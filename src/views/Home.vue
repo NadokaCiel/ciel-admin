@@ -1,13 +1,13 @@
 <template>
-  <div>About</div>
+  <div>Hello, world!</div>
 </template>
 
 <script>
 export default {
-  name: "About",
+  name: "Home",
 };
 </script>
 
-<style  lang="scss">
+<style lang="scss">
 
 </style>

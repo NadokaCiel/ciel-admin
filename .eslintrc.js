@@ -15,6 +15,7 @@ module.exports = {
       'js': 'never',
       'vue': 'never'
     }],
+    'max-len': 0,
     'prefer-promise-reject-errors': 0,
     'linebreak-style': 0,
     'no-use-before-define': 0,

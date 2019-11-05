@@ -1,0 +1,50 @@
+.elli {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.elli-1 {
+  -webkit-line-clamp: 1;
+}
+
+.elli-2 {
+  -webkit-line-clamp: 2;
+}
+
+.elli-3 {
+  -webkit-line-clamp: 3;
+}
+
+.elli-4 {
+  -webkit-line-clamp: 4;
+}
+.el-form {
+  .el-form-item {
+    margin-bottom: 22px;
+  }
+}
+.clearfix:after {
+  content: " ";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 7px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 7px;
+}
+::-webkit-scrollbar-track-piece {
+  border-radius: 7px;
+}
