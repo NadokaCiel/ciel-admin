@@ -77,9 +77,13 @@ export default {
       await vm.$api.login({
         data: vm.form,
       }).then(() => {
-        vm.$router.push({ name: "Home" });
+        vm.$router.push({
+          name: "Home",
+        });
       }).catch(err => {
-        console.log(err);
+        vm.$alert(err, {
+          type: 'error',
+        });
       });
     },
   },

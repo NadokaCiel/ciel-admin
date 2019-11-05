@@ -1,21 +1,18 @@
 export default function(version = '') {
   return {
-    name: 'logout',
+    name: 'userUpdate',
     interval: 2000, // 每隔2秒重试一次
     retryTimes: 3, // 重试3次
-    apiName: `${version}/api/token`, // 接口pathurl
+    apiName: `${version}/api/user/{id}`, // 接口pathurl
     desc: '', // 接口描述
-    method: 'POST',
+    method: 'PUT',
     params: {
       // post参数
       post: [{
-        param: 'app_key', // 参数名
-        isNeed: 1, // 是否必须 1 为必须、0为非必须
+        param: 'user_name',
+        isNeed: 1,
       }, {
-        param: 'union_id',
-        isNeed: 0,
-      }, {
-        param: 'unique_id',
+        param: 'password',
         isNeed: 1,
       }, {
         param: 'sign',

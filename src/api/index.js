@@ -1,10 +1,12 @@
 // import LocalStorage from 'ciel-localstorage';
+import Vue from 'vue';
 import Api from 'cnfapi';
 import { defaultSign } from 'mksign';
 
 import config from '../config';
 import ApiList from './apiList';
 
+const vm = new Vue();
 
 const getApi = (version) => {
   console.log(config);
@@ -14,10 +16,6 @@ const getApi = (version) => {
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
-      // 'Access-Control-Allow-Credentials': true,
-      // 'Access-Control-Allow-Headers': 'Content-Type, Set-Cookie, *',
-      // 'Access-Control-Allow-Methods': 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
-      // withCredentials: true,
     },
     resSuccessCallback(serverData, next) {
       if (serverData.retcode !== 200) {
@@ -28,7 +26,17 @@ const getApi = (version) => {
           extra: serverData.data,
         };
         console.log(log);
-        next(serverData.msg, serverData.data);
+        if (serverData.retcode === 40000) {
+          vm.$confirm('Please Login Again.', 'Login Status Expired', {
+            callback(action) {
+              if (action === 'confirm') {
+                window.location.href = '/#/login';
+              }
+            },
+          });
+          return;
+        }
+        next(serverData.msg || 'unknown error', serverData.data);
       } else {
         next(false, serverData.data);
       }
@@ -49,7 +57,9 @@ const getApi = (version) => {
         signData[item] = data[item];
       }
     });
-    data.sign = defaultSign(signData, [config.apiCode]);
+    if (Object.keys(signData).length > 0) {
+      data.sign = defaultSign(signData, [config.apiCode]);
+    }
     opts.data = data;
     next(opts);
   };
