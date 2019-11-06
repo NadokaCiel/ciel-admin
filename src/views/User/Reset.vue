@@ -110,7 +110,7 @@ export default {
 .user-reset {
   .my-form{
     margin: 20px auto;
-    padding-right: 30%;
+    // padding-right: 30%;
     width: 80%;
   }
 }

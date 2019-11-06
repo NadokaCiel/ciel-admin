@@ -9,10 +9,10 @@ export default function(version = '') {
     params: {
       // post参数
       post: [{
-        param: 'user_name',
+        param: 'id',
         isNeed: 1,
       }, {
-        param: 'password',
+        param: 'user_name',
         isNeed: 1,
       }, {
         param: 'sign',

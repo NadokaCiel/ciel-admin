@@ -49,7 +49,7 @@ export default {
         restful: {
           id: vm.id,
         },
-      }).then(data => {
+      }).then(({ data }) => {
         vm.form = data;
       }).catch(err => {
         vm.$alert(err, {
@@ -62,7 +62,13 @@ export default {
       console.log(vm.form);
       if (vm.id && vm.id !== 0) {
         await vm.$api.userUpdate({
-          data: vm.form,
+          restful: {
+            id: vm.id,
+          },
+          data: {
+            id: vm.id,
+            ...vm.form,
+          },
         }).then(() => {
           vm.toList();
         }).catch(err => {
@@ -95,7 +101,7 @@ export default {
 .user-edit {
   .my-form{
     margin: 20px auto;
-    padding-right: 30%;
+    // padding-right: 30%;
     width: 80%;
   }
 }

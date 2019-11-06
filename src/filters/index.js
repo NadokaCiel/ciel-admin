@@ -1,4 +1,5 @@
 export function date(time, format = "yyyy-MM-dd hh:mm:ss") {
+  if (!time) return '--';
   return new Date(time).Format(format);
 }
 
