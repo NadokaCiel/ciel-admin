@@ -1,10 +1,10 @@
-// import Lab from '../pages/Lab/bundle';
+// import Lab from '@/views/Lab/bundle';
 import User from '@/views/User/bundle';
-// import Item from '../pages/Item/bundle';
+import Article from '@/views//Article/bundle';
 
 const Catalog = {
   // Lab,
   User,
-  // Item,
+  Article,
 };
 export default Catalog;

@@ -48,10 +48,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 
+  &:focus {
+    outline: none;
+  }
+
   .app-view {
     margin-left: 50px;
     min-height: 100vh;
     transition: all .3s ease;
+
   }
   .folded {
     margin-left: 200px;
