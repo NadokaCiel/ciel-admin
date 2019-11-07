@@ -8,7 +8,7 @@ export default function(version = '') {
     method: 'GET',
     params: {
       // post参数
-      post: [{
+      get: [{
         param: 'page',
         isNeed: 1,
       }, {

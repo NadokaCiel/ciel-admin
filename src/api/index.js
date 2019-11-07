@@ -52,13 +52,18 @@ const getApi = (version) => {
     if (!data) {
       data = {};
     }
+    // console.log('apiOpts', apiOpts);
+    // console.log('apiConf', apiConf);
     Object.keys(data).forEach((item) => {
-      if (signKey.indexOf(item) < 0) {
+      if (signKey.indexOf(item) < 0 && item !== 'sign' && apiConf.params[item]) {
         signData[item] = data[item];
       }
     });
     if (Object.keys(signData).length > 0) {
       data.sign = defaultSign(signData, [config.apiCode]);
+      // console.log('signData', signData);
+      // console.log('config.apiCode', config.apiCode);
+      // console.log('data.sign', data.sign);
     }
     opts.data = data;
     next(opts);

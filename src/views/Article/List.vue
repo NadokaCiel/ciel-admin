@@ -30,7 +30,7 @@
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
-      <el-table-column label="Operation" width="180">
+      <el-table-column label="Operation" width="180" fixed="right">
         <template slot-scope="scope">
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">Edit</el-button>
           <el-popover width="160" v-model="scope.row.showDelete">

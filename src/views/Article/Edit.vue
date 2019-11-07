@@ -1,17 +1,47 @@
 <template>
   <div class="article-edit">
-    <el-form class="my-form" ref="form" :model="form" label-width="80px">
+    <el-form
+      class="my-form"
+      ref="form"
+      :model="form"
+      label-width="80px"
+    >
       <el-form-item label="Title">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
       <el-form-item label="Author">
         <el-input v-model="form.author"></el-input>
       </el-form-item>
+      <el-form-item label="Tag">
+        <el-select
+          style="width: 100%;"
+          v-model="form.tag"
+          multiple
+          filterable
+          allow-create
+          default-first-option
+          placeholder="Please edit tags"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="Content">
-        <vue-editor v-model="form.content" :editor-toolbar="customToolbar"></vue-editor>
+        <vue-editor
+          v-model="form.content"
+          :editor-toolbar="customToolbar"
+        ></vue-editor>
       </el-form-item>
       <el-form-item>
-        <c-button type="primary" :clickFunc="[save]">保存</c-button>
+        <c-button
+          type="primary"
+          :clickFunc="[save]"
+        >保存</c-button>
         <el-button @click="toList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -39,6 +69,16 @@ export default {
         content: '',
         author: '',
       },
+      options: [{
+        value: '旅行',
+        label: '旅行',
+      }, {
+        value: '美食',
+        label: '美食',
+      }, {
+        value: '情感',
+        label: '情感',
+      }],
       customToolbar: [
         ['bold', 'italic', 'underline', 'strike'],
         ['blockquote', 'code-block'],
