@@ -7,7 +7,6 @@ export default function(version = '') {
     desc: '', // 接口描述
     method: 'GET',
     params: {
-      // post参数
       get: [{
         param: 'page',
         isNeed: 1,
@@ -16,6 +15,9 @@ export default function(version = '') {
         isNeed: 1,
       }, {
         param: 'sign',
+        isNeed: 1,
+      }, {
+        param: 'token',
         isNeed: 1,
       }],
     },

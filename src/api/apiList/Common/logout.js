@@ -18,6 +18,9 @@ export default function(version = '') {
         param: 'unique_id',
         isNeed: 1,
       }, {
+        param: 'token',
+        isNeed: 1,
+      }, {
         param: 'sign',
         isNeed: 1,
       }],

@@ -3,5 +3,4 @@ PRJ_ENV: development
 APP_ID: ciel-admin
 API_KEY: ciel
 API_CODE: dinota
-# DOMAIN: http://localhost:3000
-DOMAIN: http://admin-server.ciel.net:3000
+DOMAIN: http://localhost:3000

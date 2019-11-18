@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import LocalStorage from 'ciel-localstorage';
 
 import Login from '@/views/Login';
 import Home from '@/views/Home';
@@ -26,10 +27,10 @@ const router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-  const auth = router.app.$cookie.get('auth');
-  if (!auth && from.name === "Login") {
+  const token = LocalStorage.get('token');
+  if (!token && from.name === "Login") {
     console.log('login');
-  } else if (!auth && to.name !== "Login") {
+  } else if (!token && to.name !== "Login") {
     next({ name: "Login" });
   } else {
     next();

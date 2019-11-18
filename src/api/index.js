@@ -1,4 +1,4 @@
-// import LocalStorage from 'ciel-localstorage';
+import LocalStorage from 'ciel-localstorage';
 import Vue from 'vue';
 import Api from 'cnfapi';
 import { defaultSign } from 'mksign';
@@ -52,6 +52,8 @@ const getApi = (version) => {
     if (!data) {
       data = {};
     }
+    const apiToken = LocalStorage.get('token');
+    data.token = apiToken;
     // console.log('apiOpts', apiOpts);
     // console.log('apiConf', apiConf);
     Object.keys(data).forEach((item) => {

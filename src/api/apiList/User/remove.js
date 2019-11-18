@@ -6,7 +6,15 @@ export default function(version = '') {
     apiName: `${version}/api/user/{id}`, // 接口pathurl
     desc: '', // 接口描述
     method: 'DELETE',
-    params: {},
+    params: {
+      post: [{
+        param: 'token',
+        isNeed: 1,
+      }, {
+        param: 'sign',
+        isNeed: 1,
+      }],
+    },
     // 不需要参数签名的参数字段
     signKeys: [],
   };

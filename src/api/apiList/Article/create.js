@@ -21,6 +21,9 @@ export default function(version = '') {
         param: 'tag',
         isNeed: 0,
       }, {
+        param: 'token',
+        isNeed: 1,
+      }, {
         param: 'sign',
         isNeed: 1,
       }],

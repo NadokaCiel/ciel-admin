@@ -15,6 +15,9 @@ export default function(version = '') {
         param: 'user_name',
         isNeed: 1,
       }, {
+        param: 'token',
+        isNeed: 1,
+      }, {
         param: 'sign',
         isNeed: 1,
       }],
