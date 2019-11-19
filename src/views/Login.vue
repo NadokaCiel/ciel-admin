@@ -77,7 +77,7 @@ export default {
       await vm.$api.login({
         data: vm.form,
       }).then(({ data }) => {
-        vm.$localStorage.set('token', data.token, 60 * 60 * 24);
+        vm.$localStorage.set('token', data.token, 7 * 24 * 60 * 60);
         vm.$router.push({
           name: "Home",
         });

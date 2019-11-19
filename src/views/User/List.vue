@@ -1,5 +1,7 @@
 <template>
   <div class="user-list">
+    <div class="page-title">用户列表</div>
+    <div class="page-subtitle">User List</div>
     <div class="tool">
       <el-button type="primary" icon="el-icon-plus" @click="toAdd"></el-button>
     </div>

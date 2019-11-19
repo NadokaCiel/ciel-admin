@@ -1,5 +1,7 @@
 <template>
   <div class="article-edit">
+    <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}文章</div>
+    <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} Article</div>
     <el-form
       class="my-form"
       ref="form"
@@ -33,6 +35,7 @@
       </el-form-item>
       <el-form-item label="Content">
         <vue-editor
+          ref="vEditor"
           v-model="form.content"
           :editor-toolbar="customToolbar"
         ></vue-editor>
@@ -152,6 +155,7 @@ export default {
     async save() {
       const vm = this;
       console.log(vm.form);
+      const plainText = this.$refs.vEditor.quill.getText();
       if (vm.id && vm.id !== 0) {
         await vm.$api.articleUpdate({
           restful: {
@@ -160,6 +164,7 @@ export default {
           data: {
             id: vm.id,
             ...vm.form,
+            abstruct: plainText.slice(0, 150),
           },
         }).then(() => {
           vm.toList();
@@ -191,6 +196,7 @@ export default {
 
 
 <style lang="scss" scoped>
+
 .article-edit {
   .my-form{
     margin: 20px auto;

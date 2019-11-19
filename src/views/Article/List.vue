@@ -1,5 +1,7 @@
 <template>
   <div class="article-list">
+    <div class="page-title">文章列表</div>
+    <div class="page-subtitle">Article List</div>
     <div class="tool">
       <el-button type="primary" icon="el-icon-plus" @click="toAdd"></el-button>
     </div>
@@ -30,8 +32,16 @@
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
+      <el-table-column label="Status" width="100" fixed="right">
+        <template slot-scope="scope">
+          <el-tag
+          :type="typeMap[scope.row.status]"
+          disable-transitions>{{statusMap[scope.row.status] || '未知状态'}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="Operation" width="180" fixed="right">
         <template slot-scope="scope">
+          <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">View</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">Edit</el-button>
           <el-popover width="160" v-model="scope.row.showDelete">
             <p>确定删除吗？</p>
@@ -64,6 +74,16 @@ export default {
       page: 1,
       total: 0,
       size: 10,
+      statusMap: {
+        pending: '待审核',
+        audited: '审核通过',
+        failed: '审核失败',
+      },
+      typeMap: {
+        pending: 'warning',
+        audited: 'success',
+        failed: 'danger',
+      },
     };
   },
   methods: {
@@ -78,6 +98,13 @@ export default {
       const vm = this;
       vm.$router.push({
         name: 'Article-Edit',
+        params: { id },
+      });
+    },
+    toView(id) {
+      const vm = this;
+      vm.$router.push({
+        name: 'Article-View',
         params: { id },
       });
     },

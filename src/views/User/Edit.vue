@@ -1,5 +1,7 @@
 <template>
   <div class="user-edit">
+    <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}用户</div>
+    <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} User</div>
     <el-form class="my-form" ref="form" :model="form" label-width="80px">
       <el-form-item label="Name">
         <el-input v-model="form.user_name"></el-input>

@@ -17,4 +17,11 @@ export default {
     activeAs: 'List',
     component: () => import(/* webpackChunkName: "article" */ './Edit.vue'),
   },
+  View: {
+    invisiable: true,
+    icon: "fa-newspaper-o",
+    path: '/article/view/:id',
+    activeAs: 'List',
+    component: () => import(/* webpackChunkName: "article" */'./View.vue'),
+  },
 };
