@@ -52,6 +52,10 @@ export default {
     outline: none;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   .app-view {
     margin-left: 50px;
     min-height: 100vh;
