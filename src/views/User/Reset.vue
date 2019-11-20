@@ -3,13 +3,13 @@
     <div class="page-title">重置密码</div>
     <div class="page-subtitle">Reset Password</div>
     <el-form class="my-form" ref="form" :model="form" :rules="rules" label-position="left" label-width="160px">
-      <el-form-item required label="Original Password" prop="o_password">
+      <el-form-item required label="原密码" prop="o_password">
         <el-input type="password" v-model="form.o_password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item required label="New Password" prop="n_password">
+      <el-form-item required label="新密码" prop="n_password">
         <el-input type="password" v-model="form.n_password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item required label="Confirm Password" prop="c_password">
+      <el-form-item required label="确认新密码" prop="c_password">
         <el-input type="password" v-model="form.c_password" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
@@ -35,9 +35,9 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please enter your password.'));
+        callback(new Error('请输入你的密码'));
       } else if (value === this.form.o_password) {
-        callback(new Error('Passwords unchanged.'));
+        callback(new Error('与旧密码相同！'));
       } else {
         if (this.form.c_password !== '') {
           this.$refs.form.validateField('c_password');
@@ -47,9 +47,9 @@ export default {
     };
     const validatePass_C = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please enter your password again.'));
+        callback(new Error('请再次输入密码'));
       } else if (value !== this.form.n_password) {
-        callback(new Error('Passwords are not inconsistent.'));
+        callback(new Error('新密码不一致！'));
       } else {
         callback();
       }
@@ -62,7 +62,7 @@ export default {
         c_password: '',
       },
       rules: {
-        o_password: [{ required: true, message: 'Password cannot be empty', trigger: 'change' }],
+        o_password: [{ required: true, message: '密码不能为空', trigger: 'change' }],
         n_password: [{
           validator: validatePass,
           trigger: 'change',

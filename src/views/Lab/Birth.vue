@@ -35,7 +35,7 @@ export default {
       },
       settings: {
         birthYear: {
-          title: "Year of birth",
+          title: "出生年份",
           type: "number",
           format: "number",
           default: 1990,
@@ -44,7 +44,7 @@ export default {
         },
       },
       layout: [{
-        title: "Basic Info",
+        title: "基础信息",
         contains: ["birthYear"],
       }],
     };

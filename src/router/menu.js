@@ -5,7 +5,7 @@ export const menuMap = getMap();
 
 function getData() {
   const menu = [{
-    name: "Home",
+    name: "主页",
     icon: "fa-home",
     route: "Home",
   }];

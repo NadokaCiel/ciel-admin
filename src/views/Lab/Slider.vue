@@ -7,8 +7,8 @@
       </div>
     </transition-group>
     <div class="box">
-      <div>Score:{{score}}</div>
-      <el-button @click="reset()">reset</el-button>
+      <div style="margin: 20px auto">Score:{{score}}</div>
+      <el-button @click="reset()">重置</el-button>
     </div>
   </div>
 </template>

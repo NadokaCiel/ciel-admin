@@ -6,15 +6,16 @@
       class="my-form"
       ref="form"
       :model="form"
+      :rules="rules"
       label-width="80px"
     >
-      <el-form-item label="Title">
+      <el-form-item label="标题" required prop="title">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="Author">
+      <el-form-item label="作者" required prop="author">
         <el-input v-model="form.author"></el-input>
       </el-form-item>
-      <el-form-item label="Tag">
+      <el-form-item label="标签" prop="tag">
         <el-select
           style="width: 100%;"
           v-model="form.tag"
@@ -22,7 +23,7 @@
           filterable
           allow-create
           default-first-option
-          placeholder="Please edit tags"
+          placeholder="请选择标签"
         >
           <el-option
             v-for="item in options"
@@ -33,7 +34,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Content">
+      <el-form-item label="正文" required prop="content">
         <vue-editor
           ref="vEditor"
           v-model="form.content"
@@ -71,6 +72,11 @@ export default {
         title: '',
         content: '',
         author: '',
+      },
+      rules: {
+        title: [{ required: true, message: '请输入标题', trigger: 'change' }],
+        content: [{ required: true, message: '内容不能为空', trigger: 'change' }],
+        author: [{ required: true, message: '请输入作者名称', trigger: 'change' }],
       },
       options: [{
         value: '旅行',
@@ -154,7 +160,11 @@ export default {
     },
     async save() {
       const vm = this;
-      console.log(vm.form);
+      let flag = false;
+      vm.$refs.form.validate((valid) => {
+        flag = valid;
+      });
+      if (!flag) return;
       const plainText = this.$refs.vEditor.quill.getText();
       if (vm.id && vm.id !== 0) {
         await vm.$api.articleUpdate({

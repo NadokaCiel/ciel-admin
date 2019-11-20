@@ -9,11 +9,11 @@
       </transition-group>
     </div>
     <div class="toolbox">
-      <c-button type="primary" :clickFunc="[generate, true]">Random Map</c-button>
-      <c-button type="primary" :clickFunc="[clearAll]">Clear All</c-button>
-      <c-button type="primary" :clickFunc="[changeMode]">Edit Mode: {{editMode?'on':'off'}}</c-button>
-      <c-button type="primary" :clickFunc="[next]">Next Step</c-button>
-      <c-button type="primary" :clickFunc="[promote]">{{!autoMove ? 'Auto' : 'Pause'}}</c-button>
+      <c-button type="primary" :clickFunc="[generate, true]">随机种子</c-button>
+      <c-button type="primary" :clickFunc="[clearAll]">清除全部</c-button>
+      <c-button type="primary" :clickFunc="[changeMode]">编辑模式: {{editMode?'On':'Off'}}</c-button>
+      <c-button type="primary" :clickFunc="[next]">下一步</c-button>
+      <c-button type="primary" :clickFunc="[promote]">{{!autoMove ? '继续' : '暂停'}}</c-button>
     </div>
   </div>
 </template>
@@ -23,9 +23,6 @@ export default {
   name: 'lab-cellular',
   created() {
     const vm = this;
-    vm.$bus.on('keyup', key => {
-      vm.move(key);
-    });
     vm.init();
   },
   data() {

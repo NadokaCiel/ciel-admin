@@ -1,10 +1,12 @@
 export default {
+  name: '文章',
   self: {
     invisiable: true,
     icon: "fa-book",
     path: '/article/list',
   },
   List: {
+    name: '列表',
     icon: "fa-list",
     path: '/article/list',
     component: () => import(/* webpackChunkName: "article" */ './List.vue'),

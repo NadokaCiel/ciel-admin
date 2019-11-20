@@ -12,13 +12,13 @@
     </transition-group>
     <div class="box">
       <el-radio-group v-model="difficulty" @change="regame()">
-        <el-radio-button :label="2">easy</el-radio-button>
-        <el-radio-button :label="4">normal</el-radio-button>
-        <el-radio-button :label="6">hard</el-radio-button>
-        <el-radio-button :label="8">nightmare</el-radio-button>
+        <el-radio-button :label="2">简单</el-radio-button>
+        <el-radio-button :label="4">普通</el-radio-button>
+        <el-radio-button :label="6">困难</el-radio-button>
+        <el-radio-button :label="8">噩梦</el-radio-button>
       </el-radio-group>
-      <div>Score:{{score}}</div>
-      <el-button @click="random()" :disabled="ticket==0">random({{ticket}})</el-button>
+      <div style="margin: 20px auto">Score:{{score}}</div>
+      <el-button @click="random()" :disabled="ticket==0">洗牌({{ticket}})</el-button>
     </div>
   </div>
 </template>

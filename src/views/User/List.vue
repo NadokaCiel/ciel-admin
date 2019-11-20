@@ -8,29 +8,22 @@
     <el-table class="my-list" :data="list" border :highlight-current-row="true">
       <el-table-column prop="id" label="ID">
       </el-table-column>
-      <el-table-column prop="user_name" label="Name">
+      <el-table-column prop="user_name" label="用户名">
       </el-table-column>
-      <el-table-column label="Create Time" width="200">
+      <el-table-column label="创建时间" width="200">
         <template slot-scope="scope">
           {{scope.row.create_time | date}}
         </template>
       </el-table-column>
-      <el-table-column label="Update Time" width="200">
+      <el-table-column label="更新时间" width="200">
         <template slot-scope="scope">
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
-      <el-table-column label="Operation" width="200">
+      <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
-          <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">Edit</el-button>
-          <el-popover width="160" v-model="scope.row.showDelete">
-            <p>确定删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.showDelete = false">取消</el-button>
-              <el-button type="text" size="mini" @click="deleteLine(scope.row)">确定</el-button>
-            </div>
-            <el-button class="line-btn" type="text" size="mini" slot="reference">Delete</el-button>
-          </el-popover>
+          <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
+          <el-button class="line-btn" type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,10 +81,6 @@ export default {
           size: vm.size,
         },
       }).then(({ data }) => {
-        data.list.forEach(i => {
-          const d = i;
-          d.showDelete = false;
-        });
         vm.list = data.list;
         vm.total = data.total;
       }).catch(err => {
@@ -102,17 +91,27 @@ export default {
     },
     async deleteLine(line) {
       const vm = this;
-
-      await vm.$api.userRemove({
-        restful: {
-          id: line.id,
+      vm.$confirm('删除用户', '确定删除吗？', {
+        async callback(action) {
+          if (action === 'confirm') {
+            await vm.$api.userRemove({
+              restful: {
+                id: line.id,
+              },
+            }).then(() => {
+              vm.$notify.success({
+                title: '用户',
+                message: '删除成功！',
+                showClose: true,
+              });
+              vm.getList();
+            }).catch(err => {
+              vm.$alert(err, {
+                type: 'error',
+              });
+            });
+          }
         },
-      }).then(() => {
-        vm.getList();
-      }).catch(err => {
-        vm.$alert(err, {
-          type: 'error',
-        });
       });
     },
   },
