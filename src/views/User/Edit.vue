@@ -2,18 +2,64 @@
   <div class="user-edit">
     <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}用户</div>
     <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} User</div>
-    <el-form class="my-form" ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="姓名" required prop="user_name">
+    <el-form
+      class="my-form"
+      ref="form"
+      :model="form"
+      :rules="rules"
+      label-width="80px"
+    >
+      <el-form-item
+        label="姓名"
+        required
+        prop="user_name"
+      >
         <el-input v-model="form.user_name"></el-input>
       </el-form-item>
-      <el-form-item label="密码" v-if="id==0" required prop="password">
-        <el-input v-model="form.password"></el-input>
+      <el-form-item
+        label="角色"
+        required
+        prop="role"
+      >
+        <el-select
+          style="width: 100%;"
+          v-model="form.role"
+          placeholder="请选择用户角色"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item required label="确认密码" v-if="id==0" prop="c_password">
-        <el-input type="password" v-model="form.c_password" auto-complete="off"></el-input>
+      <el-form-item
+        label="密码"
+        v-if="id==0"
+        required
+        prop="password"
+      >
+        <el-input v-model="form.password" type="password"></el-input>
+      </el-form-item>
+      <el-form-item
+        required
+        label="确认密码"
+        v-if="id==0"
+        prop="c_password"
+      >
+        <el-input
+          type="password"
+          v-model="form.c_password"
+          auto-complete="off"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <c-button type="primary" :clickFunc="[save]">保存</c-button>
+        <c-button
+          type="primary"
+          :clickFunc="[save]"
+        >保存</c-button>
         <el-button @click="toList">取消</el-button>
       </el-form-item>
     </el-form>
@@ -56,11 +102,13 @@ export default {
       id: 0,
       form: {
         user_name: '',
+        role: 'visitor',
         password: '',
         c_password: '',
       },
       rules: {
         user_name: [{ required: true, message: '用户名不能为空', trigger: 'change' }],
+        role: [{ required: true, message: '用户名不能为空', trigger: 'change' }],
         password: [{
           validator: validatePass,
           trigger: 'change',
@@ -70,6 +118,19 @@ export default {
           trigger: 'change',
         }],
       },
+      options: [{
+        value: 'user',
+        label: '普通用户',
+      }, {
+        value: 'admin',
+        label: '管理员',
+      }, {
+        value: 'superadmin',
+        label: '超级管理员',
+      }, {
+        value: 'visitor',
+        label: '访客',
+      }],
     };
   },
   methods: {

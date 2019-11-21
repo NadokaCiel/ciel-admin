@@ -20,6 +20,13 @@
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
+      <el-table-column label="角色" width="120" fixed="right">
+        <template slot-scope="scope">
+          <el-tag
+          :type="typeMap[scope.row.role]"
+          disable-transitions>{{roleMap[scope.row.role] || '未知角色'}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
@@ -47,6 +54,18 @@ export default {
       page: 1,
       total: 0,
       size: 10,
+      roleMap: {
+        user: '普通用户',
+        admin: '管理员',
+        superadmin: '超级管理员',
+        visitor: '访客',
+      },
+      typeMap: {
+        user: '',
+        admin: 'warning',
+        superadmin: 'success',
+        visitor: 'info',
+      },
     };
   },
   methods: {

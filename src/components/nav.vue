@@ -50,6 +50,18 @@
         </el-menu-item>
       </el-submenu>
     </template>
+    <el-menu-item
+      index="Logout"
+      key="Logout"
+      @mouseenter.native="log.isHover=!log.isHover"
+      @mouseleave.native="log.isHover=!log.isHover"
+    >
+      <i
+        class="fa fa-fw animated fa-sign-out"
+        :class="[log.isHover ? 'jello' : 'rubberBand']"
+      ></i>
+      <span>{{showText ? log.name : ''}}</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -66,6 +78,10 @@ export default {
       menu: menuData,
       menuMap,
       showText: false,
+      log: {
+        isHover: false,
+        name: '退出登录',
+      },
     };
   },
   created() {
@@ -75,8 +91,35 @@ export default {
       return this.menuMap[this.$route.name];
     },
     menuSelected(name) {
-      if (this.$route.name !== name) {
-        this.$router.push({ name });
+      const vm = this;
+      if (name === 'Logout') {
+        vm.$confirm('退出登录', '确定退出登录吗？', {
+          async callback(action) {
+            if (action === 'confirm') {
+              await vm.$api.logout({
+                restful: {
+                  token: vm.$localStorage.get('token'),
+                },
+              }).then(() => {
+                vm.$notify.success({
+                  title: '退出登录',
+                  message: '退出成功！',
+                  showClose: true,
+                });
+                vm.$localStorage.remove('token');
+                vm.$router.push({ name: 'Login' });
+              }).catch(err => {
+                vm.$alert(err, {
+                  type: 'error',
+                });
+              });
+            }
+          },
+        });
+        return;
+      }
+      if (vm.$route.name !== name) {
+        vm.$router.push({ name });
       }
     },
   },

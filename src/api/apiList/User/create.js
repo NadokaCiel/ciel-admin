@@ -12,10 +12,16 @@ export default function(version = '') {
         param: 'user_name',
         isNeed: 1,
       }, {
+        param: 'role',
+        isNeed: 1,
+      }, {
         param: 'password',
         isNeed: 1,
       }, {
         param: 'sign',
+        isNeed: 1,
+      }, {
+        param: 'token',
         isNeed: 1,
       }],
     },
