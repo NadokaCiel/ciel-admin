@@ -51,6 +51,7 @@
       </el-submenu>
     </template>
     <el-menu-item
+      class="nav-logout"
       index="Logout"
       key="Logout"
       @mouseenter.native="log.isHover=!log.isHover"
@@ -166,6 +167,12 @@ function addStatus(list) {
     display: inline-block;
     width: 16px;
     height: 16px;
+  }
+
+  .nav-logout {
+    position: fixed;
+    bottom: 0;
+    width: inherit;
   }
 }
 </style>
