@@ -88,6 +88,9 @@ export default {
       });
     },
   },
+  beforeDestroy() {
+    this.$bus.off('keyup');
+  },
   computed: mapState({
     appName: state => state.appName,
   }),
