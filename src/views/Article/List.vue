@@ -128,7 +128,7 @@ export default {
     },
     async deleteLine(line) {
       const vm = this;
-      vm.$confirm('删除文章', '确定删除吗？', {
+      vm.$confirm(`确定删除文章：《${line.title}》吗？`, '删除文章', {
         async callback(action) {
           if (action === 'confirm') {
             await vm.$api.articleRemove({

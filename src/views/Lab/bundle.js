@@ -40,4 +40,11 @@ export default {
     component: () => import(/* webpackChunkName: "lab" */ './Slider.vue'),
     meta: {},
   },
+  Blockchain: {
+    name: '区块链',
+    icon: "fa-chain",
+    path: '/lab/blockchain',
+    component: () => import(/* webpackChunkName: "lab" */ './Blockchain.vue'),
+    meta: {},
+  },
 };

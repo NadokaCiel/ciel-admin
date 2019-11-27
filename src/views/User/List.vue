@@ -110,7 +110,7 @@ export default {
     },
     async deleteLine(line) {
       const vm = this;
-      vm.$confirm('删除用户', '确定删除吗？', {
+      vm.$confirm(`确定删除用户：${line.user_name}吗？`, '删除用户', {
         async callback(action) {
           if (action === 'confirm') {
             await vm.$api.userRemove({
