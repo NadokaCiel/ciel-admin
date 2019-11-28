@@ -137,6 +137,12 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="nonce"
+        label="迭代次数"
+        width="150"
+      >
+      </el-table-column>
+      <el-table-column
         prop="timestamp"
         label="时间戳"
         width="150"
@@ -234,7 +240,7 @@ export default {
       vm.scrollToBottom('b');
       vm.scrollToBottom('total');
       vm.scrollToBottom('trade');
-      console.log(vm.chain);
+      // console.log(vm.chain);
     },
     checkBalance(name) {
       const vm = this;
