@@ -1,7 +1,10 @@
 <template>
   <div class="lab-blockchain">
     <div flex="main:justify cross:top">
-      <el-card class="box-card" ref="a">
+      <el-card
+        class="box-card"
+        ref="a"
+      >
         <div
           slot="header"
           class="clearfix"
@@ -28,8 +31,14 @@
         >
         </div>
       </el-card>
-      <el-button style="margin-top: 100px" @click="transfer">A向B转账300</el-button>
-      <el-card class="box-card" ref="b">
+      <el-button
+        style="margin-top: 100px"
+        @click="transfer"
+      >A向B转账300</el-button>
+      <el-card
+        class="box-card"
+        ref="b"
+      >
         <div
           slot="header"
           class="clearfix"
@@ -57,13 +66,16 @@
         </div>
       </el-card>
     </div>
-
-    <el-card class="total-card" ref="total">
+    <div flex="main:justify cross:top">
+      <el-card
+        class="total-card"
+        ref="total"
+      >
         <div
           slot="header"
           class="clearfix"
         >
-          <span>总日志</span>
+          <span>区块链日志</span>
         </div>
         <div
           v-for="(line, index) in history"
@@ -73,6 +85,77 @@
         >
         </div>
       </el-card>
+      <el-card
+        class="total-card"
+        ref="trade"
+      >
+        <div
+          slot="header"
+          class="clearfix"
+        >
+          <span>待处理交易</span>
+        </div>
+        <div
+          v-for="(line, index) in amountFilter(chain.pendingTransactions)"
+          :key="index"
+          class="history-line"
+          v-html="(index+1) + '. 待办交易：' + (line.fromAddress ? `<span class='worker-${line.fromAddress}'>矿工` + line.fromAddress + '</span>' : `<span class='chain-system'>系统</span>`) + `向<span class='worker-${line.toAddress}'>矿工` + line.toAddress + `</span>支付<span class='amount'>` + line.amount + '</span>'"
+        >
+        </div>
+      </el-card>
+    </div>
+    <el-table
+      class="chain-list"
+      :data="chain.chain"
+      border
+      height="300"
+      :highlight-current-row="true"
+    >
+      <el-table-column
+        label="区块序号"
+        type="index"
+        width="100"
+        :index="indexMethod"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="hash"
+        label="哈希(缩略)"
+        width="150"
+      >
+        <template slot-scope="scope">
+          {{scope.row.hash ? scope.row.hash.substr(0, 6) : '-'}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="previousHash"
+        label="父节点哈希（缩略）"
+        width="150"
+      >
+        <template slot-scope="scope">
+          {{scope.row.previousHash ? scope.row.previousHash.substr(0, 6) : '-'}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="timestamp"
+        label="时间戳"
+        width="150"
+      >
+      </el-table-column>
+      <el-table-column
+        label="存储交易项"
+      >
+        <template slot-scope="scope">
+          <!-- {{scope.row.transactions}} -->
+          <div
+            v-for="(line, index) in amountFilter(scope.row.transactions)"
+            :key="index"
+            class="history-line"
+            v-html="(index+1) + '. 交易：' + (line.fromAddress ? `<span class='worker-${line.fromAddress}'>矿工` + line.fromAddress + '</span>' : `<span class='chain-system'>系统</span>`) + `向<span class='worker-${line.toAddress}'>矿工` + line.toAddress + `</span>支付<span class='amount'>` + line.amount + '</span>'"
+          ></div>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -94,6 +177,7 @@ export default {
   },
   data() {
     return {
+      list: [],
       chain: null,
       workerA: {
         isWorking: false,
@@ -112,6 +196,9 @@ export default {
     };
   },
   methods: {
+    amountFilter(arr) {
+      return arr.filter(item => item.amount > 0);
+    },
     getWork(name) {
       const vm = this;
       const worker = vm[`worker${name}`];
@@ -146,6 +233,7 @@ export default {
       vm.scrollToBottom('a');
       vm.scrollToBottom('b');
       vm.scrollToBottom('total');
+      vm.scrollToBottom('trade');
       console.log(vm.chain);
     },
     checkBalance(name) {
@@ -220,6 +308,9 @@ export default {
         }
       });
     },
+    indexMethod(index) {
+      return index + 1;
+    },
   },
   beforeDestroy() {
     this.workerA.isWorking = false;
@@ -246,11 +337,22 @@ export default {
 
   .total-card {
     margin: 20px auto;
-    width: 90%;
+    width: 45%;
   }
 
   .history-line {
     margin: 8px auto;
+  }
+
+  .fixed-info {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+  }
+
+  .chain-list {
+    margin: 10px auto;
+    width: 95%;
   }
 }
 </style>
@@ -259,10 +361,16 @@ export default {
 @import '~@/assets/css/color.scss';
 .lab-blockchain {
   .el-card__body {
-    min-height: 100px;
-    max-height: 200px;
+    position: relative;
+    min-height: 120px;
+    max-height: 120px;
     overflow: auto;
     text-align: left;
+  }
+
+  .chain-system {
+    font-weight: bold;
+    color: $co8;
   }
 
   .worker-A {
