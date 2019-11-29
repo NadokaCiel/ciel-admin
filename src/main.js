@@ -17,7 +17,8 @@ import api from '@/api';
 import 'normalize.css';
 import 'flex.css';
 import 'element-ui/lib/theme-chalk/index.css';
-import 'font-awesome.css';
+// import 'font-awesome.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import 'animate.css';
 import '@/assets/css/common.scss';
 

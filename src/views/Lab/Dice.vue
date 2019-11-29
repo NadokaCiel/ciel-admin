@@ -2,7 +2,7 @@
   <div class="lab-dice">
     <div class="page-title">CSS实现骰子六面</div>
     <div class="page-subtitle">Dice Rendering by CSS</div>
-    <div class="flex-demo clearfix" flex="main:center cross:center">
+    <div class="flex-demo clearfix">
       <div class="box box-1" flex="main:center cross:center">
         <div class="dot-lg red"></div>
       </div>
@@ -135,6 +135,10 @@ export default {
 
   .flex-demo {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
   }
   .box {
     float: left;

@@ -21,7 +21,7 @@ export default {
   },
   Dice: {
     name: '骰子',
-    icon: "fa-language",
+    icon: "fa-dice",
     path: '/lab/dice',
     component: () => import(/* webpackChunkName: "lab" */ './Dice.vue'),
     meta: {},
@@ -35,14 +35,14 @@ export default {
   },
   Slider: {
     name: '2048',
-    icon: "fa-sort-numeric-asc",
+    icon: "fa-sort-numeric-down",
     path: '/lab/slider',
     component: () => import(/* webpackChunkName: "lab" */ './Slider.vue'),
     meta: {},
   },
   Blockchain: {
     name: '区块链',
-    icon: "fa-chain",
+    icon: "fa-donate",
     path: '/lab/blockchain',
     component: () => import(/* webpackChunkName: "lab" */ './Blockchain.vue'),
     meta: {},
