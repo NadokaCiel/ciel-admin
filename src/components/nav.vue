@@ -58,7 +58,7 @@
       @mouseleave.native="log.isHover=!log.isHover"
     >
       <i
-        class="fa fa-fw animated fa-sign-out"
+        class="fa fa-fw animated fa-sign-out-alt"
         :class="[log.isHover ? 'jello' : 'rubberBand']"
       ></i>
       <span>{{showText ? log.name : ''}}</span>
