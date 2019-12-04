@@ -45,15 +45,18 @@
   clear: both;
   visibility: hidden;
 }
+
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 10px;
+  height: 6px;
+  background: #eaeaea;
 }
 ::-webkit-scrollbar-button {
   display: none;
 }
 ::-webkit-scrollbar-thumb {
-  border-radius: 7px;
+  border-radius: 14px;
+  background: #838383;
 }
 ::-webkit-scrollbar-track {
   border-radius: 7px;
