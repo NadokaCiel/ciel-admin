@@ -28,17 +28,32 @@ export default {
     };
   },
   created() {
-    this.onListChanged();
+    const vm = this;
+    vm.onListChanged();
+    vm.$bus.on('chatbox-finishLine', () => {
+      console.log(1111);
+      vm.lockLine = false;
+    });
   },
   methods: {
+    // 当外界对话框数组变化时触发，清空当前索引
     onListChanged() {
       const vm = this;
       console.log('onListChanged', vm.list);
       vm.nowIndex = 0;
       vm.showNext();
     },
+    // 用户点击时触发，索引增加
     onClickNext() {
       const vm = this;
+      if (vm.lockLine) {
+        console.log(vm.nowIndex);
+        console.log(vm.list.length);
+        if (vm.nowIndex >= vm.list.length - 1) {
+          vm.$bus.emit('chatbox-finishAll', vm.nowArr.join(''));
+        }
+        return;
+      }
       if (vm.nowIndex < vm.list.length - 1) {
         vm.nowIndex += 1;
         vm.showNext();
@@ -46,14 +61,19 @@ export default {
         vm.$bus.emit('chatbox-finishAll', vm.nowArr.join(''));
       }
     },
+    // 着手进行下一句话的渲染
     showNext() {
       const vm = this;
       vm.nowArr = [];
       vm.backArr = vm.list[vm.nowIndex] ? vm.list[vm.nowIndex].text.split('') : [];
+      vm.lockLine = true;
       vm.moveText(0);
     },
     moveText(index) {
       const vm = this;
+      if (!vm.lockLine) {
+        return;
+      }
       if (index <= vm.backArr.length - 1) {
         setTimeout(() => {
           vm.nowArr.push(vm.backArr[index]);
@@ -91,6 +111,7 @@ export default {
   overflow: hidden;
   transition: all .8s ease;
   transform: translateY(120%);
+  user-select: none;
 
   .chat-char {
     margin-top: 0;

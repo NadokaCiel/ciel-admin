@@ -1,6 +1,9 @@
 <template>
   <div class="pet-home">
-    <div class="pet-choose" :class="{'choose-show': showChoose}">
+    <div
+      class="pet-choose"
+      :class="{'choose-show': showChoose}"
+    >
       <div class="pet-title">请选择您的宠物~</div>
       <div class="pet-list">
         <div
@@ -10,8 +13,8 @@
           :key="index"
         >
           <i
-            class="pet-icon fas"
-            :class="[pet.icon, {'now-pet': nowPet && pet.type === nowPet.type}]"
+            class="pet-icon animated fas"
+            :class="[pet.icon, nowPet && pet.type === nowPet.type ? 'now-pet bounce' : '']"
           ></i>
         </div>
       </div>
@@ -24,16 +27,30 @@
           flex="main:jusfity cross:center"
         >
           <div class="pet-detail-title">宠物类型：</div>
-          <div class="pet-detail-title">{{nowPet.name}}</div>
+          <div class="pet-detail-content">{{nowPet.name}}</div>
+          <div
+            class="pet-detail-content"
+            style="margin-left: 20px;"
+            v-if="nowPet.status === 'frozen'"
+          >
+            <el-tag disable-transitions>（测试中）</el-tag>
+          </div>
         </div>
         <div
           class="pet-detail-line"
           flex="main:jusfity cross:center"
         >
-          <div class="pet-detail-title">饲养成本：</div>
+          <div class="pet-detail-title">上手难度：</div>
+          <div class="pet-detail-content">{{nowPet.rank}}</div>
+        </div>
+        <div
+          class="pet-detail-line"
+          flex="main:jusfity cross:center"
+        >
+          <div class="pet-detail-title">日常培养：</div>
           <el-progress
             class="pet-detail-progress"
-            :percentage="nowPet.cost * 10"
+            :percentage="nowPet.dailyCost * 5"
             status="warning"
             :show-text="false"
           ></el-progress>
@@ -42,25 +59,18 @@
           class="pet-detail-line"
           flex="main:jusfity cross:center"
         >
-          <div class="pet-detail-title">初始好感：</div>
+          <div class="pet-detail-title">成为伙伴：</div>
           <el-progress
             class="pet-detail-progress"
-            :percentage="nowPet.base"
+            :percentage="nowPet.aiboCost * 2"
             status="exception"
             :show-text="false"
           ></el-progress>
         </div>
-        <div
-          class="pet-detail-line"
-          flex="main:jusfity cross:center"
-        >
-          <div class="pet-detail-title">清洁频率：</div>
-          <el-progress
-            class="pet-detail-progress"
-            :percentage="nowPet.rate * 10"
-            :show-text="false"
-          ></el-progress>
-        </div>
+        <c-button
+          type="primary"
+          :clickFunc="[save]"
+        >确定</c-button>
       </div>
     </div>
     <chatbox
@@ -69,6 +79,7 @@
     />
   </div>
 </template>
+
 <script>
 import chatbox from '@/components/text-based/chatbox';
 
@@ -79,42 +90,7 @@ export default {
   },
   data() {
     return {
-      pets: [{
-        name: '小猫',
-        type: 'cat',
-        icon: 'fa-cat',
-        cost: 5,
-        base: 10,
-        rate: 3,
-      }, {
-        name: '乌鸦',
-        type: 'crow',
-        icon: 'fa-crow',
-        cost: 3,
-        base: 15,
-        rate: 6,
-      }, {
-        name: '小狗',
-        type: 'dog',
-        icon: 'fa-dog',
-        cost: 8,
-        base: 40,
-        rate: 3,
-      }, {
-        name: '鸽子',
-        type: 'dove',
-        icon: 'fa-dove',
-        cost: 2,
-        base: 20,
-        rate: 8,
-      }, {
-        name: '龙',
-        type: 'dragon',
-        icon: 'fa-dragon',
-        cost: 10,
-        base: 0,
-        rate: 1,
-      }],
+      pets: [],
       nowList: [{
         text: '欢迎来到宠物中心~',
       }, {
@@ -126,9 +102,9 @@ export default {
       }, {
         text: '无论您需要饲料、玩具或者清洁用具，这里都有！',
       }, {
-        text: '不过，在您选择小可爱的同时，它们也在选择你哦~',
+        text: '希望你们能成为很好的朋友^_^',
       }, {
-        text: '好了，来看看店里的小可爱们吧=-=~',
+        text: '好了，来看看店里的小可爱们吧~',
       }],
       nowPet: null,
       showChat: true,
@@ -137,6 +113,7 @@ export default {
   },
   created() {
     const vm = this;
+    vm.getList();
     setTimeout(() => {
       vm.showChat = true;
     }, 500);
@@ -150,6 +127,48 @@ export default {
     onSeclectPet(pet) {
       this.nowPet = pet;
     },
+    getList() {
+      const vm = this;
+
+      vm.$api.petTypeList({
+        data: {
+          page: 1,
+          size: 50,
+        },
+      }).then(({ data }) => {
+        data.list.forEach(item => {
+          const pet = item;
+          if (pet.basePrice <= 50) {
+            pet.rank = '初心者也可以照顾得很好';
+          } else if (pet.basePrice > 50 && pet.basePrice < 100) {
+            pet.rank = '需要多花费些心思去照顾';
+          } else {
+            pet.rank = '适合颇有心得的专家';
+          }
+          pet.dailyCost = Math.max(20 - pet.feedRate - pet.cleanRate, 0);
+          pet.aiboCost = (pet.playLimit + pet.talkLimit + pet.visitLimit) * pet.fondRate + pet.baseFond;
+        });
+        vm.pets = data.list;
+      }).catch(err => {
+        vm.$alert(err, {
+          type: 'error',
+        });
+      });
+    },
+    async save() {
+      const vm = this;
+      await vm.$api.petCreate({
+        data: {
+          id: vm.nowPet.id,
+        },
+      }).then(() => {
+        vm.toList();
+      }).catch(err => {
+        vm.$alert(err, {
+          type: 'error',
+        });
+      });
+    },
   },
   beforeDestroy() {
     this.$bus.off('chatbox-finishAll');
@@ -162,6 +181,8 @@ export default {
 
 .pet-home {
   position: relative;
+  height: 100vh;
+  overflow: hidden;
 
   .pet-list {
     display: flex;
@@ -181,6 +202,7 @@ export default {
     align-items: center;
     width: 60px;
     height: 60px;
+    cursor: pointer;
   }
 
   .pet-icon {
