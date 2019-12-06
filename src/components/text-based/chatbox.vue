@@ -83,6 +83,9 @@ export default {
         vm.$bus.emit('chatbox-finishLine', vm.nowArr.join(''));
       }
     },
+    beforeDestroy() {
+      this.$bus.off('chatbox-finishLine');
+    },
   },
   watch: {
     list: 'onListChanged',
