@@ -5,7 +5,7 @@
     <div class="tool">
       <el-button type="primary" icon="el-icon-plus" @click="toAdd"></el-button>
     </div>
-    <el-table class="my-list" :data="list" border :highlight-current-row="true">
+    <el-table v-loading="loading" class="my-list" :data="list" border :highlight-current-row="true">
       <el-table-column prop="id" label="ID">
       </el-table-column>
       <el-table-column prop="title" label="标题" width="250">
@@ -63,6 +63,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       list: [],
       page: 1,
       total: 0,
@@ -112,6 +113,8 @@ export default {
     getList() {
       const vm = this;
 
+      vm.loading = true;
+
       vm.$api.articleList({
         data: {
           page: vm.page,
@@ -120,7 +123,9 @@ export default {
       }).then(({ data }) => {
         vm.list = data.list;
         vm.total = data.total;
+        vm.loading = false;
       }).catch(err => {
+        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });

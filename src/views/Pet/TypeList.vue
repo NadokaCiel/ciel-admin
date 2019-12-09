@@ -5,7 +5,7 @@
     <div class="tool">
       <el-button type="primary" icon="el-icon-plus" @click="toAdd"></el-button>
     </div>
-    <el-table class="my-list" :data="list" border :highlight-current-row="true">
+    <el-table v-loading="loading" class="my-list" :data="list" border :highlight-current-row="true">
       <el-table-column prop="id" label="ID">
       </el-table-column>
       <el-table-column prop="name" label="类型" width="100">
@@ -75,6 +75,7 @@ export default {
       page: 1,
       total: 0,
       size: 10,
+      loading: true,
       statusMap: {
         available: '可用',
         frozen: '冻结',
@@ -111,6 +112,8 @@ export default {
     getList() {
       const vm = this;
 
+      vm.loading = true;
+
       vm.$api.petTypeList({
         data: {
           page: vm.page,
@@ -119,7 +122,9 @@ export default {
       }).then(({ data }) => {
         vm.list = data.list;
         vm.total = data.total;
+        vm.loading = false;
       }).catch(err => {
+        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });

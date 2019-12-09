@@ -10,6 +10,7 @@
       >导出当前表格</el-button>
     </div>
     <el-table
+      v-loading="loading"
       class="my-list"
       :data="list"
       border
@@ -107,6 +108,7 @@ export default {
       page: 1,
       total: 0,
       size: 50,
+      loading: true,
     };
   },
   methods: {
@@ -121,6 +123,8 @@ export default {
     getList() {
       const vm = this;
 
+      vm.loading = true;
+
       vm.$api.weiboList({
         data: {
           page: vm.page,
@@ -129,7 +133,9 @@ export default {
       }).then(({ data }) => {
         vm.list = data.list;
         vm.total = data.total;
+        vm.loading = false;
       }).catch(err => {
+        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });

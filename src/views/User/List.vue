@@ -5,7 +5,7 @@
     <div class="tool">
       <el-button type="primary" icon="el-icon-plus" @click="toAdd"></el-button>
     </div>
-    <el-table class="my-list" :data="list" border :highlight-current-row="true">
+    <el-table v-loading="loading" class="my-list" :data="list" border :highlight-current-row="true">
       <el-table-column prop="id" label="ID">
       </el-table-column>
       <el-table-column prop="user_name" label="用户名">
@@ -54,6 +54,7 @@ export default {
       page: 1,
       total: 0,
       size: 10,
+      loading: true,
       roleMap: {
         user: '普通用户',
         admin: '管理员',
@@ -94,6 +95,8 @@ export default {
     getList() {
       const vm = this;
 
+      vm.loading = true;
+
       vm.$api.userList({
         data: {
           page: vm.page,
@@ -102,7 +105,9 @@ export default {
       }).then(({ data }) => {
         vm.list = data.list;
         vm.total = data.total;
+        vm.loading = false;
       }).catch(err => {
+        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });
