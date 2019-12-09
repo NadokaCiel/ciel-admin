@@ -18,7 +18,7 @@
       <el-table-column
         prop="text"
         label="正文"
-        width="250"
+        width="200"
       >
       </el-table-column>
       <el-table-column
@@ -42,7 +42,7 @@
       </el-table-column>
       <el-table-column
         label="微博编号(缩略)"
-        width="130"
+        width="120"
       >
         <template slot-scope="scope">
           {{scope.row.idstr ? scope.row.idstr.substr(scope.row.idstr.length - 4, scope.row.idstr.length - 1) : '-'}}
@@ -68,14 +68,14 @@
       </el-table-column>
       <el-table-column
         label="流量"
-        width="200"
+        width="80"
         fixed="right"
       >
         <template slot-scope="scope">
-          <div flex="main:center cross:center">
-            <div>转发：{{scope.row.reposts_count || 0}} | </div>
-            <div>评论：{{scope.row.comments_count || 0}} | </div>
-            <div>点赞：{{scope.row.attitudes_count || 0}}</div>
+          <div flex="dir:top main:center cross:center">
+            <div class="flow-gap">转发：{{scope.row.reposts_count || 0}}</div>
+            <div class="flow-gap">评论：{{scope.row.comments_count || 0}}</div>
+            <div class="flow-gap">点赞：{{scope.row.attitudes_count || 0}}</div>
           </div>
         </template>
       </el-table-column>
@@ -180,6 +180,10 @@ export default {
     margin-bottom: 20px;
     width: 100px;
     height: 100px;
+  }
+
+  .flow-gap {
+    margin: 4px auto;
   }
 }
 </style>
