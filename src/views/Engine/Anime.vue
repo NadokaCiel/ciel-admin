@@ -10,7 +10,6 @@
       <el-button :type="mood.key === petMood ? 'primary' : ''" v-for="(mood, index) in moods" :key="index" @click="makeMood(mood.key)">{{mood.name}}</el-button>
     </el-button-group>
     </div>
-    
     <div class="pet-box">
       <pet :move="petMove" :mood="petMood" />
     </div>
