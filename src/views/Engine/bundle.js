@@ -12,11 +12,18 @@ export default {
     component: () => import(/* webpackChunkName: "engine" */'./Weibo.vue'),
     meta: {},
   },
-  Home: {
+  Dialogue: {
     name: '对话',
     icon: "fa-journal-whills",
     path: '/engine/dialogue',
     component: () => import(/* webpackChunkName: "engine" */ './Dialogue.vue'),
+    meta: {},
+  },
+  Anime: {
+    name: '动画',
+    icon: "fa-icons",
+    path: '/engine/anime',
+    component: () => import(/* webpackChunkName: "engine" */ './Anime.vue'),
     meta: {},
   },
 };
