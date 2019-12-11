@@ -152,6 +152,10 @@ function addStatus(list) {
   overflow-y: auto;
   transition: all .3s ease;
 
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
   &.nav-active {
     width: 200px;
   }
@@ -173,6 +177,9 @@ function addStatus(list) {
     position: fixed;
     bottom: 0;
     width: inherit;
+    border-right: 1px solid #e6e6e6;
+    background-color: #fff;
+    z-index: 10;
   }
 }
 </style>
