@@ -20,6 +20,11 @@
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
+      <el-table-column label="最后访问" width="200">
+        <template slot-scope="scope">
+          {{scope.row.visit_time | date}}
+        </template>
+      </el-table-column>
       <el-table-column label="角色" width="120" fixed="right">
         <template slot-scope="scope">
           <el-tag
