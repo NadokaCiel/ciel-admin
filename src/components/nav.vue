@@ -97,9 +97,22 @@ export default {
         vm.$confirm('退出登录', '确定退出登录吗？', {
           async callback(action) {
             if (action === 'confirm') {
+              const token = vm.$localStorage.get('token');
+              if (!token) {
+                vm.$localStorage.remove('id');
+                vm.$localStorage.remove('role');
+                vm.$localStorage.remove('name');
+                vm.$notify.success({
+                  title: '退出登录',
+                  message: '退出成功！',
+                  showClose: true,
+                });
+                vm.$router.push({ name: 'Login' });
+                return;
+              }
               await vm.$api.logout({
                 restful: {
-                  token: vm.$localStorage.get('token'),
+                  token,
                 },
               }).then(() => {
                 vm.$notify.success({
@@ -108,6 +121,9 @@ export default {
                   showClose: true,
                 });
                 vm.$localStorage.remove('token');
+                vm.$localStorage.remove('id');
+                vm.$localStorage.remove('role');
+                vm.$localStorage.remove('name');
                 vm.$router.push({ name: 'Login' });
               }).catch(err => {
                 vm.$alert(err, {

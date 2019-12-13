@@ -20,7 +20,7 @@
           {{scope.row.update_time | date}}
         </template>
       </el-table-column>
-      <el-table-column label="最后访问" width="200">
+      <el-table-column label="最后访问" width="200" v-if="hasAuth(['admin'])">
         <template slot-scope="scope">
           {{scope.row.visit_time | date}}
         </template>

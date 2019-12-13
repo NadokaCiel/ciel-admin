@@ -4,13 +4,18 @@ export default {
     invisiable: true,
     icon: "fa-book",
     path: '/article/list',
+    meta: {
+      auth: ['user'],
+    },
   },
   List: {
     name: '列表',
     icon: "fa-list",
     path: '/article/list',
     component: () => import(/* webpackChunkName: "article" */ './List.vue'),
-    meta: {},
+    meta: {
+      auth: ['user'],
+    },
   },
   Edit: {
     invisiable: true,
@@ -18,6 +23,9 @@ export default {
     path: '/article/edit/:id',
     activeAs: 'List',
     component: () => import(/* webpackChunkName: "article" */ './Edit.vue'),
+    meta: {
+      auth: ['admin'],
+    },
   },
   View: {
     invisiable: true,
@@ -25,5 +33,8 @@ export default {
     path: '/article/view/:id',
     activeAs: 'List',
     component: () => import(/* webpackChunkName: "article" */'./View.vue'),
+    meta: {
+      auth: ['user'],
+    },
   },
 };

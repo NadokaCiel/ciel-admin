@@ -11,6 +11,9 @@ import App from '@/App';
 import router from '@/router';
 import store from '@/store';
 import * as filters from '@/filters';
+import * as directives from '@/directives';
+
+import { hasAuth } from '@/filters';
 import config from '@/config';
 import api from '@/api';
 
@@ -34,12 +37,20 @@ Vue.prototype.$config = config;
 Vue.prototype.$localStorage = LocalStorage;
 Vue.prototype._ = _;
 
+Vue.prototype.hasAuth = hasAuth;
+
 Vue.component('cButton', cButton);
 
 // 注册全局过滤器
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
+
+// 注册全局指令
+Object.keys(directives).forEach(key => {
+  Vue.directive(key, directives[key]);
+});
+
 
 Vue.config.productionTip = false;
 console.log(process.env);

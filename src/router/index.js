@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import LocalStorage from 'ciel-localstorage';
-
+import Permission from '@/store/permission';
 import Login from '@/views/Login';
 import Home from '@/views/Home';
 
@@ -33,7 +33,12 @@ router.beforeEach((to, from, next) => {
   } else if (!token && to.name !== "Login") {
     next({ name: "Login" });
   } else {
-    next();
+    const role = LocalStorage.get('role') || 'visitor';
+    if (to.meta && to.meta.auth && !Permission.checkAuth(to.meta.auth, role)) {
+      next("/error/403");
+    } else {
+      next();
+    }
   }
 });
 
@@ -47,14 +52,14 @@ function getRoutes({
     path: '/login',
     name: 'Login',
     meta: {
-      auth: ['login'],
+      auth: [],
     },
     component: Login,
   }, {
     path: '/home',
     name: 'Home',
     meta: {
-      auth: ['home'],
+      auth: [],
     },
     component: Home,
   }];

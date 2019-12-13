@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import Permission from './permission';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    appName: 'ciel-admin',
+    appName: 'vs-admin',
   },
   getters: {
     appName: state => state.appName,
@@ -19,5 +21,9 @@ export default new Vuex.Store({
     setAppName({ commit }, name) {
       commit('SET_APP_NAME', name);
     },
+  },
+  // 模块化数据由此单独接入
+  modules: {
+    permission: Permission.store,
   },
 });

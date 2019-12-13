@@ -78,6 +78,13 @@ export default {
         data: vm.form,
       }).then(({ data }) => {
         vm.$localStorage.set('token', data.token, 7 * 24 * 60 * 60);
+        vm.$localStorage.set('id', data.user.id);
+        vm.$localStorage.set('role', data.user.role);
+        vm.$localStorage.set('name', data.user.name);
+
+        console.log('token', vm.$localStorage.get('token'));
+        console.log('role', vm.$localStorage.get('role'));
+        console.log('name', vm.$localStorage.get('name'));
         vm.$router.push({
           name: "Home",
         });

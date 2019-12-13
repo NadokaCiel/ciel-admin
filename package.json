@@ -20,7 +20,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
     "animate.css": "^3.7.2",
-    "ciel-localstorage": "^1.1.3",
+    "ciel-localstorage": "^1.1.5",
     "cnfapi": "^2.0.2",
     "core-js": "^2.6.5",
     "crypto-js": "^3.1.9-1",

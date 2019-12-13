@@ -9,7 +9,7 @@ import ApiList from './apiList';
 const vm = new Vue();
 
 const getApi = (version) => {
-  console.log(config);
+  // console.log(config);
   const api = new Api({
     baseURL: config.domain,
     env: 'browser',
