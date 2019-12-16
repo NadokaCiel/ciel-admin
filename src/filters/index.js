@@ -1,13 +1,8 @@
-import LocalStorage from 'ciel-localstorage';
+import { hasAuth } from './auth';
 
-import Permission from '@/store/permission';
-
-export function hasAuth(authList) {
-  // console.log('hasAuth', authList);
-  // console.log('LocalStorage.get(role)', LocalStorage.get('role'));
-  const role = LocalStorage.get('role') || 'visitor';
-  // console.log(Permission.checkAuth(authList, role));
-  return Permission.checkAuth(authList, role);
+export function menuAuth(menu) {
+  console.log('menuAuth', menu);
+  return hasAuth(menu.auth || []);
 }
 
 export function date(time, format = "yyyy-MM-dd hh:mm:ss") {

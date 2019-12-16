@@ -22,7 +22,7 @@ export default {
   },
   created() {
     const vm = this;
-    console.log(vm.$router);
+    // console.log(vm.$router);
   },
   methods: {
     onMenu(isFoled) {

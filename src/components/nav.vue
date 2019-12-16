@@ -7,7 +7,7 @@
     @mouseleave.native="showText=!showText"
     @select="menuSelected"
   >
-    <template v-for="item in menu">
+    <template v-for="item in filterAuth(menu)">
       <el-menu-item
         v-if="!item.sub || item.sub.length==0"
         :index="item.route"
@@ -36,7 +36,7 @@
           <span>{{showText ? item.name : ''}}</span>
         </template>
         <el-menu-item
-          v-for="(subItem,index) in item.sub"
+          v-for="(subItem,index) in filterAuth(item.sub)"
           :index="subItem.route"
           :key="index"
           @mouseenter.native="subItem.isHover=!subItem.isHover"
@@ -138,6 +138,9 @@ export default {
       if (vm.$route.name !== name) {
         vm.$router.push({ name });
       }
+    },
+    filterAuth(list) {
+      return list.filter(item => this.hasAuth(item.auth || []));
     },
   },
   computed: mapState([]),

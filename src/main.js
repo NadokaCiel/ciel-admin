@@ -13,7 +13,7 @@ import store from '@/store';
 import * as filters from '@/filters';
 import * as directives from '@/directives';
 
-import { hasAuth } from '@/filters';
+import { hasAuth } from '@/filters/auth';
 import config from '@/config';
 import api from '@/api';
 

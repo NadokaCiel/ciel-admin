@@ -31,7 +31,6 @@ export default {
     const vm = this;
     vm.onListChanged();
     vm.$bus.on('chatbox-finishLine', () => {
-      console.log(1111);
       vm.lockLine = false;
     });
   },

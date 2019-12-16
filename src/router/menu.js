@@ -12,13 +12,13 @@ function getData() {
 
   Object.keys(Catalog).forEach(k => {
     const level1 = Catalog[k];
-    console.log('level1', level1);
     if (level1.self && !level1.self.menuHide) {
       const item = {
         name: level1.name || k,
         route: k,
-        icon: level1.self && level1.self.icon ? level1.self.icon : "fa-question",
+        icon: level1.self.icon || "fa-question",
         sub: [],
+        auth: level1.self.meta && level1.self.meta.auth ? level1.self.meta.auth : [],
       };
       Object.keys(level1).forEach(p => {
         const level2 = level1[p];
@@ -29,6 +29,7 @@ function getData() {
           name: level2.name || p,
           route: `${k}-${p}`,
           icon: level2.icon || "fa-question",
+          auth: level2.meta && level2.meta.auth ? level2.meta.auth : [],
         };
         item.sub.push(sub);
       });
