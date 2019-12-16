@@ -9,3 +9,7 @@ export function hasAuth(authList) {
   // console.log(Permission.checkAuth(authList, role));
   return Permission.checkAuth(authList, role);
 }
+
+export function showAuth(role) {
+  return Permission.userGroup(role);
+}

@@ -21,7 +21,7 @@ export default {
     };
   },
   created() {
-    const vm = this;
+    // const vm = this;
     // console.log(vm.$router);
   },
   methods: {

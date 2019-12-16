@@ -55,6 +55,7 @@ const Permission = {
       total: arrToMap(total),
     },
   },
+  userGroup,
   checkAuth,
 };
 
