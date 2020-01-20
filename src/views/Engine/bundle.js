@@ -35,4 +35,13 @@ export default {
       auth: ['admin'],
     },
   },
+  Upload: {
+    name: '图片',
+    icon: "fa-file-image",
+    path: '/engine/upload',
+    component: () => import(/* webpackChunkName: "engine" */ './Upload.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };
