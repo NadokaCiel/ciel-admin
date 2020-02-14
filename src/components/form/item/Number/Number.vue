@@ -1,7 +1,12 @@
 <template>
-  <el-input-number class="form-number" v-model="form.value" @change="userChange" :min="option.min || 0" :max="option.max || Infinity"></el-input-number>
+  <el-input-number
+    class="form-number"
+    v-model="form.value"
+    @change="userChange"
+    :min="option.min || 0"
+    :max="option.max || Infinity"
+  ></el-input-number>
 </template>
-
 <script>
 export default {
   name: 'form-number',

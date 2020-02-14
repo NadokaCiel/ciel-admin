@@ -1,13 +1,20 @@
 <template>
   <div class="form-color">
-    <el-input class="color-shower" placeholder="请输入内容" v-model="form.value">
+    <el-input
+      class="color-shower"
+      placeholder="请输入内容"
+      v-model="form.value"
+    >
       <template slot="prepend">
-        <el-color-picker @active-change="setColor" class="color-picker" v-model="form.value"></el-color-picker>
+        <el-color-picker
+          @active-change="setColor"
+          class="color-picker"
+          v-model="form.value"
+        ></el-color-picker>
       </template>
     </el-input>
   </div>
 </template>
-
 <script>
 export default {
   name: 'form-color',

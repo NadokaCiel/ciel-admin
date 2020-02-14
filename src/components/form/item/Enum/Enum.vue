@@ -1,14 +1,18 @@
 <template>
-  <el-select size="small" class="form-enum" v-model="form.value" :placeholder="option.description || '请选择'">
+  <el-select
+    class="form-enum"
+    v-model="form.value"
+    :placeholder="option.description || '请选择'"
+  >
     <el-option
-      v-for="item in option.enum"
+      v-for="item in option.list"
       :key="item.value"
       :label="item.label"
-      :value="item.value">
+      :value="item.value"
+    >
     </el-option>
   </el-select>
 </template>
-
 <script>
 export default {
   name: 'form-enum',

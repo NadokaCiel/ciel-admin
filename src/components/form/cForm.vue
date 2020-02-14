@@ -32,12 +32,21 @@
         </el-form-item>
       </el-collapse-item>
     </el-collapse>
+    <!-- <el-form-item class="vs-form-button">
+      <c-button
+        type="primary"
+        :clickFunc="[submit]"
+      >保存</c-button>
+      <el-button @click="cancel">取消</el-button>
+    </el-form-item> -->
   </el-form>
 </template>
 
 <script>
 import formatMap from "./formatMap";
 import components from './item/itemList';
+
+// import cButton from '../cButton';
 
 export default {
   name: 'c-form',
@@ -54,6 +63,8 @@ export default {
       type: Array,
       default: () => [],
     },
+    submit: Function,
+    cancel: Function,
   },
   data() {
     return {
@@ -79,6 +90,7 @@ export default {
         };
 
         const rule = {
+          ...this.settings[key],
           type: this.settings[key].type || '',
           message: `${this.settings[key].title} Error`,
           trigger: 'change',
@@ -136,7 +148,10 @@ export default {
   watch: {
     values: 'onValuesChanged',
   },
-  components,
+  components: {
+    // cButton,
+    ...components,
+  },
 };
 </script>
 
@@ -160,6 +175,10 @@ export default {
     .el-select .el-input--small .el-input__inner {
       height: 28px;
     }
+  }
+  .vs-form-button {
+    margin-top: 20px;
+    text-align: center;
   }
 }
 </style>

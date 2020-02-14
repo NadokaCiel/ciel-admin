@@ -1,5 +1,8 @@
 <template>
-  <el-input class="form-string" v-model="form.value"></el-input>
+  <el-input
+    class="form-string"
+    v-model="form.value"
+  ></el-input>
 </template>
 
 <script>
