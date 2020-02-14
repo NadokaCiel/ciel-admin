@@ -16,19 +16,17 @@
       >
         <el-form-item
           :label="setting.title"
-          v-for="(setting, name) in settings"
+          v-for="(setting, name) in filterSetting(settings, l)"
           :key="name"
           :prop="name"
         >
-          <template v-if="l.contains.includes(name)">
-            <component
-              class="setting-line"
-              :is="setting.format"
-              :form="settingForm[name]"
-              :option="setting"
-              @change="formChanged(name)"
-            ></component>
-          </template>
+          <component
+            class="setting-line"
+            :is="setting.format"
+            :form="settingForm[name]"
+            :option="setting"
+            @change="formChanged(name)"
+          ></component>
         </el-form-item>
       </el-collapse-item>
     </el-collapse>
@@ -79,6 +77,15 @@ export default {
     vm.onValuesChanged();
   },
   methods: {
+    filterSetting(map, l) {
+      const newMap = {};
+      Object.keys(map).forEach(key => {
+        if(l.contains && l.contains.includes(key)) {
+          newMap[key] = map[key];
+        }
+      })
+      return newMap;
+    },
     onValuesChanged() {
       const dataMap = {};
       const ruleMap = {};
