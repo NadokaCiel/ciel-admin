@@ -62,4 +62,13 @@ export default {
       auth: ['visitor'],
     },
   },
+  Miniapp: {
+    name: '小程序配置',
+    icon: "fa-donate",
+    path: '/lab/miniapp',
+    component: () => import(/* webpackChunkName: "lab" */ './Miniapp.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };

@@ -30,13 +30,13 @@
         </el-form-item>
       </el-collapse-item>
     </el-collapse>
-    <!-- <el-form-item class="vs-form-button">
+    <el-form-item class="vs-form-button" v-if="showBtn">
       <c-button
         type="primary"
         :clickFunc="[submit]"
       >保存</c-button>
       <el-button @click="cancel">取消</el-button>
-    </el-form-item> -->
+    </el-form-item>
   </el-form>
 </template>
 
@@ -44,7 +44,7 @@
 import formatMap from "./formatMap";
 import components from './item/itemList';
 
-// import cButton from '../cButton';
+import cButton from '../cButton';
 
 export default {
   name: 'c-form',
@@ -60,6 +60,10 @@ export default {
     layout: {
       type: Array,
       default: () => [],
+    },
+    showBtn: {
+      type: Boolean,
+      default: true,
     },
     submit: Function,
     cancel: Function,
@@ -80,10 +84,10 @@ export default {
     filterSetting(map, l) {
       const newMap = {};
       Object.keys(map).forEach(key => {
-        if(l.contains && l.contains.includes(key)) {
+        if (l.contains && l.contains.includes(key)) {
           newMap[key] = map[key];
         }
-      })
+      });
       return newMap;
     },
     onValuesChanged() {
@@ -145,6 +149,7 @@ export default {
           this.$emit('change', valid, this.formJson);
           if (valid) {
             // 发出更新事件
+            this.$emit('formChanged', name, this.formJson[name]);
             this.$emit('valid', this.formJson);
           }
         });
@@ -156,7 +161,7 @@ export default {
     values: 'onValuesChanged',
   },
   components: {
-    // cButton,
+    cButton,
     ...components,
   },
 };

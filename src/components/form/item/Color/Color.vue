@@ -10,6 +10,7 @@
           @active-change="setColor"
           class="color-picker"
           v-model="form.value"
+          :color-format="'hex'"
         ></el-color-picker>
       </template>
     </el-input>
