@@ -31,7 +31,12 @@ router.beforeEach((to, from, next) => {
   if (!token && from.name === "Login") {
     console.log('login');
   } else if (!token && to.name !== "Login") {
-    next({ name: "Login" });
+    next({
+      name: "Login",
+      query: {
+        redirect: to.fullPath,
+      },
+    });
   } else {
     const role = LocalStorage.get('role') || 'visitor';
     if (to.meta && to.meta.auth && !Permission.checkAuth(to.meta.auth, role)) {

@@ -33,7 +33,7 @@
         <div
           class="com-line"
           v-for="(com, index) in json"
-          :key="index"
+          :key="com.tag"
         >
           <el-card
             class="com-item"
@@ -172,10 +172,9 @@ export default {
       });
     },
     setSort() {
-      console.log(this.$refs.dragList);
-      console.log(this.$refs.dragList.$el);
-      const el = this.$refs.dragList;
-      this.sortable = Sortable.create(el, {
+      const vm = this;
+      const el = vm.$refs.dragList;
+      vm.sortable = Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
         setData(dataTransfer) {
           // to avoid Firefox bug
@@ -183,8 +182,8 @@ export default {
           dataTransfer.setData('Text', '');
         },
         onEnd: evt => {
-          const targetRow = this.json.splice(evt.oldIndex, 1)[0];
-          this.json.splice(evt.newIndex, 0, targetRow);
+          const targetRow = vm.json.splice(evt.oldIndex, 1)[0];
+          vm.json.splice(evt.newIndex, 0, targetRow);
         },
       });
     },

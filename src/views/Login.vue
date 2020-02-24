@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      redirect: undefined,
       form: {
         user_name: "",
         password: "",
@@ -85,9 +86,7 @@ export default {
         console.log('token', vm.$localStorage.get('token'));
         console.log('role', vm.$localStorage.get('role'));
         console.log('name', vm.$localStorage.get('name'));
-        vm.$router.push({
-          name: "Home",
-        });
+        vm.$router.push({ path: this.redirect || '/' });
       }).catch(err => {
         vm.$alert(err, {
           type: 'error',
@@ -101,6 +100,15 @@ export default {
   computed: mapState({
     appName: state => state.appName,
   }),
+  watch: {
+    $route: {
+      handler(route) {
+        this.redirect = route.query && route.query.redirect;
+        console.log('this.redirect', this.redirect);
+      },
+      immediate: true,
+    },
+  },
   components: {
   },
 };
