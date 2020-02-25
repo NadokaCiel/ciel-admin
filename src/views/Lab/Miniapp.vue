@@ -13,7 +13,7 @@ const jsonData = [{
   tag: "swiper1",
   style: {
     height: "211px",
-    width: "375px",
+    width: "305px",
   },
   data: [{
     image: "https://verystar.admin.verystar.net/img/logo.jpg",
@@ -69,7 +69,7 @@ const jsonData = [{
   status: "on",
   tag: "imageview1",
   style: {
-    width: "375px",
+    width: "305px",
     cols: 2,
   },
   data: [{

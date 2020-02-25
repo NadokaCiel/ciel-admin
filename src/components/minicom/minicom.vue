@@ -1,6 +1,8 @@
 <template>
   <div class="minicom">
-    <div style="margin: 0 auto">
+    <div class="phone-box">
+      <div class="phone-bg"></div>
+      <div class="phone-title"></div>
       <div class="phone-area">
         <template v-for="(com, index) in json">
           <div
@@ -15,10 +17,9 @@
           </div>
         </template>
       </div>
-      <el-button style="margin-bottom: 40px;" @click="dialogVisible = true">查看JSON数据</el-button>
     </div>
     <div class="form-area">
-      <div class="form-area-title">组件列表</div>
+      <div class="form-area-title">新增组件</div>
       <div class="com-tools">
         <el-card
           class="com-tool"
@@ -29,38 +30,40 @@
         >{{tool.name}}</el-card>
       </div>
       <div class="form-area-title">页面配置</div>
-      <div class="com-list" ref="dragList">
-        <div
-          class="com-line"
-          v-for="(com, index) in json"
-          :key="com.tag"
+      <div class="com-list">
+        <el-tabs
+          v-model="selectedIndex"
+          type="card"
+          closable
+          ref="dragList"
+          @tab-remove="removeTab"
         >
-          <el-card
-            class="com-item"
-            :class="getItemClass(index)"
-            @mouseenter.native="enterItem(index)"
-            @mouseleave.native="leaveItem(index)"
-            @click.native.self="selectItem(index)"
-            shadow="hover"
+          <el-tab-pane
+            :key="com.tag"
+            v-for="(com, index) in json"
+            :label="com.tag"
+            :name="index + ''"
           >
-            <div class="com-text">{{com.tag}}</div>
-          </el-card>
-          <div
-            class="com-delete"
-            @click="deleteLine(index, com.tag)"
-          ><i class="el-icon-delete"></i></div>
-        </div>
+            <span
+              slot="label"
+              @mouseenter="enterItem(index)"
+              @mouseleave="leaveItem(index)"
+            >{{com.tag}}</span>
+            <div class="form-content">
+              <!-- <div class="form-area-title">组件配置</div> -->
+              <div class="com-form">
+                <component
+                  class="my-form"
+                  :is="com.type + '-form'"
+                  :option="com"
+                  :key="com.tag"
+                ></component>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
-      <div class="form-area-title">组件配置</div>
-      <div class="com-form">
-        <component
-          class="my-form"
-          v-if="selectedIndex > -1"
-          :is="json[selectedIndex].type + '-form'"
-          :option="json[selectedIndex]"
-          :key="json[selectedIndex].tag"
-        ></component>
-      </div>
+      <el-button style="margin-bottom: 40px;" @click="dialogVisible = true">查看JSON数据</el-button>
     </div>
 
     <el-dialog
@@ -106,7 +109,7 @@ export default {
     return {
       dialogVisible: false,
       hoverIndex: -1,
-      selectedIndex: -1,
+      selectedIndex: '0',
       sortable: null,
       tools: [{
         name: "轮播",
@@ -144,7 +147,7 @@ export default {
       if (type === 'cover-view') {
         return '';
       }
-      if (this.selectedIndex === index) {
+      if (Number(this.selectedIndex) === index) {
         return 'com-item-active';
       }
       if (this.hoverIndex === index) {
@@ -158,22 +161,25 @@ export default {
     leaveItem() {
       this.hoverIndex = -1;
     },
-    selectItem(index) {
-      this.selectedIndex = index;
-    },
-    deleteLine(index, tag) {
+    removeTab(index) {
       const vm = this;
-      vm.$confirm(`确定删除组件： ${tag} 吗？`, '删除组件', {
+      vm.$confirm(`确定删除组件： ${vm.json[index].tag} 吗？`, '删除组件', {
         async callback(action) {
           if (action === 'confirm') {
             vm.json.splice(index, 1);
+            console.log('index', index);
+            console.log('selectedIndex', vm.selectedIndex);
+            if (index >= vm.json.length) {
+              vm.selectedIndex = '0';
+            }
           }
         },
       });
     },
     setSort() {
       const vm = this;
-      const el = vm.$refs.dragList;
+      const el = vm.$refs.dragList.$el.querySelectorAll('.el-tabs__nav')[0];
+      console.log(el);
       vm.sortable = Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
         setData(dataTransfer) {
@@ -209,18 +215,51 @@ export default {
   align-items: flex-start;
   height: 100%;
 
+  .phone-box {
+    position: relative;
+    margin: 40px 20px;
+    height: 727px;
+    width: 364px;
+  }
+
+  .phone-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 727px;
+    width: 364px;
+    background-image: url(~@/assets/imgs/iphonex.png);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .phone-title {
+    position: absolute;
+    top: 49px;
+    left: 31px;
+    height: 38px;
+    width: 303px;
+    background-image: url(~@/assets/imgs/miniapp_title.png);
+    background-position: center;
+    background-size: cover;
+  }
+
   .phone-area {
     position: relative;
-    flex-shrink: 0;
-    margin: 40px auto;
-    width: 375px;
-    height: 812px;
-    border: 1px solid #aaa;
+    margin-top: 87px;
+    margin-left: 30px;
+    width: 305px;
+    height: 592px;
+    // border: 1px solid #aaa;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: #fff;
 
     &::-webkit-scrollbar {
-      width: 0;
+      width: 4px;
+      background-color: transparent;
     }
 
     .com-item-hover {
@@ -255,31 +294,27 @@ export default {
   }
 
   .form-area {
+    padding-top: 10px;
     flex-grow: 1;
-    // margin: 20px 0;
-    max-height: 100%;
-    min-height: 80vh;
-    width: 100%;
-    max-width: 500px;
-    border-left: 1px solid #aaa;
+    // border-left: 1px solid #aaa;
     overflow: auto;
   }
 
   .form-area-title {
+    margin: 0 20px;
     height: 46px;
     line-height: 46px;
     padding-left: 20px;
     font-size: 18px;
     font-weight: bold;
-    border-top: 1px solid #aaa;
-    border-bottom: 1px solid #eee;
+    // border-bottom: 1px solid #eee;
   }
 
   .com-tools {
     display: flex;
     margin: 10px 20px;
-    // width: 100%;
     justify-content: flex-start;
+    border-bottom: 1px solid #aaa;
     overflow-x: auto;
 
     .com-tool {
@@ -295,56 +330,18 @@ export default {
 
   .com-list {
     margin: 10px auto;
-    max-height: 300px;
-    overflow-y: auto;
+    // max-height: 300px;
+    overflow-x: auto;
 
     &::-webkit-scrollbar {
       width: 2px;
     }
+  }
 
-    .com-line {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px auto;
-    }
-
-    .com-item {
-      margin-right: 10px;
-      width: 70%;
-      cursor: pointer;
-      position: relative;
-
-      &-hover {
-        position: relative;
-
-        &::after {
-          content: ' ';
-          z-index: 100;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(255, 255, 0, 0.2);
-        }
-      }
-
-      &-active {
-        position: relative;
-
-        &::after {
-          content: ' ';
-          z-index: 100;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 255, 0, 0.2);
-        }
-      }
-    }
+  .form-content {
+    min-height: 200px;
+    max-height: 500px;
+    overflow: auto;
   }
 }
 </style>
@@ -356,13 +353,7 @@ export default {
   }
 }
 
-.com-list {
-  .com-delete {
-    margin: 10px;
-    color: red;
-    cursor: pointer;
-  }
-
+.el-tabs__nav {
   .sortable-ghost {
     opacity: 0.4;
   }

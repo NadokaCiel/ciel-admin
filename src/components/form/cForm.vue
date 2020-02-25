@@ -63,7 +63,7 @@ export default {
     },
     showBtn: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     submit: Function,
     cancel: Function,

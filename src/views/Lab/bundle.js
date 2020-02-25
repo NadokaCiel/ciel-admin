@@ -64,7 +64,7 @@ export default {
   },
   Miniapp: {
     name: '小程序配置',
-    icon: "fa-donate",
+    icon: "fa-mobile-alt",
     path: '/lab/miniapp',
     component: () => import(/* webpackChunkName: "lab" */ './Miniapp.vue'),
     meta: {

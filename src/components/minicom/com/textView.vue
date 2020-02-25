@@ -3,7 +3,7 @@
     <el-button
       class="vs-text-btn"
       @click="switchModal(true)"
-    >活动规则</el-button>
+    >{{option.data.title}}</el-button>
     <div
       class="vs-text-modal"
       v-show="showInfo"
