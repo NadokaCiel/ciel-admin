@@ -71,8 +71,26 @@ export default {
         image: {
           title: "图片链接",
           type: "string",
-          format: "string",
+          format: "file",
           default: '',
+        },
+        fit: {
+          title: "填充方式",
+          type: "enum",
+          format: "enum",
+          default: '',
+          description: '请选择填充方式',
+          list: [{
+            label: "拉伸充满",
+            value: "fill",
+          }, {
+            label: "包含",
+            value: "contain",
+          }, {
+            label: "覆盖",
+            value: "cover",
+          }],
+          enum: ["fill", "contain", "cover"],
         },
         link_type: {
           title: "链接类型",
@@ -105,7 +123,7 @@ export default {
       }],
       picLayout: [{
         title: "图片",
-        contains: ["image", "link_type", "link_value"],
+        contains: ["image", "fit", "link_type", "link_value"],
       }],
     };
   },

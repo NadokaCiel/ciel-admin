@@ -54,7 +54,7 @@ export default {
         image: {
           title: "背景图",
           type: "string",
-          format: "string",
+          format: "file",
           default: '',
         },
         title: {

@@ -183,6 +183,7 @@ export default {
   }
   .el-form-item {
     width: 80%;
+    text-align: left;
 
     .el-select .el-input--small .el-input__inner {
       height: 28px;

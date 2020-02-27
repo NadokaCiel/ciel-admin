@@ -59,6 +59,7 @@ export default {
     .el-color-picker__trigger {
       border: none;
       height: 26px;
+      width: 26px;
       padding: 5px;
 
       .el-color-picker__color {
@@ -69,9 +70,7 @@ export default {
       .el-color-picker__icon {
         display: none;
       }
-
     }
-
   }
 
   .color-shower {
@@ -81,8 +80,6 @@ export default {
     .el-input-group__prepend {
       padding: 0;
     }
-
   }
-
 }
 </style>

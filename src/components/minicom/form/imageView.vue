@@ -71,7 +71,7 @@ export default {
         image: {
           title: "图片链接",
           type: "string",
-          format: "string",
+          format: "file",
           default: '',
         },
         title: {

@@ -53,22 +53,22 @@ export default {
         status: {
           title: "显示类型",
           type: "enum",
-          format: "enum",
-          default: '',
-          description: '请选择显示类型',
-          list: [{
-            label: "显示",
+          format: "status",
+          default: 'on',
+          active: {
+            text: "显示",
             value: "on",
-          }, {
-            label: "隐藏",
+          },
+          inactive: {
+            text: "隐藏",
             value: "off",
-          }],
+          },
           enum: ["on", "off"],
         },
         image: {
           title: "背景图",
           type: "string",
-          format: "string",
+          format: "file",
           default: '',
         },
         link_type: {

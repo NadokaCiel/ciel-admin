@@ -39,5 +39,10 @@ export default {
 <style lang="scss" scoped>
 .vs-carousel {
   height: 100%;
+
+  .el-image {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
