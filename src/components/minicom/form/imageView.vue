@@ -10,7 +10,19 @@
       :showBtn="false"
     >
     </c-form>
-    <template v-for="(pic, index) in picInfo">
+    <template v-for="(pic, index) in listOption.list">
+      <c-form
+        class="my-form"
+        :settings="picSettings"
+        :layout="picLayout"
+        @valid="subFilled"
+        :values="pic"
+        :showBtn="false"
+        :key="index"
+      >
+      </c-form>
+    </template>
+    <!-- <template v-for="(pic, index) in picInfo">
       <c-form
         class="my-form"
         :settings="picSettings"
@@ -21,7 +33,7 @@
         :key="index"
       >
       </c-form>
-    </template>
+    </template> -->
   </div>
 </template>
 <script>
@@ -30,7 +42,14 @@ import cForm from '@/components/form/cForm';
 export default {
   name: "vs-image-view-form",
   props: {
+    index: {
+      type: Number,
+    },
     option: {
+      type: Object,
+      default: () => {},
+    },
+    listOption: {
       type: Object,
       default: () => {},
     },
@@ -125,6 +144,9 @@ export default {
     this.optionChanged();
   },
   methods: {
+    ifActive() {
+      return this.listOption.selectedIndex === String(this.index);
+    },
     optionChanged() {
       console.log(this.option);
       this.baseInfo = {
@@ -145,6 +167,14 @@ export default {
     },
     baseFilled(data) {
       this.baseInfo = data;
+      this.formChanged();
+    },
+    subFilled(data) {
+      if (!this.ifActive()) return;
+      console.log('data', data);
+      this.listOption.list = [data];
+      this.picInfo[this.listOption.listIndex] = data;
+      this.option.data = this.picInfo;
       this.formChanged();
     },
     picFilled(index, event) {

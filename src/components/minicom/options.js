@@ -66,7 +66,7 @@ const optionMap = {
     status: "on",
     tag: "imageview1",
     style: {
-      width: "375px",
+      width: "305px",
       cols: 2,
     },
     data: [{
@@ -78,7 +78,7 @@ const optionMap = {
     }, {
       title: "某主题2",
       title_color: "#555555",
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583233164771&di=2b07988a36c9c291848c5c23c9d76efa&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F21%2F09%2F01200000026352136359091694357.jpg",
       link_type: "internal",
       link_value: "page/theme/theme?id=2",
       ext_foo: "bar",

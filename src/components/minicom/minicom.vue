@@ -5,14 +5,15 @@
       <div class="phone-title"></div>
       <div class="phone-area">
         <template v-for="(com, index) in json">
-          <div
-            :class="getItemClass(index, com.type)"
-            :key="com.tag"
-          >
+          <div :class="getItemClass(index, com.type)" :key="com.tag">
             <component
               class="phone-com"
               :is="com.type"
               :option="com"
+              :index="index"
+              :list-option="listOption"
+              @list-click="onListClick"
+              @click.native="onComClick(index, com)"
             ></component>
           </div>
         </template>
@@ -27,7 +28,8 @@
           v-for="(tool, index) in tools"
           :key="index"
           @click.native="addCom(tool.type)"
-        >{{tool.name}}</el-card>
+          >{{ tool.name }}</el-card
+        >
       </div>
       <div class="form-area-title">页面配置</div>
       <div class="com-list">
@@ -48,14 +50,17 @@
               slot="label"
               @mouseenter="enterItem(index)"
               @mouseleave="leaveItem(index)"
-            >{{com.tag}}</span>
+              >{{ com.tag }}</span
+            >
             <div class="form-content">
               <!-- <div class="form-area-title">组件配置</div> -->
               <div class="com-form">
                 <component
                   class="my-form"
                   :is="com.type + '-form'"
+                  :index="index"
                   :option="com"
+                  :list-option="listOption"
                   :key="com.tag"
                 ></component>
               </div>
@@ -63,37 +68,29 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <el-button style="margin-bottom: 40px;" @click="dialogVisible = true">查看JSON数据</el-button>
+      <el-button style="margin-bottom: 40px;" @click="dialogVisible = true"
+        >查看JSON数据</el-button
+      >
     </div>
 
-    <el-dialog
-      title="json数据"
-      :visible.sync="dialogVisible"
-      width="30%"
-    >
-      <span>{{JSON.stringify(json)}}</span>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          type="primary"
-          @click="dialogVisible = false"
-        >确 定</el-button>
+    <el-dialog title="json数据" :visible.sync="dialogVisible" width="30%">
+      <span>{{ JSON.stringify(json) }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import Sortable from 'sortablejs';
-import { mapState } from 'vuex';
+import Sortable from "sortablejs";
+import { mapState } from "vuex";
 
-import Option from './options';
-import coms from './com/comList';
-import forms from './form/formList';
+import Option from "./options";
+import coms from "./com/comList";
+import forms from "./form/formList";
 
 export default {
-  name: 'minicom',
+  name: "minicom",
   props: {
     json: {
       type: Array,
@@ -109,51 +106,62 @@ export default {
     return {
       dialogVisible: false,
       hoverIndex: -1,
-      selectedIndex: '0',
+      selectedIndex: "0",
       sortable: null,
-      tools: [{
-        name: "轮播",
-        type: "swiper",
-        // imgUrl: "",
-      }, {
-        name: "遮罩层",
-        type: "coverView",
-        // imgUrl: "",
-      }, {
-        name: "文案",
-        type: "textView",
-        // imgUrl: "",
-      }, {
-        name: "图列",
-        type: "imageView",
-        // imgUrl: "",
-      }, {
-        name: "按钮",
-        type: "buttonView",
-        // imgUrl: "",
-      }],
+      listOption: {
+        selectedIndex: "0",
+        listIndex: -1,
+        list: [],
+      },
+      tools: [
+        {
+          name: "轮播",
+          type: "swiper",
+          // imgUrl: "",
+        },
+        {
+          name: "遮罩层",
+          type: "coverView",
+          // imgUrl: "",
+        },
+        {
+          name: "文案",
+          type: "textView",
+          // imgUrl: "",
+        },
+        {
+          name: "图列",
+          type: "imageView",
+          // imgUrl: "",
+        },
+        {
+          name: "按钮",
+          type: "buttonView",
+          // imgUrl: "",
+        },
+      ],
     };
   },
   methods: {
     addCom(type) {
       const newCom = Option.getOption(type);
-      const tagList = this.json.map(item => item.tag);
+      const tagList = this.json.map((item) => item.tag);
       while (tagList.indexOf(newCom.tag) > -1) {
-        newCom.tag += '1';
+        newCom.tag += "1";
       }
       this.json.push(newCom);
     },
     getItemClass(index, type) {
-      if (type === 'cover-view') {
-        return '';
+      if (type === "cover-view") {
+        return "";
       }
       if (Number(this.selectedIndex) === index) {
-        return 'com-item-active';
+        return "com-item-active";
       }
       if (this.hoverIndex === index) {
-        return 'com-item-hover';
+        return "com-item-hover";
       }
-      return '';
+      return "";
     },
     enterItem(index) {
       this.hoverIndex = index;
@@ -163,14 +171,14 @@ export default {
     },
     removeTab(index) {
       const vm = this;
-      vm.$confirm(`确定删除组件： ${vm.json[index].tag} 吗？`, '删除组件', {
+      vm.$confirm(`确定删除组件： ${vm.json[index].tag} 吗？`, "删除组件", {
         async callback(action) {
-          if (action === 'confirm') {
+          if (action === "confirm") {
             vm.json.splice(index, 1);
-            console.log('index', index);
-            console.log('selectedIndex', vm.selectedIndex);
+            console.log("index", index);
+            console.log("selectedIndex", vm.selectedIndex);
             if (index >= vm.json.length) {
-              vm.selectedIndex = '0';
+              vm.selectedIndex = "0";
             }
           }
         },
@@ -178,23 +186,50 @@ export default {
     },
     setSort() {
       const vm = this;
-      const el = vm.$refs.dragList.$el.querySelectorAll('.el-tabs__nav')[0];
+      const el = vm.$refs.dragList.$el.querySelectorAll(".el-tabs__nav")[0];
       console.log(el);
       vm.sortable = Sortable.create(el, {
-        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        ghostClass: "sortable-ghost", // Class name for the drop placeholder,
         setData(dataTransfer) {
           // to avoid Firefox bug
           // Detail see : https://github.com/RubaXa/Sortable/issues/1012
-          dataTransfer.setData('Text', '');
+          dataTransfer.setData("Text", "");
         },
-        onEnd: evt => {
+        onEnd: (evt) => {
           const targetRow = vm.json.splice(evt.oldIndex, 1)[0];
           vm.json.splice(evt.newIndex, 0, targetRow);
         },
       });
     },
-    showJson() {
-
+    onComClick(index, com) {
+      console.log("index", index);
+      console.log("com", com);
+      this.selectedIndex = String(index);
+      if (this.selectedIndex !== this.listOption.selectedIndex) {
+        this.listOption = {
+          listIndex: -1,
+          selectedIndex: String(index),
+          list: [],
+        };
+      }
+    },
+    onListClick({
+      comIndex = null,
+      type = "",
+      listIndex = null,
+      item = {},
+    }) {
+      console.log("comIndex", comIndex);
+      console.log("type", type);
+      console.log("listIndex", listIndex);
+      console.log("item", item);
+      this.selectedIndex = String(comIndex);
+      this.listOption = {
+        listIndex,
+        selectedIndex: String(comIndex),
+        list: [item],
+      };
+      console.log("listOption", this.listOption);
     },
   },
   computed: mapState({}),
@@ -206,9 +241,7 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
-
 .minicom {
   display: flex;
   justify-content: center;
@@ -266,7 +299,7 @@ export default {
       position: relative;
 
       &::after {
-        content: ' ';
+        content: " ";
         z-index: 100;
         position: absolute;
         top: 0;
@@ -274,6 +307,7 @@ export default {
         right: 0;
         bottom: 0;
         background-color: rgba(255, 255, 0, 0.2);
+        pointer-events: none;
       }
     }
 
@@ -281,7 +315,7 @@ export default {
       position: relative;
 
       &::before {
-        content: ' ';
+        content: " ";
         z-index: 100;
         position: absolute;
         top: 0;
@@ -289,6 +323,7 @@ export default {
         right: 0;
         bottom: 0;
         background-color: rgba(0, 255, 0, 0.2);
+        pointer-events: none;
       }
     }
   }
