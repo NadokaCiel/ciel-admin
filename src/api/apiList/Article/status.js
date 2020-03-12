@@ -1,13 +1,20 @@
 export default function(version = '') {
   return {
-    name: 'imageRemove',
+    name: 'articleStatus',
     interval: 2000, // 每隔2秒重试一次
     retryTimes: 3, // 重试3次
-    apiName: `${version}/api/image/{id}`, // 接口pathurl
+    apiName: `${version}/api/article/{id}/status`, // 接口pathurl
     desc: '', // 接口描述
-    method: 'DELETE',
+    method: 'PUT',
     params: {
+      // post参数
       post: [{
+        param: 'id',
+        isNeed: 1,
+      }, {
+        param: 'status',
+        isNeed: 1,
+      }, {
         param: 'token',
         isNeed: 1,
       }, {

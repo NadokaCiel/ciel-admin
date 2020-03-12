@@ -31,6 +31,7 @@
         :limit="fileLimit"
         :on-exceed="onOutnumber"
         :on-change="onFileChange"
+        :on-success="getList"
         :file-list="uploadedList"
       >
         <i class="el-icon-upload"></i>
@@ -52,7 +53,6 @@
       <el-table-column
         prop="name"
         label="文件名"
-        width="200"
       >
       </el-table-column>
       <el-table-column
@@ -72,14 +72,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="创建者" width="100">
+      <!-- <el-table-column label="创建者" width="100">
         <template slot-scope="scope">
           {{scope.row.creator ? scope.row.creator.user_name : '-'}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="创建时间" width="180">
         <template slot-scope="scope">
           {{scope.row.create_time | date}}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="80">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -121,6 +126,7 @@ export default {
     const vm = this;
     vm.uploadUrl = `${vm.$config.domain}/api/upload`;
     vm.host = vm.$config.domain;
+    vm.getList();
   },
   methods: {
     onFileChange(file, fileList) {
@@ -173,6 +179,31 @@ export default {
         });
       });
     },
+    async deleteLine(line) {
+      const vm = this;
+      vm.$confirm(`确定删除图片：${line.name}吗？`, '删除图片', {
+        async callback(action) {
+          if (action === 'confirm') {
+            await vm.$api.imageRemove({
+              restful: {
+                id: line.id,
+              },
+            }).then(() => {
+              vm.$notify.success({
+                title: '图片',
+                message: '删除成功！',
+                showClose: true,
+              });
+              vm.getList();
+            }).catch(err => {
+              vm.$alert(err, {
+                type: 'error',
+              });
+            });
+          }
+        },
+      });
+    },
   },
 };
 </script>
@@ -189,8 +220,8 @@ export default {
   }
 
   .my-list {
-    margin: 0 auto;
-    width: 80%;
+    margin: 40px auto;
+    width: 95%;
   }
 }
 </style>

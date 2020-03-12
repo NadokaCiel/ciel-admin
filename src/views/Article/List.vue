@@ -43,6 +43,7 @@
         <template slot-scope="scope">
           <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">查看</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
+          <el-button class="line-btn" type="text" size="mini" @click="changeStatus(scope.row)">{{opMap[scope.row.status]}}</el-button>
           <el-button type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -68,6 +69,11 @@ export default {
       page: 1,
       total: 0,
       size: 10,
+      opMap: {
+        pending: '审批通过',
+        audited: '撤回文章',
+        failed: '审核失败',
+      },
       statusMap: {
         pending: '待审核',
         audited: '审核通过',
@@ -144,6 +150,35 @@ export default {
               vm.$notify.success({
                 title: '文章',
                 message: '删除成功！',
+                showClose: true,
+              });
+              vm.getList();
+            }).catch(err => {
+              vm.$alert(err, {
+                type: 'error',
+              });
+            });
+          }
+        },
+      });
+    },
+    async changeStatus(line) {
+      const vm = this;
+      vm.$confirm(`确定${line.status === 'pending' ? '通过' : '撤回'}对文章：《${line.title}》的审核吗？`, '审核文章', {
+        async callback(action) {
+          if (action === 'confirm') {
+            await vm.$api.articleStatus({
+              restful: {
+                id: line.id,
+              },
+              data: {
+                id: line.id,
+                status: line.status === 'pending' ? 'audited' : 'pending',
+              },
+            }).then(() => {
+              vm.$notify.success({
+                title: '文章',
+                message: `${line.status === 'pending' ? '审核' : '撤回'}成功！`,
                 showClose: true,
               });
               vm.getList();
