@@ -5,6 +5,7 @@
     @change="userChange"
     :min="option.min || 0"
     :max="option.max || Infinity"
+    :disabled="option.disabled"
   ></el-input-number>
 </template>
 <script>

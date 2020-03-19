@@ -8,6 +8,7 @@
     :inactive-text="option.inactive.text || ''"
     :active-value="option.active.value || false"
     :inactive-value="option.inactive.value || true"
+    :disabled="option.disabled"
   >
   </el-switch>
 </template>

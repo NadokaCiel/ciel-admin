@@ -4,6 +4,7 @@
       class="color-shower"
       placeholder="请输入内容"
       v-model="form.value"
+      :disabled="option.disabled"
     >
       <template slot="prepend">
         <el-color-picker
@@ -11,6 +12,7 @@
           class="color-picker"
           v-model="form.value"
           :color-format="'hex'"
+          :disabled="option.disabled"
         ></el-color-picker>
       </template>
     </el-input>

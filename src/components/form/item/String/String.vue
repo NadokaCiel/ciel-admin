@@ -2,6 +2,7 @@
   <el-input
     class="form-string"
     v-model="form.value"
+    :disabled="option.disabled"
   ></el-input>
 </template>
 

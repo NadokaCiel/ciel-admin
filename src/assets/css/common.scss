@@ -64,3 +64,7 @@
 ::-webkit-scrollbar-track-piece {
   border-radius: 7px;
 }
+
+.el-drawer__body {
+  overflow: auto;
+}

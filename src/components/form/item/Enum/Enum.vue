@@ -3,6 +3,7 @@
     class="form-enum"
     v-model="form.value"
     :placeholder="option.description || '请选择'"
+    :disabled="option.disabled"
   >
     <el-option
       v-for="item in option.list"

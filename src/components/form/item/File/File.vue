@@ -1,30 +1,32 @@
 <template>
   <div class="form-file">
     <el-upload
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :action="uploadUrl"
       :multiple="option.multiple || false"
-      :limit="3"
-      :file-list="fileList"
+      :limit="option.limit || 1"
+      :accept="option.accept || '.jpg,.png'"
+      :on-success="onUploadSuccess"
     >
-      <el-button
-        size="small"
-        type="primary"
-      >点击上传</el-button>
-      <div
-        slot="tip"
-        class="el-upload__tip"
-      >只能上传jpg/png文件，且不超过500kb</div>
+      <el-button size="small" type="primary">点击上传</el-button>
+      <div slot="tip" class="el-upload__tip">
+        {{ option.hint }}
+      </div>
     </el-upload>
-    <el-input
-      class="form-file"
-      v-model="form.value"
-    ></el-input>
+    <el-image
+      v-if="form.value"
+      class="form-image-preview"
+      fit="cover"
+      :src="form.value"
+      :preview-src-list="[form.value]"
+    >
+    </el-image>
+    <el-input class="form-file" v-model="form.value"></el-input>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'form-file',
+  name: "form-file",
   props: {
     form: {
       type: Object,
@@ -37,19 +39,36 @@ export default {
   },
   data() {
     return {
-      fileList: [],
+      host: "",
+      uploadUrl: "",
     };
   },
   created() {
+    const vm = this;
+    vm.host = vm.$config.domain;
+    vm.uploadUrl = `${vm.host}/api/upload`;
   },
   methods: {
+    onUploadSuccess(res) {
+      console.log("url", res.data.url);
+      this.form.value = this.host + res.data.url;
+    },
     valueChange(nV) {
       console.log(nV);
-      this.$emit('change');
+      this.$emit("change");
     },
   },
   watch: {
-    'form.value': 'valueChange',
+    "form.value": "valueChange",
   },
 };
 </script>
+
+<style lang="scss">
+.form-file {
+  .form-image-preview {
+    width: 80px;
+    height: 80px;
+  }
+}
+</style>

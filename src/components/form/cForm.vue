@@ -31,10 +31,7 @@
       </el-collapse-item>
     </el-collapse>
     <el-form-item class="vs-form-button" v-if="showBtn">
-      <c-button
-        type="primary"
-        :clickFunc="[submit]"
-      >保存</c-button>
+      <c-button type="primary" :clickFunc="[checkForm]">保存</c-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>
@@ -42,12 +39,12 @@
 
 <script>
 import formatMap from "./formatMap";
-import components from './item/itemList';
+import components from "./item/itemList";
 
-import cButton from '../cButton';
+import cButton from "../cButton";
 
 export default {
-  name: 'c-form',
+  name: "c-form",
   props: {
     settings: {
       type: Object,
@@ -70,6 +67,7 @@ export default {
   },
   data() {
     return {
+      valid: false,
       formJson: {},
       settingForm: {},
       settingRules: {},
@@ -83,7 +81,7 @@ export default {
   methods: {
     filterSetting(map, l) {
       const newMap = {};
-      Object.keys(map).forEach(key => {
+      Object.keys(map).forEach((key) => {
         if (l.contains && l.contains.includes(key)) {
           newMap[key] = map[key];
         }
@@ -93,7 +91,7 @@ export default {
     onValuesChanged() {
       const dataMap = {};
       const ruleMap = {};
-      Object.keys(this.settings).forEach(key => {
+      Object.keys(this.settings).forEach((key) => {
         const { format } = this.settings[key];
         dataMap[key] = {
           title: key,
@@ -102,9 +100,9 @@ export default {
 
         const rule = {
           ...this.settings[key],
-          type: this.settings[key].type || '',
-          message: `${this.settings[key].title} Error`,
-          trigger: 'change',
+          type: this.settings[key].type || "",
+          message: `${this.settings[key].title} 错误`,
+          trigger: "change",
           pattern: null,
         };
         if (this.settings[key].pattern) {
@@ -115,42 +113,85 @@ export default {
         if (this.settings[key].required) {
           const validator = {
             required: true,
-            message: `Please Enter ${this.settings[key].title}`,
-            trigger: 'change',
+            message: `请填写 ${this.settings[key].title}`,
+            trigger: "change",
           };
           ruleMap[key].push(validator);
         }
         if (formatMap[format]) {
           const validator = {
             validator: formatMap[format],
-            trigger: 'change',
+            trigger: "change",
           };
           ruleMap[key].push(validator);
         }
       });
 
       const formJson = {};
-      Object.keys(dataMap).forEach(key => {
+      Object.keys(dataMap).forEach((key) => {
         formJson[key] = dataMap[key].value;
       });
       this.formJson = formJson;
       this.settingForm = dataMap;
       this.settingRules = ruleMap;
     },
+    onSettingChanged() {
+      const ruleMap = {};
+      Object.keys(this.settings).forEach((key) => {
+        const { format } = this.settings[key];
+
+        const rule = {
+          ...this.settings[key],
+          type: this.settings[key].type || "",
+          message: `${this.settings[key].title} 错误`,
+          trigger: "change",
+          pattern: null,
+        };
+        if (this.settings[key].pattern) {
+          rule.pattern = new RegExp(this.settings[key].pattern);
+        }
+        ruleMap[key] = [rule];
+
+        if (this.settings[key].required) {
+          const validator = {
+            required: true,
+            message: `请填写 ${this.settings[key].title}`,
+            trigger: "change",
+          };
+          ruleMap[key].push(validator);
+        }
+        if (formatMap[format]) {
+          const validator = {
+            validator: formatMap[format],
+            trigger: "change",
+          };
+          ruleMap[key].push(validator);
+        }
+      });
+      this.settingRules = ruleMap;
+    },
     formChanged(name) {
-      console.log('formChanged', name);
+      console.log("formChanged", name);
       const formJson = {};
-      Object.keys(this.settingForm).forEach(key => {
+      Object.keys(this.settingForm).forEach((key) => {
         formJson[key] = this.settingForm[key].value;
       });
       this.formJson = formJson;
+      this.$emit("change", this.valid, this.formJson);
+      this.$emit("formChanged", name, this.formJson[name]);
       this.$nextTick(() => {
-        (this.$refs.settingConfig).validate((valid) => {
-          this.$emit('change', valid, this.formJson);
+        console.log(this.$refs.settingConfig);
+        this.$refs.settingConfig.clearValidate();
+      });
+    },
+    checkForm(e) {
+      this.$nextTick(() => {
+        this.$refs.settingConfig.validate((valid) => {
+          this.valid = valid;
           if (valid) {
             // 发出更新事件
-            this.$emit('formChanged', name, this.formJson[name]);
-            this.$emit('valid', this.formJson);
+            this.$emit("valid", this.formJson);
+            this.submit(e);
           }
         });
       });
@@ -158,7 +199,15 @@ export default {
   },
   computed: {},
   watch: {
-    values: 'onValuesChanged',
+    values: "onValuesChanged",
+    settings: {
+      handler() {
+        console.log('settings handler');
+        this.onSettingChanged();
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+      deep: true,
+    },
   },
   components: {
     cButton,
@@ -167,8 +216,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
 <style lang="scss">
 .setting-form {
   .el-collapse-item__header {

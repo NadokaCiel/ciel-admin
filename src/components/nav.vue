@@ -161,6 +161,7 @@ function addStatus(list) {
 
 <style lang="scss" scoped>
 .nav {
+  padding-bottom: 60px;
   width: 50px;
   position: fixed;
   top: 0;
