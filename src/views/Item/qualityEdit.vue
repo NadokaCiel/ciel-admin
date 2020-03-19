@@ -50,7 +50,7 @@ export default {
           type: "string",
           format: "color",
           default: "",
-          required: false,
+          required: true,
         },
         mark: {
           title: "备注",

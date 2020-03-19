@@ -51,6 +51,7 @@ export default {
           description: "请选择物品类型",
           list: [],
           enum: [],
+          required: true,
         },
         quality_id: {
           title: "品质",
@@ -60,6 +61,7 @@ export default {
           description: "请选择品质",
           list: [],
           enum: [],
+          required: true,
         },
         stack: {
           title: "可堆叠数",
