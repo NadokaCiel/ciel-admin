@@ -76,7 +76,7 @@ export default {
     async submit() {
       const vm = this;
 
-      let body = {
+      const body = {
         id: vm.data.id,
         ...vm.modifiedData,
       };
