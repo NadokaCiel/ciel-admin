@@ -7,6 +7,8 @@ import Image from './Image';
 import Item from './Item';
 import ItemType from './ItemType';
 import Quality from './Quality';
+import Class from './Class';
+import Race from './Race';
 
 const getApi = (version) => [
   ...Common(version),
@@ -18,6 +20,8 @@ const getApi = (version) => [
   ...Item(version),
   ...ItemType(version),
   ...Quality(version),
+  ...Class(version),
+  ...Race(version),
 ];
 
 export default getApi;

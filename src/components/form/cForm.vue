@@ -4,7 +4,8 @@
     :model="formJson"
     :rules="settingRules"
     ref="settingConfig"
-    label-width="25%"
+    :label-position="labelPosition"
+    :label-width="labelWidth"
     @submit.native.prevent
   >
     <el-collapse v-model="collapseList">
@@ -19,9 +20,11 @@
           v-for="(setting, name) in filterSetting(settings, l)"
           :key="name"
           :prop="name"
+          :style="{ textAlign: layout.position || 'left' }"
         >
           <component
             class="setting-line"
+            :class="'setting-'+layout.position"
             :is="setting.format"
             :form="settingForm[name]"
             :option="setting"
@@ -57,6 +60,14 @@ export default {
     layout: {
       type: Array,
       default: () => [],
+    },
+    labelWidth: {
+      type: String,
+      default: () => '25%',
+    },
+    labelPosition: {
+      type: String,
+      default: () => 'right',
     },
     showBtn: {
       type: Boolean,
@@ -222,6 +233,9 @@ export default {
   .el-collapse-item__header {
     padding-left: 20px;
   }
+  .el-form-item__label {
+    padding-left: 20px;
+  }
   .el-collapse-item__content {
     padding-bottom: 5px;
 
@@ -231,7 +245,6 @@ export default {
   }
   .el-form-item {
     width: 80%;
-    text-align: left;
 
     .el-select .el-input--small .el-input__inner {
       height: 28px;
