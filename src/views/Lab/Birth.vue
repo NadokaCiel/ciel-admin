@@ -2,7 +2,7 @@
   <div class="lab-birth">
     <div class="page-title">生日问题</div>
     <div class="page-subtitle">Birthday Puzzle</div>
-    <c-form class="my-form" :settings="settings" :layout="layout" @valid="formFilled" :values="values">
+    <c-form class="my-form" :settings="settings" :layout="layout" @change="formFilled" :values="values">
     </c-form>
     <div class="age-info">
       <p class="info-line" v-for="(line,index) in results" :key="index">
@@ -56,7 +56,7 @@ export default {
         name: 'Item-List',
       });
     },
-    formFilled(data) {
+    formFilled(valid, data) {
       this.values = data;
       this.calc();
     },
