@@ -171,25 +171,48 @@ export function getGamete(type) {
   return gametes;
 }
 
-function combination(originalData) {
-  const len = originalData.length;
-  if (len < 2) {
-    return originalData[0];
-  }
-  const fArrLen = originalData[0].length;
-  const secArrlen = originalData[1].length;
+// function combination(originalData) {
+//   const len = originalData.length;
+//   if (len < 2) {
+//     return originalData[0];
+//   }
+//   const fArrLen = originalData[0].length;
+//   const secArrlen = originalData[1].length;
+//   const result = [];
+//   for (let firstIndex = 0; firstIndex < fArrLen; firstIndex += 1) {
+//     for (let secondIndex = 0; secondIndex < secArrlen; secondIndex += 1) {
+//       result[result.length] = originalData[0][firstIndex] + originalData[1][secondIndex];
+//     }
+//   }
+//   const tmpResult = [];
+//   for (let i = 2; i < originalData.length; i += 1) {
+//     tmpResult[i - 1] = originalData[i];
+//   }
+//   tmpResult[0] = result;
+//   return combination(tmpResult);
+// }
+
+
+function combination(arr) {
+  const lenArr = [];
+  const productArr = [];
   const result = [];
-  for (let firstIndex = 0; firstIndex < fArrLen; firstIndex += 1) {
-    for (let secondIndex = 0; secondIndex < secArrlen; secondIndex += 1) {
-      result[result.length] = originalData[0][firstIndex] + originalData[1][secondIndex];
+  let length = 1;
+  for (let i = 0; i < arr.length; i += 1) {
+    const len = arr[i].length;
+    lenArr.push(len);
+    const product = i === 0 ? 1 : arr[i - 1].length * productArr[i - 1];
+    productArr.push(product);
+    length *= len;
+  }
+  for (let i = 0; i < length; i += 1) {
+    let resultItem = '';
+    for (let j = 0; j < arr.length; j += 1) {
+      resultItem += arr[j][Math.floor(i / productArr[j]) % lenArr[j]];
     }
+    result.push(resultItem);
   }
-  const tmpResult = [];
-  for (let i = 2; i < originalData.length; i += 1) {
-    tmpResult[i - 1] = originalData[i];
-  }
-  tmpResult[0] = result;
-  return combination(tmpResult);
+  return result;
 }
 
 export default {

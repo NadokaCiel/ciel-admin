@@ -21,7 +21,6 @@
         </el-option>
       </el-select>
     </div>
-
     <div
       class="lab-box"
       flex="main:left cross:center"
@@ -42,7 +41,6 @@
         </el-option>
       </el-select>
     </div>
-
     <div
       class="lab-box"
       flex="main:left cross:center"
@@ -63,34 +61,34 @@
         </el-option>
       </el-select>
     </div>
-
     <div class="lab-content">
-
       <el-table
         class="lab-table"
         :data="data"
       >
         <el-table-column
           prop="prop0"
-          label="亲代"
+          label="亲代配子"
         >
-          <!-- <template slot-scope="scope">
+          <template slot-scope="scope">
             <div
               class="table-father-left"
-              flex="main:left cross:top"
+              flex="main:justify cross:center"
             >
-              <div>白色（种子）</div>
-              <div
-                flex="dir:top main:center cross:center"
-                v-for="(header, index) in gametes1"
-                :key="index"
-              ></div>
+              <div>{{parent1Title}}</div>
+              <div>
+                <div
+                  flex="dir:top main:center cross:center"
+                  v-for="(gamete, index) in scope.row.prop0"
+                  :key="index"
+                >{{gamete}}</div>
+              </div>
             </div>
-          </template> -->
+          </template>
         </el-table-column>
         <el-table-column
           class="table-father-top"
-          label="白色（种子）"
+          :label="parent2Title"
         >
           <el-table-column
             v-for="(gamete, index) in gametes2"
@@ -125,17 +123,15 @@ export default {
       flowerType: 'lily',
       parentOptions: [],
       typeOptions: [],
-      data: [],
+      data: [{
+        prop0: {},
+      }],
       parent1: '',
       parent2: '',
+      parent1Title: '',
+      parent2Title: '',
       gametes1: [],
-      gametes2: [{
-        prop: 'prop1',
-        label: 'rys',
-      }, {
-        prop: 'prop2',
-        label: 'ryS',
-      }],
+      gametes2: [],
     };
   },
   methods: {
@@ -146,11 +142,20 @@ export default {
     onParentsChange() {
       console.log('parent1', this.parent1);
       console.log('parent2', this.parent2);
+      if (this.parent1) {
+        this.parent1Title = this.parentOptions.find(item => item.value === this.parent1).label;
+      }
+      if (this.parent2) {
+        this.parent2Title = this.parentOptions.find(item => item.value === this.parent2).label;
+      }
       if (this.parent1 && this.parent2) {
         this.gametes1 = getGamete(this.parent1);
         this.gametes2 = getGamete(this.parent2);
         console.log('gametes1', this.gametes1);
         console.log('gametes2', this.gametes2);
+        this.data = [{
+          prop0: this.gametes1,
+        }];
       }
     },
     changeSeeds(type) {
@@ -180,6 +185,11 @@ export default {
   .lab-box {
     margin: 20px 0;
     padding: 0 40px;
+  }
+
+  .lab-table {
+    margin: 40px auto;
+    max-width: 90vw;
   }
 }
 </style>
