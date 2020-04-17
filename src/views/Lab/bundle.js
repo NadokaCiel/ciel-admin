@@ -62,6 +62,15 @@ export default {
       auth: ['visitor'],
     },
   },
+  Garden: {
+    name: '遗传研究',
+    icon: "fa-seedling",
+    path: '/lab/garden',
+    component: () => import(/* webpackChunkName: "lab" */ './Garden.vue'),
+    meta: {
+      auth: ['visitor'],
+    },
+  },
   Miniapp: {
     name: '小程序配置',
     icon: "fa-mobile-alt",

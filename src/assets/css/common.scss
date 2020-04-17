@@ -68,3 +68,17 @@
 .el-drawer__body {
   overflow: auto;
 }
+
+.lab-table {
+  margin: 40px auto;
+  max-width: 90vw;
+
+  &-grid {
+    margin-top: -1px;
+    margin-left: -1px;
+    min-height: 40px;
+    min-width: 40px;
+    border: 1px solid #000;
+    border-radius: 4px;
+  }
+}
