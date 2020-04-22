@@ -1,4 +1,9 @@
+const anonymous = [
+  'anonymous',
+];
+
 const visitor = [
+  ...anonymous,
   'visitor',
 ];
 
@@ -30,6 +35,7 @@ const arrToMap = (arr) => {
 };
 
 const userGroup = {
+  anonymous: arrToMap(anonymous),
   visitor: arrToMap(visitor),
   user: arrToMap(user),
   admin: arrToMap(admin),
