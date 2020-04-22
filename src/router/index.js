@@ -28,6 +28,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = LocalStorage.get('token');
+  console.log('to.meta', to.meta);
+  if (to.meta.auth.indexOf('anonymous') > -1) {
+    next();
+    return;
+  }
   if (!token && from.name === "Login") {
     console.log('login');
   } else if (!token && to.name !== "Login") {

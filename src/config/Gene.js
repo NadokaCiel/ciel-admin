@@ -1,3 +1,12 @@
+import Lily from "./Flower/Lily";
+import Cosmos from "./Flower/Cosmos";
+import Mum from "./Flower/Mum";
+import Windflower from "./Flower/Windflower";
+import Pansy from "./Flower/Pansy";
+import Hyacinth from "./Flower/Hyacinth";
+import Tulip from "./Flower/Tulip";
+import Rose from "./Flower/Rose";
+
 export const colorMap = {
   white: '白',
   yellow: '黄',
@@ -28,81 +37,21 @@ export const colorCSSMap = {
 
 const initData = {
   // 百合
-  lily: {
-    name: '百合',
-    seeds: ['rryySS', 'rrYYss', 'RRyySs'],
-    typeMap: {
-      rryyss: 'white',
-      rryySs: 'white',
-      rryySS: 'white',
-      rrYyss: 'yellow',
-      rrYySs: 'white',
-      rrYySS: 'white',
-      rrYYss: 'yellow',
-      rrYYSs: 'yellow',
-      rrYYSS: 'white',
-      Rryyss: 'red',
-      RryySs: 'pink',
-      RryySS: 'white',
-      RrYyss: 'orange',
-      RrYySs: 'yellow',
-      RrYySS: 'yellow',
-      RrYYss: 'orange',
-      RrYYSs: 'yellow',
-      RrYYSS: 'yellow',
-      RRyyss: 'dark',
-      RRyySs: 'red',
-      RRyySS: 'pink',
-      RRYyss: 'dark',
-      RRYySs: 'red',
-      RRYySS: 'pink',
-      RRYYss: 'orange',
-      RRYYSs: 'orange',
-      RRYYSS: 'white',
-    },
-  },
-  // // 波斯菊
-  // cosmos: {
-  //   name: '波斯菊',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 菊花
-  // mum: {
-  //   name: '菊花',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 银莲花
-  // windflower: {
-  //   name: '银莲花',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 三色堇
-  // pansy: {
-  //   name: '三色堇',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 风信子
-  // hyacinth: {
-  //   name: '风信子',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 郁金香
-  // tulip: {
-  //   name: '郁金香',
-  //   seeds: [],
-  //   types: [],
-  // },
-  // // 玫瑰
-  // rose: {
-  //   name: '玫瑰',
-  //   seeds: [],
-  //   types: [],
-  // },
+  lily: Lily,
+  // 波斯菊
+  cosmos: Cosmos,
+  // 菊花
+  mum: Mum,
+  // 银莲花
+  windflower: Windflower,
+  // 三色堇
+  pansy: Pansy,
+  // 风信子
+  hyacinth: Hyacinth,
+  // 郁金香
+  tulip: Tulip,
+  // 玫瑰
+  rose: Rose,
 };
 
 export const geneMap = init(initData);
@@ -170,28 +119,6 @@ export function getGamete(type) {
   const gametes = combination(genePool);
   return gametes;
 }
-
-// function combination(originalData) {
-//   const len = originalData.length;
-//   if (len < 2) {
-//     return originalData[0];
-//   }
-//   const fArrLen = originalData[0].length;
-//   const secArrlen = originalData[1].length;
-//   const result = [];
-//   for (let firstIndex = 0; firstIndex < fArrLen; firstIndex += 1) {
-//     for (let secondIndex = 0; secondIndex < secArrlen; secondIndex += 1) {
-//       result[result.length] = originalData[0][firstIndex] + originalData[1][secondIndex];
-//     }
-//   }
-//   const tmpResult = [];
-//   for (let i = 2; i < originalData.length; i += 1) {
-//     tmpResult[i - 1] = originalData[i];
-//   }
-//   tmpResult[0] = result;
-//   return combination(tmpResult);
-// }
-
 
 function combination(arr) {
   const lenArr = [];

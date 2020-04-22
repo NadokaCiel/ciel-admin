@@ -5,7 +5,7 @@ export default {
     icon: "fa-flask",
     path: '/lab/',
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Cellular: {
@@ -14,7 +14,7 @@ export default {
     path: '/lab/cellular',
     component: () => import(/* webpackChunkName: "lab" */ './Cellular.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Birth: {
@@ -23,7 +23,7 @@ export default {
     path: '/lab/brith',
     component: () => import(/* webpackChunkName: "lab" */ './Birth.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Dice: {
@@ -32,7 +32,7 @@ export default {
     path: '/lab/dice',
     component: () => import(/* webpackChunkName: "lab" */ './Dice.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Linkup: {
@@ -41,7 +41,7 @@ export default {
     path: '/lab/linkup',
     component: () => import(/* webpackChunkName: "lab" */ './Linkup.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Slider: {
@@ -50,7 +50,7 @@ export default {
     path: '/lab/slider',
     component: () => import(/* webpackChunkName: "lab" */ './Slider.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Blockchain: {
@@ -59,7 +59,7 @@ export default {
     path: '/lab/blockchain',
     component: () => import(/* webpackChunkName: "lab" */ './Blockchain.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Garden: {
@@ -68,7 +68,7 @@ export default {
     path: '/lab/garden',
     component: () => import(/* webpackChunkName: "lab" */ './Garden.vue'),
     meta: {
-      auth: ['visitor'],
+      auth: ['anonymous'],
     },
   },
   Miniapp: {
