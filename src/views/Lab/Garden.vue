@@ -9,6 +9,7 @@
       <el-select
         class="lab-box-select"
         v-model="flowerType"
+        size="mini"
         @change="onFlowerTypeChange"
         placeholder="请选择花卉品种"
       >
@@ -21,45 +22,50 @@
         </el-option>
       </el-select>
     </div>
-    <div
-      class="lab-box"
-      flex="main:left cross:center"
-    >
-      <div class="lab-box-label">亲代1：</div>
-      <el-select
-        class="lab-box-select"
-        v-model="parent1"
-        @change="onParentsChange"
-        placeholder="请选择亲代1"
+    <c-history :history="history" />
+    <div flex="main:center cross:center">
+      <div
+        class="lab-box"
+        flex="main:left cross:center"
       >
-        <el-option
-          v-for="item in parentOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+        <div class="lab-box-label">亲代1：</div>
+        <el-select
+          class="lab-box-select"
+          v-model="parent1"
+          @change="onParentsChange"
+          size="mini"
+          placeholder="请选择亲代1"
         >
-        </el-option>
-      </el-select>
-    </div>
-    <div
-      class="lab-box"
-      flex="main:left cross:center"
-    >
-      <div class="lab-topbox-label">亲代2：</div>
-      <el-select
-        class="lab-topbox-select"
-        v-model="parent2"
-        @change="onParentsChange"
-        placeholder="请选择亲代2"
+          <el-option
+            v-for="item in parentOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div
+        class="lab-box"
+        flex="main:left cross:center"
       >
-        <el-option
-          v-for="item in parentOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+        <div class="lab-box-label">亲代2：</div>
+        <el-select
+          class="lab-topbox-select"
+          v-model="parent2"
+          @change="onParentsChange"
+          size="mini"
+          placeholder="请选择亲代2"
         >
-        </el-option>
-      </el-select>
+          <el-option
+            v-for="item in parentOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
     </div>
     <div class="lab-content">
       <el-table
@@ -97,7 +103,7 @@
             :label="gamete"
             :key="index"
           >
-           <template slot-scope="scope">
+            <template slot-scope="scope">
               <div
                 class="unit-grid"
                 flex="dir:top main:center cross:center"
@@ -106,11 +112,21 @@
               >
                 <el-image
                   class="son-image"
+                  :title="son.color+'色'"
                   :src="son.image"
-                  fit="contain">
+                  fit="contain"
+                >
                 </el-image>
-                <div class="son-color" :style="{color: son.css}">{{son.color}}色</div>
+                <!-- <div class="son-color" :style="{color: son.css}">{{son.color}}色</div> -->
+                <div class="son-rate">{{son.rate}}</div>
                 <div class="son-gene">{{son.gene}}</div>
+                <el-button
+                  class="son-btn"
+                  type="success"
+                  plain
+                  size="mini"
+                  @click="saveHistory(son)"
+                >保存子代</el-button>
               </div>
             </template>
           </el-table-column>
@@ -122,6 +138,8 @@
 
 <script>
 import { mapState } from 'vuex';
+
+import cHistory from '@/components/cHistory';
 
 import {
   geneMap,
@@ -154,20 +172,21 @@ export default {
       parent2Title: '',
       gametes1: [],
       gametes2: [],
+      history: [],
     };
   },
   methods: {
     getSon(row, index) {
-      console.log('getSon', index);
+      // console.log('getSon', index);
       return row[`prop${index + 1}`];
     },
     onFlowerTypeChange(type) {
-      console.log('onFlowerTypeChange', type);
+      // console.log('onFlowerTypeChange', type);
       this.changeSeeds(type);
     },
     onParentsChange() {
-      console.log('parent1', this.parent1);
-      console.log('parent2', this.parent2);
+      // console.log('parent1', this.parent1);
+      // console.log('parent2', this.parent2);
       if (this.parent1) {
         this.parent1Title = this.parentOptions.find(item => item.value === this.parent1).label;
       }
@@ -177,8 +196,8 @@ export default {
       if (this.parent1 && this.parent2) {
         this.gametes1 = getGamete(this.parent1);
         this.gametes2 = getGamete(this.parent2);
-        console.log('gametes1', this.gametes1);
-        console.log('gametes2', this.gametes2);
+        // console.log('gametes1', this.gametes1);
+        // console.log('gametes2', this.gametes2);
         this.getData();
       }
     },
@@ -190,24 +209,41 @@ export default {
       const result = {
         prop0: this.gametes1,
       };
-      const { typeMap, imageMap } = geneMap[this.flowerType];
+      const { typeMap, imageMap, name } = geneMap[this.flowerType];
+      const rateMap = {};
+      const total = gametes1.length * gametes2.length;
       gametes2.forEach((g2, index) => {
         const key = `prop${index + 1}`;
-        const gird = [];
+        const grid = [];
         gametes1.forEach(g1 => {
           const gene = this.combine(g1, g2);
           const color = typeMap[gene];
-          gird.push({
+          if (!rateMap[gene]) {
+            rateMap[gene] = 1;
+          } else {
+            rateMap[gene] += 1;
+          }
+          grid.push({
             gene,
+            name: `${colorMap[typeMap[gene]]}色${name}`,
             color: colorMap[color],
             css: colorCSSMap[color],
             image: imageMap[color],
           });
         });
-        result[key] = gird;
+        result[key] = grid;
+      });
+      Object.keys(result).forEach(key => {
+        if (key === 'prop0') return;
+        result[key].forEach(gene => {
+          const g = gene;
+          console.log('g', g);
+          console.log('rateMap', rateMap[g.gene]);
+          g.rate = `${(rateMap[g.gene] / total * 100).toFixed(2)}%`;
+        });
       });
       this.data = [result];
-      console.log('this.data', this.data);
+      // console.log('this.data', this.data);
     },
     combine(g1, g2) {
       const arr1 = g1.split('');
@@ -223,13 +259,35 @@ export default {
       this.parentOptions = geneMap[type].list;
       this.parent1 = this.parentOptions[0].value;
       this.parent2 = this.parentOptions[0].value;
+      this.history = [];
       this.onParentsChange();
-      console.log('this.parentOptions', this.parentOptions);
+      // console.log('this.parentOptions', this.parentOptions);
+    },
+    saveHistory(son) {
+      // console.log('parent1', this.parent1);
+      // console.log('parent2', this.parent2);
+      console.log('son', son);
+      const { typeMap, imageMap } = geneMap[this.flowerType];
+      this.history.push({
+        parents: [{
+          name: this.parent1Title,
+          gene: this.parent1,
+          image: imageMap[typeMap[this.parent1]],
+        }, {
+          name: this.parent2Title,
+          gene: this.parent2,
+          image: imageMap[typeMap[this.parent2]],
+        }],
+        rate: son.rate,
+        son,
+      });
+      console.log('history', this.history);
     },
   },
   computed: mapState({}),
   watch: {},
   components: {
+    cHistory,
   },
 };
 </script>
@@ -246,24 +304,42 @@ export default {
   .lab-box {
     margin: 20px 0;
     padding: 0 40px;
+
+    &-label {
+      font-size: 12px;
+    }
   }
 
   .lab-table {
-    margin: 40px auto;
+    margin: 10px auto;
     max-width: 90vw;
   }
 
   .unit-grid {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
 
   .son-image {
-    width: 40px;
-    height: 40px;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+  }
+
+  .son-rate,
+  .son-gene, {
+    height: 14px;
+    line-height: 14px;
+    font-size: 12px;
+  }
+
+  .son-btn {
+    transform: scale(0.75);
   }
 
   .son-color {
+    font-size: 12px;
     text-shadow: #aaa 1px 0 0, #aaa 0 1px 0, #aaa -1px 0 0, #aaa 0 -1px 0;
   }
 }

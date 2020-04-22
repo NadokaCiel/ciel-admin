@@ -75,6 +75,7 @@ function init(loadData) {
       label: `${colorMap[typeMap[type]]}色${name}${isSeeds(type) ? '(种子)' : ''} : ${type}`,
       name: `${colorMap[typeMap[type]]}色`,
       color: typeMap[type],
+      isSeeds: isSeeds(type),
     }));
 
     list.sort((a, b) => {
