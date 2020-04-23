@@ -109,21 +109,50 @@ export default {
       parent2: 'RRyyWWSs',
       son: 'RRyyWWss',
     }],
+    // blue: [{
+    //   parent1: 'rryyWwss',
+    //   parent2: 'rryyWwss',
+    //   son: 'rryywwss',
+    // }, {
+    //   parent1: 'rrYYWWss',
+    //   parent2: 'RRyyWWSs',
+    //   son: 'RrYyWWss',
+    // }, {
+    //   parent1: 'rryywwss',
+    //   parent2: 'RrYyWWss',
+    //   son: 'RrYyWwss',
+    // }, {
+    //   parent1: 'RrYyWwss',
+    //   parent2: 'RrYyWwss',
+    //   son: 'RRYYwwss',
+    // }],
     blue: [{
       parent1: 'rryyWwss',
       parent2: 'rryyWwss',
       son: 'rryywwss',
     }, {
+      parent1: 'rryyWwss',
+      parent2: 'rrYYWWss',
+      son: 'rrYyWwss',
+    }, {
+      parent1: 'rryywwss',
+      parent2: 'rrYyWwss',
+      son: 'rrYywwss',
+    }, {
       parent1: 'rrYYWWss',
       parent2: 'RRyyWWSs',
       son: 'RrYyWWss',
     }, {
-      parent1: 'rryywwss',
+      parent1: 'rrYywwss',
       parent2: 'RrYyWWss',
-      son: 'RrYyWwss',
+      son: 'RrYYWwss',
     }, {
-      parent1: 'RrYyWwss',
-      parent2: 'RrYyWwss',
+      parent1: 'RrYYWwss',
+      parent2: 'RrYYWwss',
+      son: 'RrYYwwss',
+    }, {
+      parent1: 'RrYYwwss',
+      parent2: 'RrYYwwss',
       son: 'RRYYwwss',
     }],
   },
