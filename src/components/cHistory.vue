@@ -23,6 +23,22 @@
           >
           </el-image>
           <div class="item-box-name">{{parent.name}}</div>
+          <el-dropdown @command="getCommand($event, parent)" size="mini">
+            <el-button
+              class="flower-btn"
+              type="success"
+              plain
+              size="mini"
+            >
+              更多操作
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="parent1">选为亲代1</el-dropdown-item>
+              <el-dropdown-item command="parent2">选为亲代2</el-dropdown-item>
+              <el-dropdown-item command="parent">自交</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
       <div class="item-process" flex="dir:top main:center cross:center">
@@ -41,6 +57,22 @@
         </el-image>
         <div class="item-box-name">{{item.son.name}}</div>
         <div class="item-box-gene">{{item.son.gene}}</div>
+        <el-dropdown @command="getCommand($event, item.son)" size="mini">
+          <el-button
+            class="flower-btn"
+            type="success"
+            plain
+            size="mini"
+          >
+            更多操作
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="parent1">选为亲代1</el-dropdown-item>
+            <el-dropdown-item command="parent2">选为亲代2</el-dropdown-item>
+            <el-dropdown-item command="parent">自交</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <div class="item-delete" @click="deleteItem(index)">
         <i class="el-icon-close"></i>
@@ -62,6 +94,9 @@ export default {
     };
   },
   methods: {
+    getCommand(key, flower) {
+      this.$emit('changeParent', key, flower);
+    },
     deleteItem(index) {
       const vm = this;
       vm.$confirm(`确定删除该结果吗？`, '删除结果', {
@@ -113,7 +148,13 @@ export default {
   .item-delete {
     margin-top: 20px;
     margin-bottom: auto;
+    margin-right: 10px;
+    width: 40px;
     cursor: pointer;
+  }
+
+  .flower-btn {
+    transform: scale(0.75);
   }
 }
 </style>

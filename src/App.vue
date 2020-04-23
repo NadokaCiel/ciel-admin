@@ -42,6 +42,10 @@ export default {
 };
 </script>
 <style lang="scss">
+body {
+  overflow: auto !important;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -30,6 +30,32 @@ export default {
     RRYYWw: 'violet',
     RRYYww: 'violet',
   },
+  routeMap: {
+    orange: [{
+      parent1: 'rrYYWW',
+      parent2: 'RRyyWw',
+      son: 'RrYyWW',
+    }],
+    blue: [{
+      parent1: 'rryyWw',
+      parent2: 'rryyWw',
+      son: 'rryyww',
+    }],
+    pink: [{
+      parent1: 'rryyWw',
+      parent2: 'RRyyWw',
+      son: 'RryyWw',
+    }],
+    violet: [{
+      parent1: 'rrYYWW',
+      parent2: 'RRyyWw',
+      son: 'RrYyWW',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RrYyWW',
+      son: 'RRYYWW',
+    }],
+  },
   imageMap: {
     white: 'http://120.27.3.78:3000/public/uploads/15875415495471z53.png',
     yellow: 'http://120.27.3.78:3000/public/uploads/1587541549545wbjl.png',

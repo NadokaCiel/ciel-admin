@@ -22,7 +22,30 @@
         </el-option>
       </el-select>
     </div>
-    <c-history :history="history" />
+    <div
+      class="lab-box"
+      flex="main:left cross:center"
+    >
+      <div class="lab-box-label">推荐图谱：</div>
+      <div class="" flex="main:left cross:center">
+        <el-button
+          class="route-btn"
+          size="mini"
+          v-for="(route, key) in routeMap"
+          :key="key"
+          @click="makeRoute(route)"
+        >
+          <el-image
+            class="route-image"
+            :title="colorMap[key]+'色'"
+            :src="imageMap[key]"
+            fit="contain"
+          >
+          </el-image>
+        </el-button>
+      </div>
+    </div>
+    <c-history :history="history" @changeParent="getCommand" />
     <div flex="main:center cross:center">
       <div
         class="lab-box"
@@ -120,13 +143,23 @@
                 <!-- <div class="son-color" :style="{color: son.css}">{{son.color}}色</div> -->
                 <div class="son-rate">{{son.rate}}</div>
                 <div class="son-gene">{{son.gene}}</div>
-                <el-button
-                  class="son-btn"
-                  type="success"
-                  plain
-                  size="mini"
-                  @click="saveHistory(son)"
-                >保存子代</el-button>
+                <el-dropdown @command="getCommand($event, son)" size="mini">
+                  <el-button
+                    class="son-btn"
+                    type="success"
+                    plain
+                    size="mini"
+                  >
+                    更多操作
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="save">保存子代</el-dropdown-item>
+                    <el-dropdown-item divided command="parent1">选为亲代1</el-dropdown-item>
+                    <el-dropdown-item command="parent2">选为亲代2</el-dropdown-item>
+                    <el-dropdown-item command="parent">自交</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </template>
           </el-table-column>
@@ -160,7 +193,10 @@ export default {
   },
   data() {
     return {
+      colorMap,
       flowerType: 'lily',
+      routeMap: {},
+      imageMap: {},
       parentOptions: [],
       typeOptions: [],
       data: [{
@@ -170,6 +206,7 @@ export default {
       parent2: '',
       parent1Title: '',
       parent2Title: '',
+      sonGene: '',
       gametes1: [],
       gametes2: [],
       history: [],
@@ -240,6 +277,10 @@ export default {
           console.log('g', g);
           console.log('rateMap', rateMap[g.gene]);
           g.rate = `${(rateMap[g.gene] / total * 100).toFixed(2)}%`;
+          if (this.sonGene === g.gene) {
+            this.saveHistory(g);
+            this.sonGene = '';
+          }
         });
       });
       this.data = [result];
@@ -260,6 +301,8 @@ export default {
       this.parent1 = this.parentOptions[0].value;
       this.parent2 = this.parentOptions[0].value;
       this.history = [];
+      this.routeMap = geneMap[type].routeMap;
+      this.imageMap = geneMap[type].imageMap;
       this.onParentsChange();
       // console.log('this.parentOptions', this.parentOptions);
     },
@@ -283,6 +326,30 @@ export default {
       });
       console.log('history', this.history);
     },
+    getCommand(key, flower) {
+      if (key === 'save') {
+        this.saveHistory(flower);
+      } else if (key === 'parent1') {
+        this.parent1 = flower.gene;
+        this.onParentsChange();
+      } else if (key === 'parent2') {
+        this.parent2 = flower.gene;
+        this.onParentsChange();
+      } else if (key === 'parent') {
+        this.parent1 = flower.gene;
+        this.parent2 = flower.gene;
+        this.onParentsChange();
+      }
+    },
+    makeRoute(routes) {
+      this.history = [];
+      routes.forEach(route => {
+        this.parent1 = route.parent1;
+        this.parent2 = route.parent2;
+        this.sonGene = route.son;
+        this.onParentsChange();
+      });
+    },
   },
   computed: mapState({}),
   watch: {},
@@ -295,6 +362,16 @@ export default {
 
 <style lang="scss" scoped>
 .lab-garden {
+
+  .route-btn {
+    padding: 6px;
+  }
+
+  .route-image {
+    width: 30px;
+    height: 30px;
+  }
+
   .lab-title {
     margin: 20px auto;
     font-size: 24px;
@@ -312,6 +389,7 @@ export default {
 
   .lab-table {
     margin: 10px auto;
+    margin-bottom: 80px;
     max-width: 90vw;
   }
 

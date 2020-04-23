@@ -84,6 +84,49 @@ export default {
     RRYYwwSs: 'red',
     RRYYwwSS: 'white',
   },
+  routeMap: {
+    violet: [{
+      parent1: 'rryyWwss',
+      parent2: 'rryyWwss',
+      son: 'rryywwss',
+    }],
+    orange: [{
+      parent1: 'rrYYWWss',
+      parent2: 'RRyyWWSs',
+      son: 'RrYyWWss',
+    }],
+    pink: [{
+      parent1: 'rryyWwss',
+      parent2: 'RRyyWWSs',
+      son: 'RryyWWSs',
+    }, {
+      parent1: 'rryyWwss',
+      parent2: 'RRyyWWSs',
+      son: 'RryyWwSs',
+    }],
+    dark: [{
+      parent1: 'RRyyWWSs',
+      parent2: 'RRyyWWSs',
+      son: 'RRyyWWss',
+    }],
+    blue: [{
+      parent1: 'rryyWwss',
+      parent2: 'rryyWwss',
+      son: 'rryywwss',
+    }, {
+      parent1: 'rrYYWWss',
+      parent2: 'RRyyWWSs',
+      son: 'RrYyWWss',
+    }, {
+      parent1: 'rryywwss',
+      parent2: 'RrYyWWss',
+      son: 'RrYyWwss',
+    }, {
+      parent1: 'RrYyWwss',
+      parent2: 'RrYyWwss',
+      son: 'RRYYwwss',
+    }],
+  },
   imageMap: {
     white: 'http://120.27.3.78:3000/public/uploads/1587542694466o45x.png',
     yellow: 'http://120.27.3.78:3000/public/uploads/1587542694456em0p.png',
