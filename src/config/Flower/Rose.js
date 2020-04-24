@@ -109,6 +109,12 @@ export default {
       parent2: 'RRyyWWSs',
       son: 'RRyyWWss',
     }],
+    gold: [{
+      parent1: 'RRyyWWSs',
+      parent2: 'RRyyWWSs',
+      son: 'RRyyWWss',
+      hint: '用金色浇水壶浇过的黑色玫瑰可自交出金色玫瑰',
+    }],
     // blue: [{
     //   parent1: 'rryyWwss',
     //   parent2: 'rryyWwss',
@@ -134,10 +140,12 @@ export default {
       parent1: 'rryyWwss',
       parent2: 'rrYYWWss',
       son: 'rrYyWwss',
+      hint: '这里杂交出的白色后代都可使用',
     }, {
       parent1: 'rryywwss',
       parent2: 'rrYyWwss',
       son: 'rrYywwss',
+      hint: '这里杂交出的紫色后代有一半不可用，但在第五步紫橙杂交时可放心辨别',
     }, {
       parent1: 'rrYYWWss',
       parent2: 'RRyyWWSs',
@@ -146,14 +154,22 @@ export default {
       parent1: 'rrYywwss',
       parent2: 'RrYyWWss',
       son: 'RrYYWwss',
+      hint: '若长期无法产出橙色后代，需替换或扩大第三步紫色后代的使用',
+    }, {
+      parent1: 'RrYYWwss',
+      parent2: 'RrYYWwss',
+      son: 'RRYYwwss',
+      hint: '这里已经可以产出蓝色玫瑰，也可继续使用后代红',
     }, {
       parent1: 'RrYYWwss',
       parent2: 'RrYYWwss',
       son: 'RrYYwwss',
+      hint: '这里的红色后代全是安全颜色，基因型统一',
     }, {
       parent1: 'RrYYwwss',
       parent2: 'RrYYwwss',
       son: 'RRYYwwss',
+      hint: '此时蓝色玫瑰的产出概率为最高',
     }],
   },
   imageMap: {
@@ -165,5 +181,6 @@ export default {
     pink: 'http://120.27.3.78:3000/public/uploads/15875426944513pft.png',
     dark: 'http://120.27.3.78:3000/public/uploads/1587542694451437d.png',
     violet: 'http://120.27.3.78:3000/public/uploads/1587542694535e0dh.png',
+    gold: 'http://120.27.3.78:3000/public/uploads/1587542694468fxxe.png',
   },
 };

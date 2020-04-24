@@ -69,6 +69,7 @@ export default {
       parent1: 'RrYySs',
       parent2: 'RrYyss',
       son: 'RRYYSs',
+      hint: '种子获得的两种橙色波斯菊自交或杂交都可获得黑色波斯菊',
     }],
   },
   imageMap: {

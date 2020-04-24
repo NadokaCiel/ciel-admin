@@ -54,6 +54,40 @@ export default {
       parent1: 'RrYyWW',
       parent2: 'RrYyWW',
       son: 'RRYYWW',
+      hint: '橙色的蓝色、橙色后代也可保留，自交或杂交出紫色风信子的概率更高',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RrYyWW',
+      son: 'RRYyWW',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RrYyWW',
+      son: 'RrYYWW',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RRYyWW',
+      son: 'RRYYWW',
+      hint: '一代橙与蓝色后代杂交',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RrYYWW',
+      son: 'RRYYWW',
+      hint: '一代橙与橙色后代杂交',
+    }, {
+      parent1: 'RRYyWW',
+      parent2: 'RrYYWW',
+      son: 'RRYYWW',
+      hint: '蓝色与橙色后代杂交',
+    }, {
+      parent1: 'RRYyWW',
+      parent2: 'RRYyWW',
+      son: 'RRYYWW',
+      hint: '蓝色后代自交',
+    }, {
+      parent1: 'RrYYWW',
+      parent2: 'RrYYWW',
+      son: 'RRYYWW',
+      hint: '橙色后代自交',
     }],
   },
   imageMap: {

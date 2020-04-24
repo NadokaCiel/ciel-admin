@@ -53,6 +53,19 @@ export default {
       parent1: 'RryyWw',
       parent2: 'RryyWw',
       son: 'RRyyww',
+      hint: '二代红的蓝色后代也可保留，其中一种蓝色杂交或自交出紫色三色堇的概率更高',
+    }, {
+      parent1: 'RryyWw',
+      parent2: 'RryyWw',
+      son: 'Rryyww',
+    }, {
+      parent1: 'RryyWw',
+      parent2: 'Rryyww',
+      son: 'RRyyww',
+    }, {
+      parent1: 'Rryyww',
+      parent2: 'Rryyww',
+      son: 'RRyyww',
     }],
   },
   imageMap: {

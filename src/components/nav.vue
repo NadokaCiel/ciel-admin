@@ -51,6 +51,7 @@
       </el-submenu>
     </template>
     <el-menu-item
+      v-show="showLogout"
       class="nav-logout"
       index="Logout"
       key="Logout"
@@ -83,9 +84,11 @@ export default {
         isHover: false,
         name: '退出登录',
       },
+      showLogout: false,
     };
   },
   created() {
+    this.checkLogout();
   },
   methods: {
     getRouter() {
@@ -142,8 +145,17 @@ export default {
     filterAuth(list) {
       return list.filter(item => this.hasAuth(item.auth || []));
     },
+    checkLogout() {
+      console.log('checkLogout', this);
+      this.showLogout = !!this.$localStorage.get('token');
+    },
   },
   computed: mapState([]),
+  watch: {
+    $route() {
+      this.checkLogout();
+    },
+  },
   components: {
   },
 };

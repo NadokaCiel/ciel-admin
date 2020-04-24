@@ -70,4 +70,17 @@ body {
     margin-left: 200px;
   }
 }
+
+
+@media only screen and (max-width:768px) {
+  #app {
+    .nav {
+      visibility: hidden;
+    }
+
+    .app-view {
+      margin-left: 0;
+    }
+  }
+}
 </style>

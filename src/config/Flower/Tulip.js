@@ -54,6 +54,19 @@ export default {
       parent1: 'RrYyss',
       parent2: 'RrYyss',
       son: 'RRYYss',
+      hint: '橙色的黑色后代也可保留，其中一种黑色后代自交或与橙色杂交出紫色郁金香的概率更高',
+    }, {
+      parent1: 'RrYyss',
+      parent2: 'RrYyss',
+      son: 'RRYyss',
+    }, {
+      parent1: 'RrYyss',
+      parent2: 'RRYyss',
+      son: 'RRYYss',
+    }, {
+      parent1: 'RRYyss',
+      parent2: 'RRYyss',
+      son: 'RRYYss',
     }],
   },
   imageMap: {

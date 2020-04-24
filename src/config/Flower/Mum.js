@@ -53,6 +53,19 @@ export default {
       parent1: 'RrYyWW',
       parent2: 'RrYyWW',
       son: 'RRYYWW',
+      hint: '二代黄的紫色后代也可保留，紫色自交或与二代黄出绿色菊花的概率更高',
+    }, {
+      parent1: 'RrYyWW',
+      parent2: 'RrYyWW',
+      son: 'RrYYWW',
+    }, {
+      parent1: 'RrYYWW',
+      parent2: 'RrYyWW',
+      son: 'RRYYWW',
+    }, {
+      parent1: 'RrYYWW',
+      parent2: 'RrYYWW',
+      son: 'RRYYWW',
     }],
   },
   imageMap: {

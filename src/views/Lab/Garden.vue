@@ -27,7 +27,7 @@
       flex="main:left cross:center"
     >
       <div class="lab-box-label">推荐图谱：</div>
-      <div class="" flex="main:left cross:center">
+      <div flex="main:left cross:center">
         <el-button
           class="route-btn"
           size="mini"
@@ -46,7 +46,7 @@
       </div>
     </div>
     <c-history :history="history" @changeParent="getCommand" />
-    <div flex="main:center cross:center">
+    <div>
       <div
         class="lab-box"
         flex="main:left cross:center"
@@ -323,7 +323,9 @@ export default {
         }],
         rate: son.rate,
         son,
+        hint: this.historyHint || '',
       });
+      this.historyHint = '';
       console.log('history', this.history);
     },
     getCommand(key, flower) {
@@ -347,6 +349,7 @@ export default {
         this.parent1 = route.parent1;
         this.parent2 = route.parent2;
         this.sonGene = route.son;
+        this.historyHint = route.hint;
         this.onParentsChange();
       });
     },
@@ -383,7 +386,12 @@ export default {
     padding: 0 40px;
 
     &-label {
+      flex-shrink: 0;
       font-size: 12px;
+    }
+
+    &-select {
+      flex-shrink: 0;
     }
   }
 
