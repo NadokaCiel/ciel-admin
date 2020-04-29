@@ -1,7 +1,7 @@
 <template>
   <div class="user-reset">
-    <div class="page-title">重置密码</div>
-    <div class="page-subtitle">Reset Password</div>
+    <div class="page-title">修改密码</div>
+    <div class="page-subtitle">Change Password</div>
     <el-form class="my-form" ref="form" :model="form" :rules="rules" label-position="left" label-width="160px">
       <el-form-item required label="原密码" prop="o_password">
         <el-input type="password" v-model="form.o_password" auto-complete="off"></el-input>

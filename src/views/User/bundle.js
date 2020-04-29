@@ -28,7 +28,7 @@ export default {
     },
   },
   Reset: {
-    name: '重置密码',
+    name: '修改密码',
     icon: "fa-lock",
     path: '/user/reset',
     component: () => import(/* webpackChunkName: "user" */ './Reset.vue'),
