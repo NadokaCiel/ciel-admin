@@ -5,6 +5,7 @@ const components = {
   enum: () => import(/* webpackChunkName: "form" */ './Enum/Enum.vue'),
   status: () => import(/* webpackChunkName: "form" */ './Status/Status.vue'),
   file: () => import(/* webpackChunkName: "form" */ './File/File.vue'),
+  editor: () => import(/* webpackChunkName: "form" */ './Editor/Editor.vue'),
 };
 
 export default components;

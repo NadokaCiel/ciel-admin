@@ -4,3 +4,4 @@ APP_ID: ciel-admin
 API_KEY: ciel
 API_CODE: dinota
 DOMAIN: http://localhost:3000
+# DOMAIN: http://nadokaciel.cn:3000

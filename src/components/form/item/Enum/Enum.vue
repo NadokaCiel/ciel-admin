@@ -4,6 +4,9 @@
     v-model="form.value"
     :placeholder="option.description || '请选择'"
     :disabled="option.disabled"
+    :allow-create="option.allowCreate"
+    :filterable="option.filterable"
+    :multiple="option.multiple"
   >
     <el-option
       v-for="item in option.list"

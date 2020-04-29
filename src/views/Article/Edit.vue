@@ -2,59 +2,23 @@
   <div class="article-edit">
     <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}文章</div>
     <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} Article</div>
-    <el-form
+    <c-form
       class="my-form"
-      ref="form"
-      :model="form"
-      :rules="rules"
-      label-width="80px"
+      :settings="settings"
+      :layout="layout"
+      @valid="onChange"
+      :values="form"
+      :showBtn="true"
+      :submit="submit"
+      :cancel="toList"
     >
-      <el-form-item label="标题" required prop="title">
-        <el-input v-model="form.title"></el-input>
-      </el-form-item>
-      <el-form-item label="作者" required prop="author">
-        <el-input v-model="form.author"></el-input>
-      </el-form-item>
-      <el-form-item label="标签" prop="tag">
-        <el-select
-          style="width: 100%;"
-          v-model="form.tag"
-          multiple
-          filterable
-          allow-create
-          default-first-option
-          placeholder="请选择标签"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="正文" required prop="content">
-        <vue-editor
-          ref="vEditor"
-          v-model="form.content"
-          :editor-toolbar="customToolbar"
-        ></vue-editor>
-      </el-form-item>
-      <el-form-item>
-        <c-button
-          type="primary"
-          :clickFunc="[save]"
-        >保存</c-button>
-        <el-button @click="toList">取消</el-button>
-      </el-form-item>
-    </el-form>
+    </c-form>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { VueEditor } from "vue2-editor";
+import cForm from "@/components/form/cForm";
 
 export default {
   name: 'article-edit',
@@ -73,71 +37,69 @@ export default {
         content: '',
         author: '',
       },
-      rules: {
-        title: [{ required: true, message: '请输入标题', trigger: 'change' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'change' }],
-        author: [{ required: true, message: '请输入作者名称', trigger: 'change' }],
+      settings: {
+        title: {
+          title: "标题",
+          type: "string",
+          format: "string",
+          default: "",
+          required: true,
+        },
+        author: {
+          title: "作者",
+          type: "string",
+          format: "string",
+          default: "",
+          required: true,
+        },
+        cover: {
+          title: "封面",
+          type: "string",
+          format: "file",
+          default: "",
+          required: false,
+        },
+        tag: {
+          title: "标签",
+          type: "array",
+          format: "enum",
+          default: "",
+          multiple: true,
+          filterable: true,
+          allowCreate: true,
+          description: "请选择物品类型",
+          list: [{
+            value: '旅行',
+            label: '旅行',
+          }, {
+            value: '美食',
+            label: '美食',
+          }, {
+            value: '情感',
+            label: '情感',
+          }],
+          required: true,
+        },
+        content: {
+          title: "正文",
+          type: "string",
+          format: "editor",
+          default: "",
+          required: false,
+        },
       },
-      options: [{
-        value: '旅行',
-        label: '旅行',
-      }, {
-        value: '美食',
-        label: '美食',
-      }, {
-        value: '情感',
-        label: '情感',
-      }],
-      customToolbar: [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-
-        [{
-          header: 1,
-        }, {
-          header: 2,
-        }],
-        [{
-          list: 'ordered',
-        }, {
-          list: 'bullet',
-        }],
-        [{
-          script: 'sub',
-        }, {
-          script: 'super',
-        }],
-        [{
-          indent: '-1',
-        }, {
-          indent: '+1',
-        }],
-        [{
-          direction: 'rtl',
-        }],
-        [{
-          size: ['small', false, 'large', 'huge'],
-        }],
-        [{
-          header: [1, 2, 3, 4, 5, 6, false],
-        }],
-
-        [{
-          color: [],
-        }, {
-          background: [],
-        }],
-        [{
-          font: [],
-        }],
-        [{
-          align: [],
-        }],
-        ['clean'],
+      layout: [
+        {
+          title: "文章",
+          contains: ["title", "author", "cover", "tag", "content"],
+        },
       ],
     };
   },
   methods: {
+    onChange(data) {
+      this.form = data;
+    },
     toList() {
       const vm = this;
       vm.$router.push({
@@ -158,14 +120,10 @@ export default {
         });
       });
     },
-    async save() {
+    async submit() {
       const vm = this;
-      let flag = false;
-      vm.$refs.form.validate((valid) => {
-        flag = valid;
-      });
-      if (!flag) return;
-      const plainText = this.$refs.vEditor.quill.getText();
+      const plainText = this.settings.content.quill.getText();
+      // console.log('plainText', plainText);
       if (vm.id && vm.id !== 0) {
         await vm.$api.articleUpdate({
           restful: {
@@ -199,7 +157,7 @@ export default {
   computed: mapState({}),
   watch: {},
   components: {
-    VueEditor,
+    cForm,
   },
 };
 </script>

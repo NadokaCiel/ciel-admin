@@ -8,31 +8,53 @@
     :label-width="labelWidth"
     @submit.native.prevent
   >
-    <el-collapse v-model="collapseList">
-      <el-collapse-item
-        v-for="(l, index) in layout"
-        :title="l.title"
-        :key="l.title"
-        :name="index"
+
+    <template v-if="layout.length === 1">
+      <el-form-item
+        :label="setting.title"
+        v-for="(setting, name) in filterSetting(settings, layout[0])"
+        :key="name"
+        :prop="name"
+        :style="{ textAlign: layout.position || 'left' }"
       >
-        <el-form-item
-          :label="setting.title"
-          v-for="(setting, name) in filterSetting(settings, l)"
-          :key="name"
-          :prop="name"
-          :style="{ textAlign: layout.position || 'left' }"
+        <component
+          class="setting-line"
+          :class="'setting-'+layout.position"
+          :is="setting.format"
+          :form="settingForm[name]"
+          :option="setting"
+          @change="formChanged(name)"
+        ></component>
+      </el-form-item>
+    </template>
+    <template v-else>
+      <el-collapse v-model="collapseList">
+        <el-collapse-item
+          v-for="(l, index) in layout"
+          :title="l.title"
+          :key="l.title"
+          :name="index"
         >
-          <component
-            class="setting-line"
-            :class="'setting-'+layout.position"
-            :is="setting.format"
-            :form="settingForm[name]"
-            :option="setting"
-            @change="formChanged(name)"
-          ></component>
-        </el-form-item>
-      </el-collapse-item>
-    </el-collapse>
+          <el-form-item
+            :label="setting.title"
+            v-for="(setting, name) in filterSetting(settings, l)"
+            :key="name"
+            :prop="name"
+            :style="{ textAlign: layout.position || 'left' }"
+          >
+            <component
+              class="setting-line"
+              :class="'setting-'+layout.position"
+              :is="setting.format"
+              :form="settingForm[name]"
+              :option="setting"
+              @change="formChanged(name)"
+            ></component>
+          </el-form-item>
+        </el-collapse-item>
+      </el-collapse>
+    </template>
+
     <el-form-item class="vs-form-button" v-if="showBtn">
       <c-button type="primary" :clickFunc="[checkForm]">保存</c-button>
       <el-button @click="cancel">取消</el-button>
@@ -41,6 +63,9 @@
 </template>
 
 <script>
+// https://github.com/yiminghe/async-validator
+// rule的type字段对应async-validator的type
+
 import formatMap from "./formatMap";
 import components from "./item/itemList";
 
@@ -118,6 +143,9 @@ export default {
         };
         if (this.settings[key].pattern) {
           rule.pattern = new RegExp(this.settings[key].pattern);
+        }
+        if (!this.settings[key].enum && this.settings[key].list) {
+          rule.enum = this.settings[key].list.map(item => item.value);
         }
         ruleMap[key] = [rule];
 
