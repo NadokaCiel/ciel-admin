@@ -64,7 +64,7 @@
           <div flex="dir:top main:center cross:center">
             <el-image
               class="weibo-pic"
-              fit="cover"
+              fit="contain"
               :src="host + scope.row.url"
               :preview-src-list="[host + scope.row.url]"
             >

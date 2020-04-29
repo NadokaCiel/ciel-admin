@@ -123,7 +123,7 @@ export default {
     async submit() {
       const vm = this;
       const plainText = this.settings.content.quill.getText();
-      // console.log('plainText', plainText);
+      console.log('plainText', plainText.slice(0, 150));
       if (vm.id && vm.id !== 0) {
         await vm.$api.articleUpdate({
           restful: {
@@ -143,7 +143,10 @@ export default {
         });
       } else {
         await vm.$api.articleCreate({
-          data: vm.form,
+          data: {
+            ...vm.form,
+            abstruct: plainText.slice(0, 150),
+          },
         }).then(() => {
           vm.toList();
         }).catch(err => {

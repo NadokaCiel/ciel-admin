@@ -15,8 +15,14 @@ export default function(version = '') {
         param: 'author',
         isNeed: 0,
       }, {
+        param: 'cover',
+        isNeed: 0,
+      }, {
         param: 'content',
         isNeed: 1,
+      }, {
+        param: 'abstruct',
+        isNeed: 0,
       }, {
         param: 'tag',
         isNeed: 0,

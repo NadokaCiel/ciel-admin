@@ -15,7 +15,7 @@
     <el-image
       v-if="form.value"
       class="form-image-preview"
-      fit="cover"
+      :fit="form.fit || 'contain'"
       :src="form.value"
       :preview-src-list="[form.value]"
     >
