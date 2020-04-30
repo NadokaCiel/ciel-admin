@@ -24,6 +24,7 @@
             </el-image>
             <div class="item-box-name">{{parent.name}}</div>
             <el-dropdown
+              trigger="click"
               @command="getCommand($event, parent)"
               size="mini"
             >
@@ -64,6 +65,7 @@
           <div class="item-box-name">{{item.son.name}}</div>
           <div class="item-box-gene">{{item.son.gene}}</div>
           <el-dropdown
+            trigger="click"
             @command="getCommand($event, item.son)"
             size="mini"
           >

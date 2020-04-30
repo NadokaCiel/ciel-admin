@@ -143,7 +143,7 @@
                 <!-- <div class="son-color" :style="{color: son.css}">{{son.color}}色</div> -->
                 <div class="son-rate">{{son.rate}}</div>
                 <div class="son-gene">{{son.gene}}</div>
-                <el-dropdown @command="getCommand($event, son)" size="mini">
+                <el-dropdown trigger="click" @command="getCommand($event, son)" size="mini">
                   <el-button
                     class="son-btn"
                     type="success"
