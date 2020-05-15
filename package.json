@@ -35,6 +35,7 @@
     "vue-cookie": "^1.1.4",
     "vue-router": "^3.0.3",
     "vue2-editor": "^2.10.2",
+    "vuedraggable": "^2.23.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

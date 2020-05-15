@@ -3,6 +3,11 @@
     class="form-string"
     v-model="form.value"
     :disabled="option.disabled"
+    :minlength="option.minlength || 1"
+    :maxlength="option.maxlength || 60"
+    :show-word-limit="option.showWordLimit || false"
+    :clearable="option.clearable || false"
+    :show-password="option.showPassword || false"
   ></el-input>
 </template>
 
