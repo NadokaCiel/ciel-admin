@@ -48,6 +48,7 @@ export default {
   name: 'login',
   created() {
     const vm = this;
+    vm.checkLogin();
     vm.$bus.on('keyup', key => {
       if (key === "enter") {
         vm.login();
@@ -92,6 +93,11 @@ export default {
           type: 'error',
         });
       });
+    },
+    checkLogin() {
+      if (this.$localStorage.get('token')) {
+        this.$router.push({ path: this.redirect || '/' });
+      }
     },
   },
   beforeDestroy() {

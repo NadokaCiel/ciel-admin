@@ -132,6 +132,11 @@ export default {
                 vm.$alert(err, {
                   type: 'error',
                 });
+                vm.$localStorage.remove('token');
+                vm.$localStorage.remove('id');
+                vm.$localStorage.remove('role');
+                vm.$localStorage.remove('name');
+                vm.$router.push({ name: 'Login' });
               });
             }
           },

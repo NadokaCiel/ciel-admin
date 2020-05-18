@@ -27,6 +27,10 @@ const getApi = (version) => {
         };
         console.log(log);
         if (serverData.retcode === 40000) {
+          LocalStorage.remove('token');
+          LocalStorage.remove('id');
+          LocalStorage.remove('role');
+          LocalStorage.remove('name');
           vm.$confirm('Please Login Again.', 'Login Status Expired', {
             callback(action) {
               if (action === 'confirm') {
