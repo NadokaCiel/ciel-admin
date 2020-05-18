@@ -27,23 +27,23 @@ export default {
       auth: ['admin'],
     },
   },
-  // SubjectList: {
-  //   invisiable: true,
-  //   icon: "fa-pencil-alt",
-  //   path: '/quiz/subject/list',
-  //   component: () => import(/* webpackChunkName: "quiz" */'./SubjectList.vue'),
-  //   meta: {
-  //     auth: ['user'],
-  //   },
-  // },
-  // SubjectEdit: {
-  //   invisiable: true,
-  //   icon: "fa-edit",
-  //   path: '/quiz/subject/edit/:id',
-  //   activeAs: 'SubjectList',
-  //   component: () => import(/* webpackChunkName: "quiz" */ './SubjectEdit.vue'),
-  //   meta: {
-  //     auth: ['admin'],
-  //   },
-  // },
+  SubjectList: {
+    name: '题目列表',
+    icon: "fa-pencil-alt",
+    path: '/quiz/subject/list',
+    component: () => import(/* webpackChunkName: "quiz" */'./SubjectList.vue'),
+    meta: {
+      auth: ['user'],
+    },
+  },
+  SubjectEdit: {
+    invisiable: true,
+    icon: "fa-edit",
+    path: '/quiz/subject/edit/:id',
+    activeAs: 'SubjectList',
+    component: () => import(/* webpackChunkName: "quiz" */ './SubjectEdit.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };

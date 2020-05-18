@@ -1,7 +1,7 @@
 <template>
-  <div class="quiz-edit">
-    <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}问卷</div>
-    <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} Quiz</div>
+  <div class="subject-edit">
+    <div class="page-title">{{id !== 0 ? '编辑' : '新建'}}题目</div>
+    <div class="page-subtitle">{{id !== 0 ? 'Edit' : 'Create'}} Subject</div>
     <c-form
       class="my-form"
       :settings="settings"
@@ -13,17 +13,17 @@
       :cancel="toList"
     >
       <template slot="diy-form">
-        <div class="form-title">试题列表</div>
+        <div class="form-title">选项列表</div>
         <draggable
           class="ciel-drag-list"
-          v-model="subjects"
+          v-model="options"
           draggable=".drag-item"
           handle=".list-drag"
         >
           <transition-group name="flip-list" tag="div">
             <div
               class="drag-item"
-              v-for="(item, index) in subjects"
+              v-for="(item, index) in options"
               :key="item.idx"
             >
               <div
@@ -31,21 +31,16 @@
                 flex="main:left cross:center"
               >
                 <div class="item-index">{{index+1}}. </div>
-                <el-select
-                  class="item-select"
-                  size="small"
-                  v-model="item.id"
-                  placeholder="请选择题目"
-                  @change="lineChange($event, index)"
-                >
-                  <el-option
-                    v-for="option in options"
-                    :key="option.id"
-                    :label="option.title"
-                    :value="option.id"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input class="item-input" size="small" v-model="item.text" placeholder="请输入选项内容"></el-input>
+                <el-button
+                  class="list-delete"
+                  slot="footer"
+                  size="mini"
+                  :type="item.isTrue ? 'success' : 'danger'"
+                  :icon="item.isTrue ? 'el-icon-check' : 'el-icon-close'"
+                  @click="item.isTrue = !item.isTrue"
+                  title="选项是否正确"
+                ></el-button>
                 <el-button
                   class="list-drag"
                   slot="footer"
@@ -61,10 +56,10 @@
                   type="primary"
                   icon="el-icon-minus"
                   @click="deleteItem(index)"
-                  title="删除项目"
+                  title="删除该项"
                 ></el-button>
                 <el-button
-                  v-if="index === subjects.length - 1"
+                  v-if="index === options.length - 1"
                   class="list-add"
                   slot="footer"
                   size="mini"
@@ -78,7 +73,7 @@
             </div>
           </transition-group>
           <el-button
-            v-show="subjects.length === 0"
+            v-show="options.length === 0"
             class="list-add"
             slot="footer"
             size="mini"
@@ -99,7 +94,7 @@ import cForm from "@/components/form/cForm";
 import subjectItem from "./subjectItem";
 
 export default {
-  name: 'quiz-edit',
+  name: 'subject-edit',
   created() {
     const vm = this;
     if (vm.$route.params && vm.$route.params.id && Number(vm.$route.params.id) !== 0) {
@@ -114,40 +109,9 @@ export default {
       drag: false,
       form: {
         title: '',
-        author: '',
+        type: '',
       },
-      subjects: [],
-      options: [{
-        id: "3wh4r",
-        title: "多选题1",
-        type: 'MULTI-SELECT',
-        content: '题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1',
-        options: [{
-          text: "选项A内容",
-        }, {
-          text: "选项B内容",
-        }, {
-          text: "选项C内容",
-        }, {
-          text: "选项D内容",
-        }],
-        answer: [1, 4],
-      }, {
-        id: "rh3sr",
-        title: "单选题1",
-        type: 'SELECT',
-        content: '题目内容2',
-        options: [{
-          text: "单选项A内容",
-        }, {
-          text: "单选项B内容",
-        }, {
-          text: "单选项C内容",
-        }, {
-          text: "单选项D内容",
-        }],
-        answer: [3],
-      }],
+      options: [],
       settings: {
         title: {
           title: "标题",
@@ -156,25 +120,27 @@ export default {
           default: "",
           required: true,
         },
-        author: {
-          title: "作者",
-          type: "string",
-          format: "string",
-          default: "",
+        type: {
+          title: "类型",
+          type: "enum",
+          format: "enum",
+          default: 'SELECT',
+          description: '请选择题目类型',
+          list: [{
+            label: "单选",
+            value: "SELECT",
+          }, {
+            label: "多选",
+            value: "MULTI-SELECT",
+          }],
+          enum: ["SELECT", "MULTI-SELECT"],
           required: true,
-        },
-        cover: {
-          title: "封面",
-          type: "string",
-          format: "file",
-          default: "",
-          required: false,
         },
       },
       layout: [
         {
-          title: "问卷",
-          contains: ["title", "author", "cover"],
+          title: "题目",
+          contains: ["title", "type"],
         },
       ],
     };
@@ -186,12 +152,12 @@ export default {
     toList() {
       const vm = this;
       vm.$router.push({
-        name: 'Quiz-List',
+        name: 'Quiz-SubjectList',
       });
     },
     getData() {
       const vm = this;
-      vm.$api.quizInfo({
+      vm.$api.subjectInfo({
         restful: {
           id: vm.id,
         },
@@ -203,38 +169,60 @@ export default {
         });
       });
     },
-    lineChange(id, index) {
-      console.log('lineChange id', id);
-      console.log('lineChange index', index);
-      const data = this.options.find(option => option.id === id);
-      const item = {
-        idx: this.subjects[index].idx,
-        ...data,
-      };
-      this.subjects.splice(index, 1, item);
-    },
     addItem() {
       const vm = this;
       vm.idx += 1;
-      vm.subjects.push({ idx: vm.idx });
-      console.log(vm.subjects);
+      vm.options.push({ idx: vm.idx, text: '', isTrue: false });
+      console.log(vm.options);
     },
     deleteItem(index) {
       const vm = this;
       vm.$confirm(`确定删除该项吗？`, '删除项目', {
         async callback(action) {
           if (action === 'confirm') {
-            vm.subjects.splice(index, 1);
+            vm.options.splice(index, 1);
           }
         },
       });
     },
     async submit() {
       const vm = this;
-      console.log('vm.subjects', vm.subjects);
+      let count = 0;
+      vm.options = vm.options.filter(option => option.text);
+      vm.options.forEach(option => {
+        if (option.isTrue) {
+          count += 1;
+        }
+      });
+      console.log('vm.options', vm.options);
       console.log('vm.form', vm.form);
+      if (vm.options.length < 2) {
+        vm.$alert('请提供至少2个选项', {
+          type: 'error',
+        });
+        return;
+      }
+      if (count === 0) {
+        vm.$alert('题目没有正确答案', {
+          type: 'error',
+        });
+        return;
+      }
+      if (count === 1 && vm.form.type === 'MULTI-SELECT') {
+        vm.$alert('多选题需要多个正确答案', {
+          type: 'error',
+        });
+        return;
+      }
+      if (count > 1 && vm.form.type === 'SELECT') {
+        vm.$alert('单选题只能由一个正确答案', {
+          type: 'error',
+        });
+        // return;
+      }
+
       // if (vm.id && vm.id !== 0) {
-      //   await vm.$api.quizUpdate({
+      //   await vm.$api.subjectUpdate({
       //     restful: {
       //       id: vm.id,
       //     },
@@ -250,7 +238,7 @@ export default {
       //     });
       //   });
       // } else {
-      //   await vm.$api.quizCreate({
+      //   await vm.$api.subjectCreate({
       //     data: {
       //       ...vm.form,
       //     },
@@ -277,7 +265,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.quiz-edit {
+.subject-edit {
   .my-form{
     margin: 20px auto;
     width: 80%;
@@ -309,7 +297,7 @@ export default {
     margin-left: 4px;
   }
 
-  .item-select {
+  .item-input {
     margin-right: 12px;
   }
 }

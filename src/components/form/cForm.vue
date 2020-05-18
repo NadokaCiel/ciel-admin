@@ -212,7 +212,7 @@ export default {
       this.settingRules = ruleMap;
     },
     formChanged(name) {
-      console.log("formChanged", name);
+      // console.log("formChanged", name);
       const formJson = {};
       Object.keys(this.settingForm).forEach((key) => {
         formJson[key] = this.settingForm[key].value;
@@ -221,7 +221,7 @@ export default {
       this.$emit("change", this.valid, this.formJson);
       this.$emit("formChanged", name, this.formJson[name]);
       this.$nextTick(() => {
-        console.log(this.$refs.settingConfig);
+        // console.log(this.$refs.settingConfig);
         this.$refs.settingConfig.clearValidate();
       });
     },

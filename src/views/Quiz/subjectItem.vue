@@ -40,6 +40,10 @@ export default {
 
 <style lang="scss" scoped>
 .subject {
+  &-item {
+    margin: 20px auto;
+  }
+
   &-content {
     margin: 12px auto;
     text-align: left;
