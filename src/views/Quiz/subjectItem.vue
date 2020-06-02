@@ -1,6 +1,6 @@
 <template>
   <div class="subject-item">
-    <div class="subject-content">{{data.content}}{{data.type === 'MULTI-SELECT' ? ' (多选)' : ''}}</div>
+    <div class="subject-content">{{data.content}}{{data.type === 'multi_select' ? ' (多选)' : ''}}</div>
     <div class="subject-options">
       <div
         class="subject-option"

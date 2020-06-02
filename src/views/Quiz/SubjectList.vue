@@ -13,8 +13,8 @@
       <el-table-column label="状态" width="100">
         <template slot-scope="scope">
           <el-tag
-          :type="typeMap[scope.row.status]"
-          disable-transitions>{{statusMap[scope.row.status] || '未知类型'}}</el-tag>
+          :type="typeMap[scope.row.type]"
+          disable-transitions>{{statusMap[scope.row.type] || '未知类型'}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建者" width="100">
@@ -55,8 +55,8 @@ import { mapState } from 'vuex';
 export default {
   name: 'subject-list',
   created() {
-    // const vm = this;
-    // vm.getList();
+    const vm = this;
+    vm.getList();
   },
   data() {
     return {
@@ -66,12 +66,12 @@ export default {
       total: 0,
       size: 10,
       statusMap: {
-        SELECT: '单选',
-        'MULTI-SELECT': '多选',
+        select: '单选',
+        multi_select: '多选',
       },
       typeMap: {
-        SELECT: 'info',
-        'MULTI-SELECT': 'success',
+        select: 'info',
+        multi_select: 'success',
       },
     };
   },

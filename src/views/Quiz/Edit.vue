@@ -73,6 +73,10 @@
                   @click="addItem"
                   title="添加项目"
                 ></el-button>
+                <div flex="main:center cross:center">
+                  <div class="score-mark">分值</div>
+                  <el-input-number v-model="item.score" :min="1" :max="100" size="small"></el-input-number>
+                </div>
               </div>
               <subject-item :data="item" />
             </div>
@@ -87,6 +91,7 @@
             @click="addItem"
           ></el-button>
         </draggable>
+        <div class="score-total">总分：{{totalScore}}</div>
       </template>
     </c-form>
   </div>
@@ -106,6 +111,7 @@ export default {
       vm.id = Number(vm.$route.params.id);
       vm.getData();
     }
+    vm.getOption();
   },
   data() {
     return {
@@ -117,37 +123,7 @@ export default {
         author: '',
       },
       subjects: [],
-      options: [{
-        id: "3wh4r",
-        title: "多选题1",
-        type: 'MULTI-SELECT',
-        content: '题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1题目内容1',
-        options: [{
-          text: "选项A内容",
-        }, {
-          text: "选项B内容",
-        }, {
-          text: "选项C内容",
-        }, {
-          text: "选项D内容",
-        }],
-        answer: [1, 4],
-      }, {
-        id: "rh3sr",
-        title: "单选题1",
-        type: 'SELECT',
-        content: '题目内容2',
-        options: [{
-          text: "单选项A内容",
-        }, {
-          text: "单选项B内容",
-        }, {
-          text: "单选项C内容",
-        }, {
-          text: "单选项D内容",
-        }],
-        answer: [3],
-      }],
+      options: [],
       settings: {
         title: {
           title: "标题",
@@ -197,6 +173,22 @@ export default {
         },
       }).then(({ data }) => {
         vm.form = data;
+        vm.subjects = data.subjects || [];
+        vm.subjects.forEach((subject, index) => {
+          const line = subject;
+          line.idx = index + 1;
+        });
+        vm.idx = vm.subjects.length;
+      }).catch(err => {
+        vm.$alert(err, {
+          type: 'error',
+        });
+      });
+    },
+    getOption() {
+      const vm = this;
+      vm.$api.subjectOption().then(({ data }) => {
+        vm.options = data.subject || [];
       }).catch(err => {
         vm.$alert(err, {
           type: 'error',
@@ -208,7 +200,7 @@ export default {
       console.log('lineChange index', index);
       const data = this.options.find(option => option.id === id);
       const item = {
-        idx: this.subjects[index].idx,
+        ...this.subjects[index],
         ...data,
       };
       this.subjects.splice(index, 1, item);
@@ -216,7 +208,7 @@ export default {
     addItem() {
       const vm = this;
       vm.idx += 1;
-      vm.subjects.push({ idx: vm.idx });
+      vm.subjects.push({ idx: vm.idx, score: 5 });
       console.log(vm.subjects);
     },
     deleteItem(index) {
@@ -233,38 +225,55 @@ export default {
       const vm = this;
       console.log('vm.subjects', vm.subjects);
       console.log('vm.form', vm.form);
-      // if (vm.id && vm.id !== 0) {
-      //   await vm.$api.quizUpdate({
-      //     restful: {
-      //       id: vm.id,
-      //     },
-      //     data: {
-      //       id: vm.id,
-      //       ...vm.form,
-      //     },
-      //   }).then(() => {
-      //     vm.toList();
-      //   }).catch(err => {
-      //     vm.$alert(err, {
-      //       type: 'error',
-      //     });
-      //   });
-      // } else {
-      //   await vm.$api.quizCreate({
-      //     data: {
-      //       ...vm.form,
-      //     },
-      //   }).then(() => {
-      //     vm.toList();
-      //   }).catch(err => {
-      //     vm.$alert(err, {
-      //       type: 'error',
-      //     });
-      //   });
-      // }
+      if (vm.totalScore !== 100) {
+        vm.$alert('请分配总分为100分的题目分值', {
+          type: 'error',
+        });
+        return;
+      }
+      if (vm.id && vm.id !== 0) {
+        await vm.$api.quizUpdate({
+          restful: {
+            id: vm.id,
+          },
+          data: {
+            id: vm.id,
+            ...vm.form,
+            subjects: vm.subjects,
+          },
+        }).then(() => {
+          vm.toList();
+        }).catch(err => {
+          vm.$alert(err, {
+            type: 'error',
+          });
+        });
+      } else {
+        await vm.$api.quizCreate({
+          data: {
+            ...vm.form,
+            subjects: vm.subjects,
+          },
+        }).then(() => {
+          vm.toList();
+        }).catch(err => {
+          vm.$alert(err, {
+            type: 'error',
+          });
+        });
+      }
     },
   },
-  computed: mapState({}),
+  computed: {
+    ...mapState({}),
+    totalScore() {
+      let score = 0;
+      this.subjects.forEach(subject => {
+        score += subject.score || 0;
+      });
+      return score;
+    },
+  },
   watch: {},
   components: {
     cForm,
@@ -276,6 +285,7 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '~@/assets/css/color.scss';
 
 .quiz-edit {
   .my-form{
@@ -321,5 +331,11 @@ export default {
 .form-title {
   margin: 20px auto;
   margin-top: 40px;
+}
+
+.score-mark {
+  margin: 0 8px 0 20px;
+  font-size: 14px;
+  color: $lighterblack;
 }
 </style>

@@ -59,8 +59,8 @@ import { mapState } from 'vuex';
 export default {
   name: 'quiz-list',
   created() {
-    // const vm = this;
-    // vm.getList();
+    const vm = this;
+    vm.getList();
   },
   data() {
     return {

@@ -110,6 +110,7 @@ export default {
       form: {
         title: '',
         type: '',
+        content: '',
       },
       options: [],
       settings: {
@@ -120,27 +121,34 @@ export default {
           default: "",
           required: true,
         },
+        content: {
+          title: "题干",
+          type: "string",
+          format: "string",
+          default: "",
+          required: true,
+        },
         type: {
           title: "类型",
           type: "enum",
           format: "enum",
-          default: 'SELECT',
+          default: 'select',
           description: '请选择题目类型',
           list: [{
             label: "单选",
-            value: "SELECT",
+            value: "select",
           }, {
             label: "多选",
-            value: "MULTI-SELECT",
+            value: "multi_select",
           }],
-          enum: ["SELECT", "MULTI-SELECT"],
+          enum: ["select", "multi_select"],
           required: true,
         },
       },
       layout: [
         {
           title: "题目",
-          contains: ["title", "type"],
+          contains: ["title", "content", "type"],
         },
       ],
     };
@@ -163,6 +171,7 @@ export default {
         },
       }).then(({ data }) => {
         vm.form = data;
+        vm.options = data.options || [];
       }).catch(err => {
         vm.$alert(err, {
           type: 'error',
@@ -187,11 +196,13 @@ export default {
     },
     async submit() {
       const vm = this;
+      const answer = [];
       let count = 0;
       vm.options = vm.options.filter(option => option.text);
-      vm.options.forEach(option => {
+      vm.options.forEach((option, index) => {
         if (option.isTrue) {
           count += 1;
+          answer.push(index);
         }
       });
       console.log('vm.options', vm.options);
@@ -208,48 +219,52 @@ export default {
         });
         return;
       }
-      if (count === 1 && vm.form.type === 'MULTI-SELECT') {
+      if (count === 1 && vm.form.type === 'multi_select') {
         vm.$alert('多选题需要多个正确答案', {
           type: 'error',
         });
         return;
       }
-      if (count > 1 && vm.form.type === 'SELECT') {
+      if (count > 1 && vm.form.type === 'select') {
         vm.$alert('单选题只能由一个正确答案', {
           type: 'error',
         });
-        // return;
+        return;
       }
 
-      // if (vm.id && vm.id !== 0) {
-      //   await vm.$api.subjectUpdate({
-      //     restful: {
-      //       id: vm.id,
-      //     },
-      //     data: {
-      //       id: vm.id,
-      //       ...vm.form,
-      //     },
-      //   }).then(() => {
-      //     vm.toList();
-      //   }).catch(err => {
-      //     vm.$alert(err, {
-      //       type: 'error',
-      //     });
-      //   });
-      // } else {
-      //   await vm.$api.subjectCreate({
-      //     data: {
-      //       ...vm.form,
-      //     },
-      //   }).then(() => {
-      //     vm.toList();
-      //   }).catch(err => {
-      //     vm.$alert(err, {
-      //       type: 'error',
-      //     });
-      //   });
-      // }
+      if (vm.id && vm.id !== 0) {
+        await vm.$api.subjectUpdate({
+          restful: {
+            id: vm.id,
+          },
+          data: {
+            id: vm.id,
+            ...vm.form,
+            options: vm.options,
+            answer,
+          },
+        }).then(() => {
+          vm.toList();
+        }).catch(err => {
+          vm.$alert(err, {
+            type: 'error',
+          });
+        });
+      } else {
+        await vm.$api.subjectCreate({
+          data: {
+            ...vm.form,
+            options: vm.options,
+            answer,
+          },
+        }).then(() => {
+          vm.toList();
+        }).catch(err => {
+          vm.$alert(err, {
+            type: 'error',
+          });
+        });
+      }
     },
   },
   computed: mapState({}),

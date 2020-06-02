@@ -9,6 +9,8 @@ import ItemType from './ItemType';
 import Quality from './Quality';
 import Class from './Class';
 import Race from './Race';
+import Quiz from './Quiz';
+import Subject from './Subject';
 
 const getApi = (version) => [
   ...Common(version),
@@ -22,6 +24,8 @@ const getApi = (version) => [
   ...Quality(version),
   ...Class(version),
   ...Race(version),
+  ...Quiz(version),
+  ...Subject(version),
 ];
 
 export default getApi;
