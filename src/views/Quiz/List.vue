@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column label="操作" width="180" fixed="right">
         <template slot-scope="scope">
-          <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">查看</el-button>
+          <!-- <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">查看</el-button> -->
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="changeStatus(scope.row)">{{opMap[scope.row.status]}}</el-button>
           <el-button type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
