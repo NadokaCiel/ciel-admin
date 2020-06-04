@@ -4,5 +4,5 @@ PRJ_ENV: production
 APP_ID: ciel-admin
 API_KEY: ciel
 API_CODE: dinota
-DOMAIN: https://nadokaciel.cn:3000
-# DOMAIN: http://120.27.3.78:3000
+DOMAIN: https://nadokaciel.cn
+# DOMAIN: http://120.27.3.78
