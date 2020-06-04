@@ -44,6 +44,7 @@
           <!-- <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">查看</el-button> -->
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="changeStatus(scope.row)">{{opMap[scope.row.status]}}</el-button>
+          <el-button v-show="scope.row.status === 'audited'" class="line-btn" type="text" size="mini" @click="getQrcode(scope.row)">考试码</el-button>
           <el-button type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -189,6 +190,23 @@ export default {
             });
           }
         },
+      });
+    },
+    async getQrcode(line) {
+      const vm = this;
+      await vm.$api.quizQrcode({
+        restful: {
+          id: line.id,
+        },
+        data: {
+          id: line.id,
+        },
+      }).then((res) => {
+        console.log('quizQrcode', res);
+      }).catch(err => {
+        vm.$alert(err, {
+          type: 'error',
+        });
       });
     },
   },

@@ -5,6 +5,7 @@ import create from './create';
 import update from './update';
 import remove from './remove';
 import status from './status';
+import qrcode from './qrcode';
 
 const Quiz = (version) => [
   info(version),
@@ -13,6 +14,7 @@ const Quiz = (version) => [
   update(version),
   remove(version),
   status(version),
+  qrcode(version),
 ];
 
 export default Quiz;
