@@ -194,19 +194,39 @@ export default {
     },
     async getQrcode(line) {
       const vm = this;
+      const item = line;
+      if (item.qrcode_url) {
+        vm.showPic(item);
+        return;
+      }
       await vm.$api.quizQrcode({
         restful: {
-          id: line.id,
+          id: item.id,
         },
         data: {
-          id: line.id,
+          id: item.id,
         },
-      }).then((res) => {
-        console.log('quizQrcode', res);
+      }).then(({ data }) => {
+        item.qrcode_url = data.url;
+        vm.showPic(item);
+        console.log('quizQrcode', data);
       }).catch(err => {
         vm.$alert(err, {
           type: 'error',
         });
+      });
+    },
+    showPic(line) {
+      const vm = this;
+      vm.$alert(`
+        <div style="text-align: center">
+          <image
+            style="margin: 30px auto; width: 240px; height: 240px"
+            src="${vm.$config.domain}${line.qrcode_url}"
+            fit="fit"></image>
+        </div>
+        `, `问卷：《${line.title}》小程序码`, {
+        dangerouslyUseHTMLString: true,
       });
     },
   },
