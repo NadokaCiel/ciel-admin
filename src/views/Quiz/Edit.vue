@@ -225,6 +225,17 @@ export default {
       const vm = this;
       console.log('vm.subjects', vm.subjects);
       console.log('vm.form', vm.form);
+      const validateMap = {};
+      for (let i = 0; i < vm.subjects.length; i += 1) {
+        const { id } = vm.subjects[i];
+        if (validateMap[id]) {
+          vm.$alert('题目有重复', {
+            type: 'error',
+          });
+          return;
+        }
+        validateMap[id] = true;
+      }
       if (vm.totalScore !== 100) {
         vm.$alert('请分配总分为100分的题目分值', {
           type: 'error',

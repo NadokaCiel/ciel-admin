@@ -43,6 +43,7 @@
         <template slot-scope="scope">
           <!-- <el-button class="line-btn" type="text" size="mini" @click="toView(scope.row.id)">查看</el-button> -->
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
+          <el-button class="line-btn" type="text" size="mini" @click="toResult(scope.row.id)">查看结果</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="changeStatus(scope.row)">{{opMap[scope.row.status]}}</el-button>
           <el-button v-show="scope.row.status === 'audited'" class="line-btn" type="text" size="mini" @click="getQrcode(scope.row)">考试码</el-button>
           <el-button type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
@@ -99,6 +100,13 @@ export default {
       const vm = this;
       vm.$router.push({
         name: 'Quiz-Edit',
+        params: { id },
+      });
+    },
+    toResult(id) {
+      const vm = this;
+      vm.$router.push({
+        name: 'Quiz-Result',
         params: { id },
       });
     },
@@ -195,10 +203,10 @@ export default {
     async getQrcode(line) {
       const vm = this;
       const item = line;
-      if (item.qrcode_url) {
-        vm.showPic(item);
-        return;
-      }
+      // if (item.qrcode_url) {
+      //   vm.showPic(item);
+      //   return;
+      // }
       await vm.$api.quizQrcode({
         restful: {
           id: item.id,

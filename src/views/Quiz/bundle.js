@@ -27,6 +27,16 @@ export default {
       auth: ['admin'],
     },
   },
+  Result: {
+    invisiable: true,
+    icon: "fa-newspaper-o",
+    path: '/quiz/result/:id',
+    activeAs: 'List',
+    component: () => import(/* webpackChunkName: "quiz" */ './ResultView.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
   SubjectList: {
     name: '题目列表',
     icon: "fa-pencil-alt",
