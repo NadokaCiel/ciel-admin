@@ -1,135 +1,110 @@
 <template>
-  <div class="result-list">
-    <div class="page-title">问卷结果列表</div>
-    <div class="page-subtitle">Result List</div>
-    <div class="tool">
-      <el-button type="primary" icon="el-icon-back" @click="toList"></el-button>
+  <div class="result-view">
+    <div class="page-title">{{result.title}}</div>
+    <div
+      class="page-subtitle"
+      v-show="result.user_name"
+    >{{result.user_name}}: {{result.score}}分</div>
+    <div class="result-content">
+      <div
+        class="result-line"
+        v-for="(item, index) in subjects"
+        :key="item.idx"
+      >
+        <div>{{index + 1}}. 考生答案：{{getAnswer(sheet[item.id])}}</div>
+        <subject-item :data="item" />
+      </div>
     </div>
-    <el-table v-loading="loading" class="my-list" :data="list" border :highlight-current-row="true">
-      <el-table-column prop="id" label="ID">
-      </el-table-column>
-      <el-table-column prop="user_name" label="微信昵称">
-      </el-table-column>
-      <el-table-column prop="user_avatar" label="问卷封面" width="140">
-        <template slot-scope="scope">
-          <div flex="dir:top main:center cross:center">
-            <el-image
-              v-if="scope.row.user_avatar"
-              class="weibo-pic"
-              fit="contain"
-              :src="scope.row.user_avatar"
-            >
-            </el-image>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="score" label="分数">
-      </el-table-column>
-      <el-table-column prop="title" label="问卷" width="250">
-      </el-table-column>
-      <el-table-column prop="cover" label="问卷封面" width="140">
-        <template slot-scope="scope">
-          <div flex="dir:top main:center cross:center">
-            <el-image
-              v-if="scope.row.cover"
-              class="weibo-pic"
-              fit="contain"
-              :src="scope.row.cover"
-              :preview-src-list="[scope.row.cover]"
-            >
-            </el-image>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination class="tool" @size-change="sizeChange" @current-change="pageChange" :current-page="page" :page-sizes="[5, 10, 15, 20]" :page-size="size" layout="total, sizes, prev, pager, next" :total="total">
-    </el-pagination>
+    <el-button @click="toList">返回列表</el-button>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import subjectItem from "./subjectItem";
 
 export default {
-  name: 'result-list',
+  name: 'result-view',
   created() {
     const vm = this;
-    if (vm.$route.params && vm.$route.params.id && Number(vm.$route.params.id) !== 0) {
+    if (vm.$route.params && vm.$route.params.id && vm.$route.params.resultId) {
       vm.id = Number(vm.$route.params.id);
-      vm.getList();
+      vm.resultId = Number(vm.$route.params.resultId);
+      vm.getData();
     }
   },
   data() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     return {
-      loading: true,
-      list: [],
-      page: 1,
-      total: 0,
-      size: 10,
+      id: 0,
+      resultId: 0,
+      alphabet,
+      result: {},
+      quiz: {},
+      sheet: {},
+      subjects: [],
     };
   },
   methods: {
     toList() {
       const vm = this;
       vm.$router.push({
-        name: 'Quiz-List',
+        name: 'Quiz-Result',
+        params: { id: vm.id },
       });
     },
-    sizeChange(size) {
-      this.size = size;
-      this.getList();
-    },
-    pageChange(page) {
-      this.page = page;
-      this.getList();
-    },
-    getList() {
+    getData() {
       const vm = this;
-
-      vm.loading = true;
-
       vm.$api.quizResult({
+        restful: {
+          id: vm.resultId,
+        },
+      }).then(({ data }) => {
+        vm.result = data;
+        vm.sheet = data.sheet;
+      }).catch(err => {
+        vm.$alert(err, {
+          type: 'error',
+        });
+      });
+
+      vm.$api.quizInfo({
         restful: {
           id: vm.id,
         },
-        data: {
-          page: vm.page,
-          size: vm.size,
-        },
       }).then(({ data }) => {
-        vm.list = data.list;
-        vm.total = data.total;
-        vm.loading = false;
+        vm.quiz = data;
+        vm.subjects = data.subjects;
       }).catch(err => {
-        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });
       });
     },
+    getAnswer(arr) {
+      return arr.map(index => this.alphabet[index]).join('，');
+    },
   },
   computed: mapState({}),
-  watch: {
-  },
+  watch: {},
   components: {
+    subjectItem,
   },
 };
 </script>
 
 
 <style lang="scss" scoped>
-.result-list {
-  .tool{
-    margin: 20px auto;
-    width: 80%;
+
+.result-view {
+  .result-content {
+    margin: 60px auto;
+    padding: 0 60px;
+    text-align: left;
   }
-  .my-list{
-    text-align: center;
-    margin: 20px auto;
-    width: 80%;
-    .line-btn{
-      margin:0 10px;
-    }
+
+  .result-line {
+    margin-top: 40px;
   }
 }
 </style>

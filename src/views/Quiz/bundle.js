@@ -30,7 +30,17 @@ export default {
   Result: {
     invisiable: true,
     icon: "fa-newspaper-o",
-    path: '/quiz/result/:id',
+    path: '/quiz/:id/result',
+    activeAs: 'List',
+    component: () => import(/* webpackChunkName: "quiz" */ './ResultList.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
+  ResultView: {
+    invisiable: true,
+    icon: "fa-newspaper-o",
+    path: '/quiz/:id/result/:resultId',
     activeAs: 'List',
     component: () => import(/* webpackChunkName: "quiz" */ './ResultView.vue'),
     meta: {

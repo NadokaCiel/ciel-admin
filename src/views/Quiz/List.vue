@@ -10,6 +10,20 @@
       </el-table-column>
       <el-table-column prop="title" label="问卷" width="250">
       </el-table-column>
+      <el-table-column prop="cover" label="封面" width="140">
+        <template slot-scope="scope">
+          <div flex="dir:top main:center cross:center">
+            <el-image
+              v-if="scope.row.cover"
+              class="weibo-pic"
+              fit="contain"
+              :src="scope.row.cover"
+              :preview-src-list="[scope.row.cover]"
+            >
+            </el-image>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="author" label="作者">
       </el-table-column>
       <el-table-column label="创建者" width="100">
@@ -203,10 +217,10 @@ export default {
     async getQrcode(line) {
       const vm = this;
       const item = line;
-      // if (item.qrcode_url) {
-      //   vm.showPic(item);
-      //   return;
-      // }
+      if (item.qrcode_url) {
+        vm.showPic(item);
+        return;
+      }
       await vm.$api.quizQrcode({
         restful: {
           id: item.id,
