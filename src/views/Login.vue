@@ -89,7 +89,7 @@ export default {
         console.log('name', vm.$localStorage.get('name'));
         vm.$router.push({ path: this.redirect || '/' });
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err && err.msg, {
           type: 'error',
         });
       });

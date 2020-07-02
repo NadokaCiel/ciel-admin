@@ -8,6 +8,8 @@ import ApiList from './apiList';
 
 const vm = new Vue();
 
+const USER_ERROR_CODE = [43000, 44000];
+
 const getApi = (version) => {
   // console.log(config);
   const api = new Api({
@@ -16,6 +18,7 @@ const getApi = (version) => {
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
+      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
     resSuccessCallback(serverData, next) {
       if (serverData.retcode !== 200) {
@@ -31,11 +34,23 @@ const getApi = (version) => {
           LocalStorage.remove('id');
           LocalStorage.remove('role');
           LocalStorage.remove('name');
-          vm.$confirm('Please Login Again.', 'Login Status Expired', {
+          vm.$confirm('请重新登录', '登录超时', {
             callback(action) {
               if (action === 'confirm') {
                 window.location.href = '/#/login';
               }
+            },
+          });
+          return;
+        }
+        if (USER_ERROR_CODE.includes(serverData.retcode)) {
+          LocalStorage.remove('token');
+          LocalStorage.remove('id');
+          LocalStorage.remove('role');
+          LocalStorage.remove('name');
+          vm.$confirm('请联系管理员获得帮助', '用户状态异常', {
+            callback() {
+              window.location.href = '/#/login';
             },
           });
           return;

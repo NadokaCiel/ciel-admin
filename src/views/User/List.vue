@@ -32,9 +32,17 @@
           disable-transitions>{{roleMap[scope.row.role] || '未知角色'}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="状态" width="100" fixed="right">
+        <template slot-scope="scope">
+          <el-tag
+          :type="typeMap[scope.row.status]"
+          disable-transitions>{{statusMap[scope.row.status] || '未知状态'}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button class="line-btn" type="text" size="mini" @click="toEdit(scope.row.id)">编辑</el-button>
+          <el-button class="line-btn" type="text" size="mini" @click="changeStatus(scope.row)" v-if="scope.row.id !== myId">{{opMap[scope.row.status]}}</el-button>
           <el-button class="line-btn" type="text" size="mini" @click="deleteLine(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -51,26 +59,39 @@ export default {
   name: 'user-list',
   created() {
     const vm = this;
+    vm.myId = Number(vm.$localStorage.get('id'));
+    console.log('myId', vm.myId);
     vm.getList();
   },
   data() {
     return {
+      myId: '',
       list: [],
       page: 1,
       total: 0,
       size: 10,
       loading: true,
+      opMap: {
+        frozen: '解冻',
+        normal: '冻结',
+      },
       roleMap: {
         user: '普通用户',
         admin: '管理员',
         superadmin: '超级管理员',
         visitor: '访客',
       },
+      statusMap: {
+        normal: '正常',
+        frozen: '已冻结',
+      },
       typeMap: {
         user: '',
         admin: 'warning',
         superadmin: 'success',
         visitor: 'info',
+        normal: 'success',
+        frozen: 'primary',
       },
     };
   },
@@ -108,7 +129,11 @@ export default {
           size: vm.size,
         },
       }).then(({ data }) => {
-        vm.list = data.list;
+        vm.list = data.list.map(item => {
+          const line = item;
+          line.status = line.status || 'normal';
+          return line;
+        });
         vm.total = data.total;
         vm.loading = false;
       }).catch(err => {
@@ -116,6 +141,35 @@ export default {
         vm.$alert(err, {
           type: 'error',
         });
+      });
+    },
+    async changeStatus(line) {
+      const vm = this;
+      vm.$confirm(`确定${line.status === 'normal' ? '冻结' : '解冻'}用户：${line.user_name}吗？`, '操作用户', {
+        async callback(action) {
+          if (action === 'confirm') {
+            await vm.$api.userStatus({
+              restful: {
+                id: line.id,
+              },
+              data: {
+                id: line.id,
+                status: line.status === 'normal' ? 'frozen' : 'normal',
+              },
+            }).then(() => {
+              vm.$notify.success({
+                title: '用户',
+                message: `${line.status === 'normal' ? '冻结' : '解冻'}成功！`,
+                showClose: true,
+              });
+              vm.getList();
+            }).catch(err => {
+              vm.$alert(err, {
+                type: 'error',
+              });
+            });
+          }
+        },
       });
     },
     async deleteLine(line) {
