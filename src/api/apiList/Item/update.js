@@ -21,6 +21,9 @@ export default function(version = '') {
         param: 'quality_id',
         isNeed: 1,
       }, {
+        param: 'price',
+        isNeed: 1,
+      }, {
         param: 'stack',
         isNeed: 1,
       }, {

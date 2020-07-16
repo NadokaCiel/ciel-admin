@@ -77,6 +77,13 @@ export default {
           default: "",
           required: false,
         },
+        price: {
+          title: "单价(ccoin)",
+          type: "number",
+          format: "number",
+          default: 10,
+          required: true,
+        },
         mark: {
           title: "备注",
           type: "string",
@@ -88,7 +95,7 @@ export default {
       layout: [
         {
           title: "物品信息",
-          contains: ["name", "type_id", "quality_id", "stack", "image", "mark"],
+          contains: ["name", "type_id", "quality_id", "price", "stack", "image", "mark"],
         },
       ],
       modifiedData: {},

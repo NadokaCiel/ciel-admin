@@ -40,7 +40,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="stack" label="可堆叠数" width="100"> </el-table-column>
+      <el-table-column prop="price" label="单价(price)" width="120"> </el-table-column>
+      <el-table-column prop="stack" label="可堆叠数" width="80"> </el-table-column>
       <el-table-column label="创建者" width="100">
         <template slot-scope="scope">
           {{ scope.row.creator ? scope.row.creator.user_name : "-" }}
