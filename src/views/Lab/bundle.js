@@ -63,10 +63,19 @@ export default {
     },
   },
   Garden: {
-    name: '遗传研究',
+    name: '动森遗传研究',
     icon: "fa-seedling",
     path: '/lab/garden',
     component: () => import(/* webpackChunkName: "lab" */ './Garden.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
+  Pokemon: {
+    name: '宝可梦属性',
+    icon: "fa-dragon",
+    path: '/lab/pokemon',
+    component: () => import(/* webpackChunkName: "lab" */ './Pokemon.vue'),
     meta: {
       auth: ['anonymous'],
     },
