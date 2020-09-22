@@ -2,8 +2,6 @@
   <div class="grid-box">
     <div class="page-title">国际象棋</div>
     <div class="page-subtitle">Chess</div>
-    <div class="page-subtitle">Current Player: {{chess.currentMover}}</div>
-    <div class="page-subtitle" v-if="chess.gameEnd">Winner: {{chess.winner}}</div>
     <div
       class="chess-board"
       flex="main:center cross:center"
@@ -20,7 +18,7 @@
           v-for="item in chess.graph"
           :key="item.id"
           class="grid-box"
-          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}]"
+          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}, {'attack-white': checkRoute === 'white' && chess.whiteAttckMap[item.key] && item.piece}, {'attack-black': checkRoute === 'black' && chess.blackAttckMap[item.key] && item.piece}]"
           :style="{'width':(100 / width) + '%','padding-bottom':(100 / width) + '%','height':0}"
           @click="gridClick(item)"
           @mouseenter="showPath(item)"
@@ -41,12 +39,66 @@
         </div>
       </transition-group>
     </div>
+    <div class="box">
+      <div>执子 : {{campMapCN[chess.currentMover]}}</div>
+      <div>Current Camp : {{campMap[chess.currentMover]}}</div>
+      <el-button @click="undo()" type="default">悔棋 | Undo</el-button>
+      <el-button @click="generate()" type="default">重开 | Reset</el-button>
+      <el-radio-group v-model="checkRoute">
+        <el-radio :label="'none'">无辅助 | No assist</el-radio>
+        <el-radio :label="'white'">显示蓝方攻击范围 | Show Blue attack range</el-radio>
+        <el-radio :label="'black'">显示红方攻击范围 | Show Pink attack range</el-radio>
+      </el-radio-group>
+      <!-- <el-switch v-model="ai" on-color="#FF6E97" off-color="#DB9019" on-text="AI" off-text="PVP">
+      </el-switch> -->
+    </div>
+    <el-dialog
+      class="upgrade-dialog"
+      title="升变你的兵卒 | Upgrade Your Pawn"
+      :visible.sync="chess.showUpgrade"
+      size="small"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-button
+        class="upgrade-btn"
+        size="small"
+        type="warning"
+        @click="upgradeTo('r')"
+      >城堡 | Rook</el-button>
+      <el-button
+        class="upgrade-btn"
+        size="small"
+        type="warning"
+        @click="upgradeTo('n')"
+      >骑士 | Knight</el-button>
+      <el-button
+        class="upgrade-btn"
+        size="small"
+        type="warning"
+        @click="upgradeTo('b')"
+      >主教 | Bishop</el-button>
+      <el-button
+        class="upgrade-btn"
+        size="small"
+        type="warning"
+        @click="upgradeTo('q')"
+      >王后 | Queen</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Game Over"
+      :visible.sync="chess.gameEnd"
+      size="tiny"
+    >
+      <span>胜者: {{campMapCN[chess.winner]}}</span>
+      <span>Winner: {{campMap[chess.winner]}}</span>
+    </el-dialog>
   </div>
 </template>
 <script>
 
 import Chess from '@/assets/js/Chess';
-// import Piece from '@/assets/js/Piece';
 
 export default {
   name: "grid-box",
@@ -59,6 +111,15 @@ export default {
       width: 8,
       height: 8,
       chess: null,
+      campMap: {
+        white: 'Blue',
+        black: 'Pink',
+      },
+      campMapCN: {
+        white: '蓝方',
+        black: '红方',
+      },
+      checkRoute: 'white',
     };
   },
   created() {
@@ -74,19 +135,28 @@ export default {
     generate() {
       this.chess = new Chess();
     },
+    undo() {
+      if (!this.chess) return;
+      this.chess.undo();
+    },
     gridClick(data) {
       // console.log('gridClick', data);
       this.chess.move(data);
     },
     showPath(data) {
+      if (this.chess.selected.position) return;
       this.chess.showPiecePath(data);
     },
     clearPath() {
+      if (this.chess.selected.position) return;
       this.chess.removePiecePath();
     },
     getPieceClass(item) {
       if (!item || !item.piece) return 'none';
       return `piece-${item.piece.name.toLowerCase()}-${item.piece.camp}`;
+    },
+    upgradeTo(alias) {
+      this.chess.upgradeTo(alias);
     },
   },
 };
@@ -97,6 +167,15 @@ export default {
 .grid-box {
   .chess-board {
     margin: 40px auto;
+  }
+
+  .box {
+    margin:25px auto;
+    text-align: center;
+    font-size: 24px;
+    *{
+      margin:10px;
+    }
   }
 
   * {
@@ -125,11 +204,18 @@ export default {
       }
 
       &:hover, &.selected {
-        box-shadow: 0 0 15px 5px rgba(233,240,29, 0.8);
+        box-shadow: 0 0 15px 5px #ecd61d;
         z-index: 10;
       }
-      &.selected{
-        border-color: #ecd61d;
+      &.selected:after {
+        content: ' ';
+        position: absolute;
+        top:-2px;
+        right:-2px;
+        bottom:-2px;
+        left:-2px;
+        box-shadow: 0 0 10px 3px rgba(100,30,128, .4);
+        background-color: rgba(100,30,128, .4);
       }
       &.access:after {
         content: ' ';
@@ -150,6 +236,30 @@ export default {
         left:-2px;
         box-shadow: 0 0 10px 3px rgba(235,63,47, .4);
         background-color: rgba(235,63,47, .4);
+      }
+
+      &.attack-black:after {
+        content: ' ';
+        position: absolute;
+        top:-2px;
+        right:-2px;
+        bottom:-2px;
+        left:-2px;
+        box-shadow: 0 0 10px 3px rgba(222,49,99, .4);
+        background-color: rgba(222,49,99, .4);
+        animation: blink 1.2s infinite;
+      }
+
+      &.attack-white:after {
+        content: ' ';
+        position: absolute;
+        top:-2px;
+        right:-2px;
+        bottom:-2px;
+        left:-2px;
+        box-shadow: 0 0 10px 3px rgba(65,105,225, .4);
+        background-color: rgba(65,105,225, .4);
+        animation: blink 1.2s infinite;
       }
 
       &:hover .grid-black {
@@ -253,6 +363,30 @@ export default {
   .piece-bishop-black {
     background-image: url(~@/assets/imgs/chess/piece-bishop-black.png)
   }
+}
 
+.upgrade-dialog{
+  text-align: center;
+  .upgrade-btn{
+    margin:10px;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>
