@@ -352,7 +352,9 @@ export default class Chess {
         if (rook && isAlly(piece, rook) && rook.inactive) {
           // console.log('车在原位');
           // 中间是否没有阻拦
-          if (vm.clearPath(config.king[`${direction}Start`], config.rook[`${direction}Start`])) {
+          if (vm.clearPath(config.king[`${direction}Start`], config.rook[`${direction}Start`])
+            && !vm.axisMap[config.king[`${direction}End`]].piece
+            && !vm.axisMap[config.rook[`${direction}End`]].piece) {
             // console.log('中间没有阻拦');
             // 判断王经过的格子是否会被攻击
             let underAttack = false;
