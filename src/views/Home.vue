@@ -31,7 +31,7 @@
           <div
             class="memo-line"
             flex="main:center cross:center"
-            v-if="serial !== 0"
+            v-if="user.serial !== 0"
           >
             <div class="memo-line-title">您已连续签到：</div>
             <div class="memo-line-content">{{user.serial || 0}}天</div>

@@ -89,4 +89,22 @@ export default {
       auth: ['admin'],
     },
   },
+  Chess: {
+    name: '国际象棋',
+    icon: "fa-chess",
+    path: '/lab/chess',
+    component: () => import(/* webpackChunkName: "lab" */ './Chess.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
+  Cartoon: {
+    name: '动画',
+    icon: "fa-cog",
+    path: '/lab/cartoon',
+    component: () => import(/* webpackChunkName: "lab" */ './Cartoon.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
 };

@@ -44,4 +44,13 @@ export default {
       auth: ['admin'],
     },
   },
+  Grid: {
+    name: '网格',
+    icon: "fa-grip-horizontal",
+    path: '/engine/grid',
+    component: () => import(/* webpackChunkName: "engine" */ './Grid.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };
