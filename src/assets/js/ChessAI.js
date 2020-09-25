@@ -8,7 +8,7 @@ const minimaxRoot = (depth, game, isMaximisingPlayer) => {
 
   for (let i = 0; i < moves.length; i += 1) {
     const move = moves[i];
-    game.move(move[0], move[1]);
+    game.move(...move);
     const value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
     game.undo();
     // console.log('minimaxRoot move: ', value);
@@ -36,7 +36,7 @@ const minimax = (depth, game, a, b, isMaximisingPlayer) => {
     // 为当前玩家争取最大分值
     let bestMove = -9999;
     for (let i = 0; i < moves.length; i += 1) {
-      game.move(moves[i][0], moves[i][1]);
+      game.move(...moves[i]);
       bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
       game.undo();
       alpha = Math.max(alpha, bestMove);
@@ -50,7 +50,7 @@ const minimax = (depth, game, a, b, isMaximisingPlayer) => {
   let bestMove = 9999;
   // 为当前玩家的对手争取最小分值
   for (let i = 0; i < moves.length; i += 1) {
-    game.move(moves[i][0], moves[i][1]);
+    game.move(...moves[i]);
     // console.log('moves[i]', moves[i]);
     bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
     game.undo();

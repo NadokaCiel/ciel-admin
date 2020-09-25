@@ -18,7 +18,7 @@
           v-for="item in chess.graph"
           :key="item.id"
           class="grid-box"
-          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}, {'attack-white': checkRoute === 'white' && chess.whiteAttckMap[item.key] && item.piece}, {'attack-black': checkRoute === 'black' && chess.blackAttckMap[item.key] && item.piece}]"
+          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}, {'attack-white': checkRoute === 'white' && chess.whiteAttckMap[item.id] && item.piece}, {'attack-black': checkRoute === 'black' && chess.blackAttckMap[item.id] && item.piece}]"
           :style="{'width':(100 / width) + '%','padding-bottom':(100 / width) + '%','height':0}"
           @click="gridClick(item)"
           @mouseenter="showPath(item)"
@@ -148,12 +148,12 @@ export default {
       vm.generate();
       vm.loading = false;
       // console.log('vm.chess', vm.chess);
-      // vm.gridClick(vm.chess.graph[15]);
-      // vm.gridClick(vm.chess.graph[23]);
+      // vm.gridClick(vm.chess.graph[47]);
+      // vm.gridClick(vm.chess.graph[55]);
     },
     generate() {
       this.chess = new Chess();
-      // this.chess.aiDepth = 1;
+      // this.chess.aiDepth = 4;
     },
     undo() {
       if (!this.chess || this.chess.aiMoving) return;

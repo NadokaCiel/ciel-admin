@@ -1,4 +1,4 @@
-export default class Piece {
+export class Piece {
   constructor(alias) {
     const piece = pieceEnum[alias.toLowerCase()];
     this.name = piece.name;
@@ -34,6 +34,52 @@ export default class Piece {
     }
   }
 }
+
+export const getPiece = (alias) => {
+  const piece = pieceEnum[alias.toLowerCase()];
+  return {
+    name: piece.name,
+    alias: piece.alias,
+    type: piece.type,
+    inactive: true,
+    camp: /[A-Z]/.test(alias) ? 'white' : 'black',
+  };
+};
+
+export const transform = (p_, alias) => {
+  if (['r', 'n', 'b', 'q'].indexOf(alias) < 0) {
+    throw new Error('Illegal Piece Type');
+  }
+  const piece = p_;
+  const p = pieceEnum[alias];
+  piece.former = p.alias;
+  piece.name = p.name;
+  piece.type = p.type;
+  piece.alias = p.alias;
+};
+
+export const eaten = (p_, eater, round) => {
+  const piece = p_;
+  piece.eater = eater;
+  piece.eaten = true;
+  piece.deathRound = round;
+};
+
+export const setActiveState = (p_, round) => {
+  const piece = p_;
+  if (piece.inactive) {
+    piece.inactive = false;
+    piece.firstMoveRound = round;
+  }
+};
+
+export default {
+  Piece,
+  getPiece,
+  transform,
+  eaten,
+  setActiveState,
+};
 
 const pieceEnum = {
   p: {
