@@ -1,4 +1,5 @@
 import Piece from '@/assets/js/Piece';
+import { getBestMove } from '@/assets/js/ChessAI';
 
 export default class Chess {
   constructor(config = defaultConfig) {
@@ -28,7 +29,9 @@ export default class Chess {
     vm.whiteAttckMap = {};
     // 黑方的攻击范围
     vm.blackAttckMap = {};
-    vm.checkCamp = '';
+    // 默认的兵升变类型
+    vm.promotionType = 'q';
+    vm.aiDepth = 3;
     for (let i = 0; i < config.height; i += 1) {
       for (let j = 0; j < config.width; j += 1) {
         const item = {
@@ -46,7 +49,8 @@ export default class Chess {
     vm.setPiece(config.fnn);
     vm.fnnList.push(vm.getPiece());
     vm.history.push(JSON.parse(JSON.stringify(vm.axisMap)));
-    vm.checkAttackedGrid();
+    // 正在被将军的阵营
+    vm.beCheckedCamp = vm.checkAttackedGrid();
   }
 
   clearBoard() {
@@ -101,16 +105,17 @@ export default class Chess {
         fnn += '/';
       }
     });
-    fnn = fnn.substr(0, fnn.length - 2);
+    fnn = fnn.substr(0, fnn.length - 1);
+    // fnn = fnn.split('/').reverse().join('/');
     vm.currentFnn = fnn;
     // console.log('getPiece', vm.currentFnn);
     return fnn;
   }
 
-  move(item) {
+  play(item) {
     const vm = this;
     const block = item;
-    const { position, piece, x } = vm.selected;
+    const { position, piece } = vm.selected;
     // console.log('move', item);
     if (vm.gameEnd) return;
     if (!position && !block.piece) return;
@@ -125,60 +130,80 @@ export default class Chess {
     }
 
     if (vm.isLegalPath(piece, vm.selected, block, true)) {
-      piece.setActiveState(vm.fnnList.length + 1);
-      // 吃过路兵：对角上方的敌方士兵应该被吃掉
-      if (vm.event === 'passant') {
-        const eatenPiece = vm.axisMap[`(${block.x},${vm.selected.y})`].piece;
-        eatenPiece.eaten(piece, vm.fnnList.length + 1);
-        vm.cemetery[eatenPiece.camp].push(eatenPiece);
-        vm.axisMap[`(${block.x},${vm.selected.y})`].piece = null;
-        vm.event = '';
-      }
-      // 王车易位：对应的车应该移动
-      if (vm.event === 'castling') {
-        const direction = x - block.x > 0 ? 'left' : 'right';
-        const { camp } = piece;
-        const rookStartAxis = castlingMap[camp].rook[`${direction}Start`];
-        const rookEndAxis = castlingMap[camp].rook[`${direction}End`];
-        vm.axisMap[rookEndAxis].piece = vm.axisMap[rookStartAxis].piece;
-        vm.axisMap[rookStartAxis].piece = null;
-        vm.axisMap[rookEndAxis].piece.setActiveState(vm.fnnList.length + 1);
-        vm.event = '';
-      }
-      // 处理吃子
-      if (block.piece) {
-        // 判断将死
-        if (block.piece.name === 'King') {
-          vm.winner = vm.selected.piece.camp;
+      vm.move(vm.selected, block);
+      // 是否阻止了将军
+      if (getOpponent(vm.currentMover) === vm.checkAttackedGrid()) {
+        vm.undo();
+      } else {
+        if (vm.getMoves().length < 0) {
+          vm.winner = getOpponent(vm.currentMover);
           vm.gameEnd = true;
           return;
         }
-        block.piece.eaten(piece, vm.fnnList.length + 1);
-        vm.cemetery[block.piece.camp].push(block.piece);
-      }
-      block.piece = vm.selected.piece;
-      vm.currentMover = getOpponent(vm.currentMover);
-      // 兵的升变
-      vm.needsUpgrade(piece, block.y);
-      vm.selected.piece = null;
-      vm.fnnList.push(vm.getPiece());
-      vm.history.push(JSON.parse(JSON.stringify(vm.axisMap)));
-      if (vm.ai && vm.currentMover === 'black') {
-        console.log('AI Move!');
-        // vm.aiMove();
+        if (vm.isAiMove()) {
+          vm.aiMoving = true;
+          setTimeout(() => {
+            vm.aiMove();
+            vm.aiMoving = false;
+          }, 500);
+        }
       }
     }
+  }
+
+  move(block1, block2) {
+    const vm = this;
+    const start = block1;
+    const end = block2;
+    const { piece, x } = start;
+    piece.setActiveState(vm.fnnList.length + 1);
+    // 吃过路兵：对角上方的敌方士兵应该被吃掉
+    if (vm.event === 'passant') {
+      const eatenPiece = vm.axisMap[`(${end.x},${start.y})`].piece;
+      eatenPiece.eaten(piece, vm.fnnList.length + 1);
+      vm.cemetery[eatenPiece.camp].push(eatenPiece);
+      vm.axisMap[`(${end.x},${start.y})`].piece = null;
+      vm.event = '';
+    }
+    // 王车易位：对应的车应该移动
+    if (vm.event === 'castling') {
+      const direction = x - end.x > 0 ? 'left' : 'right';
+      const { camp } = piece;
+      const rookStartAxis = castlingMap[camp].rook[`${direction}Start`];
+      const rookEndAxis = castlingMap[camp].rook[`${direction}End`];
+      vm.axisMap[rookEndAxis].piece = vm.axisMap[rookStartAxis].piece;
+      vm.axisMap[rookStartAxis].piece = null;
+      vm.axisMap[rookEndAxis].piece.setActiveState(vm.fnnList.length + 1);
+      vm.event = '';
+    }
+    // 处理吃子
+    if (end.piece) {
+      // 判断将死
+      if (end.piece.name === 'King') {
+        vm.winner = start.piece.camp;
+        vm.gameEnd = true;
+        return;
+      }
+      end.piece.eaten(piece, vm.fnnList.length + 1);
+      vm.cemetery[end.piece.camp].push(end.piece);
+    }
+    end.piece = start.piece;
+    // 兵的升变
+    vm.needsUpgrade(piece, end.y);
+    start.piece = null;
+    vm.fnnList.push(vm.getPiece());
+    vm.history.push(JSON.parse(JSON.stringify(vm.axisMap)));
     vm.selected = {};
-    // console.log('vm.fnnList', vm.fnnList);
-    // console.log('vm.history', vm.history);
-    vm.checkAttackedGrid();
+    vm.beCheckedCamp = vm.checkAttackedGrid();
+    vm.currentMover = getOpponent(vm.currentMover);
   }
 
   needsUpgrade(piece, y) {
     if (piece.type !== 'pawn') return;
-    if ((piece.camp === 'white' && y === 7) || (piece.camp === 'black' && y === 0)) {
+    if ((piece.camp === 'white' && y === 0) || (piece.camp === 'black' && y === 7)) {
       this.upgradePiece = piece;
       this.showUpgrade = true;
+      this.upgradeTo(this.promotionType);
     }
   }
 
@@ -187,9 +212,8 @@ export default class Chess {
     vm.upgradePiece.transform(alias);
     vm.upgradePiece = null;
     vm.showUpgrade = false;
+    // vm.beCheckedCamp = vm.checkAttackedGrid();
   }
-
-  // aiMove() {}
 
   undo() {
     const vm = this;
@@ -202,16 +226,16 @@ export default class Chess {
     const map = vm.history[vm.history.length - 1];
     vm.graph.forEach(block => {
       if (!block.piece || !map[block.key].piece) return;
-      const { round } = map[block.key].piece;
-      if (!round) return;
-      block.piece.setActiveState(round);
+      const { firstMoveRound } = map[block.key].piece;
+      if (!firstMoveRound) return;
+      block.piece.setActiveState(firstMoveRound);
     });
     vm.cemetery.white = vm.cemetery.white.filter(piece => piece.deathRound > vm.fnnList.length);
     vm.cemetery.black = vm.cemetery.black.filter(piece => piece.deathRound > vm.fnnList.length);
     vm.winner = '';
     vm.gameEnd = false;
     vm.currentMover = getOpponent(vm.currentMover);
-    vm.checkAttackedGrid();
+    vm.beCheckedCamp = vm.checkAttackedGrid();
   }
 
   clearPath(start, end) {
@@ -256,6 +280,8 @@ export default class Chess {
     const vm = this;
     vm.whiteAttckMap = {};
     vm.blackAttckMap = {};
+    let whiteBeChecked = false;
+    let blackBeChecked = false;
     vm.graph.forEach(grid1 => {
       if (!grid1.piece) return;
       vm.graph.forEach(grid2 => {
@@ -267,11 +293,22 @@ export default class Chess {
             vm.blackAttckMap[grid2.key] = true;
           }
           if (grid2.piece && grid2.piece.type === 'king') {
-            vm.checkCamp = getOpponent(grid1.piece.camp);
+            if (getOpponent(grid1.piece.camp) === 'white') {
+              whiteBeChecked = true;
+            } else {
+              blackBeChecked = true;
+            }
           }
         }
       });
     });
+    if (whiteBeChecked && blackBeChecked) {
+      // 不能以将军来阻止将军
+      return getOpponent(vm.currentMover);
+    }
+    if (whiteBeChecked) return 'white';
+    if (blackBeChecked) return 'black';
+    return '';
   }
 
   showPiecePath(item) {
@@ -304,7 +341,7 @@ export default class Chess {
     const { type, camp } = piece;
     const { x: x1, y: y1 } = start;
     const { x: x2, y: y2, piece: p2 } = end;
-    const upside = camp === 'white';
+    const upside = camp === 'black';
     const x_d = x1 - x2;
     const y_d = y1 - y2;
     const direction = x_d > 0 ? 'left' : 'right';
@@ -377,17 +414,74 @@ export default class Chess {
     }
     return flag;
   }
+
+  isAiMove() {
+    return this.aiDepth > 0 && this.currentMover === 'black';
+  }
+
+  // https://github.com/lhartikk/simple-chess-ai/blob/master/script.js
+  aiMove() {
+    const vm = this;
+    if (vm.aiDepth < 1) return;
+    if (vm.aiDepth === 1) {
+      const moves = vm.getMoves();
+      const move = moves[Math.floor(Math.random() * moves.length)];
+      // console.log('getDumbMove', move);
+      vm.move(move[0], move[1]);
+    } else {
+      const move = getBestMove(vm, vm.aiDepth - 1);
+      // console.log('getBestMove', move);
+      if (!move) {
+        vm.winner = 'white';
+        vm.gameEnd = true;
+        return;
+      }
+      vm.move(move[0], move[1]);
+    }
+  }
+
+  // 获取当前阵营所有可用的走法
+  getMoves() {
+    const vm = this;
+    const moves = [];
+    vm.graph.forEach(grid1 => {
+      if (!grid1.piece || grid1.piece.camp !== vm.currentMover) return;
+      vm.graph.forEach(grid2 => {
+        if (grid1.key === grid2.key) return;
+        if (vm.isLegalPath(grid1.piece, grid1, grid2)) {
+          let flag = false;
+          vm.move(grid1, grid2);
+          // 是否阻止了将军
+          if (getOpponent(vm.currentMover) === vm.checkAttackedGrid()) {
+            flag = true;
+          }
+          vm.undo();
+          if (!flag) {
+            moves.push([grid1, grid2]);
+          }
+        }
+      });
+    });
+    // console.log('moves num', moves.length);
+    // moves.forEach((move) => {
+    //   console.log(`move: ${move[0].piece.type} from ${move[0].key} to ${move[1].key}`);
+    // });
+    return moves;
+  }
 }
 
 const width = 8;
 const height = 8;
-const resetFnn = 'RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr';
+const resetFnn = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 // 兵的升变
-// const resetFnn = 'RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppP/rnbqkbn1';
+// const resetFnn = 'rnbqkb1r/ppppppPp/8/8/8/8/PPPPPPPp/RNBQKBN1';
 // 王车易位
-// const resetFnn = 'R3K2R/PPPrPPPP/8/8/8/8/pppppRpp/r3k2r';
+// const resetFnn = 'r3k2r/p2pp2p/8/8/8/QQQQQQQQ/P2PQqqP/R3K2R';
 // 吃过路兵
-// const resetFnn = 'RNBQKBNR/PPPPPPPP/8/8/pPpP4/8/pppppppp/rnbqkbnr';
+// const resetFnn = 'rnbqkbnr/pppppppp/8/pPp5/5pPp/8/PPPPPPPP/RNBQKBNR';
+// 残局
+// const resetFnn = 'r2r4/p1p2kpp/2Qbbq2/4p3/8/2N5/PPPP1PPP/R1B1K2R';
+// const resetFnn = '7k/6qr/8/8/8/8/R6Q/1QK5';
 const charArr = 'abcdefgh'.split('');
 const defaultConfig = {
   fnn: resetFnn,
@@ -396,7 +490,7 @@ const defaultConfig = {
 };
 // 王车易位坐标
 const castlingMap = {
-  white: {
+  black: {
     king: {
       leftStart: '(4,0)',
       rightStart: '(4,0)',
@@ -412,7 +506,7 @@ const castlingMap = {
     leftPath: ['(4,0)', '(3,0)', '(2,0)'],
     rightPath: ['(4,0)', '(5,0)', '(6,0)'],
   },
-  black: {
+  white: {
     king: {
       leftStart: '(4,7)',
       rightStart: '(4,7)',
@@ -436,14 +530,14 @@ const pieceRule = {
   pawn(start, end) {
     const { x: x1, y: y1, piece: p1 } = start;
     const { x: x2, y: y2, piece: p2 } = end;
-    const upside = p1.camp === 'white';
+    const upside = p1.camp === 'black';
     const x_d = x1 - x2;
     const y_d = y1 - y2;
 
     // 只能前行
     if ((y_d > 0 && !upside) || (y_d < 0 && upside)) {
       // 未移动过，可以前进两步
-      if (x_d === 0 && Math.abs(y_d) === 2 && p1.inactive && !p2) {
+      if (x_d === 0 && Math.abs(y_d) === 2 && p1.inactive && ((y1 === 6 && !upside) || (y1 === 1 && upside)) && !p2) {
         return true;
       }
       // 可以每次前进1步

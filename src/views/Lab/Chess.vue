@@ -41,21 +41,33 @@
     </div>
     <div class="box">
       <div>执子 : {{campMapCN[chess.currentMover]}}</div>
+      <div v-if="chess.aiMoving">AI思考中...</div>
+      <div v-if="chess.beCheckedCamp">{{campMapCN[chess.beCheckedCamp]}}正被将军</div>
       <div>Current Camp : {{campMap[chess.currentMover]}}</div>
       <el-button @click="undo()" type="default">悔棋 | Undo</el-button>
       <el-button @click="generate()" type="default">重开 | Reset</el-button>
-      <el-radio-group v-model="checkRoute">
-        <el-radio :label="'none'">无辅助 | No assist</el-radio>
-        <el-radio :label="'white'">显示蓝方攻击范围 | Show Blue attack range</el-radio>
-        <el-radio :label="'black'">显示红方攻击范围 | Show Pink attack range</el-radio>
-      </el-radio-group>
-      <!-- <el-switch v-model="ai" on-color="#FF6E97" off-color="#DB9019" on-text="AI" off-text="PVP">
-      </el-switch> -->
+      <el-button @click="openPromotionConfig()" type="default">升变配置 | Config</el-button>
+      <div>
+        <el-radio-group v-model="checkRoute">
+          <el-radio :label="'none'">无辅助 | No assist</el-radio>
+          <el-radio :label="'white'">显示蓝方攻击范围 | Show Blue attack range</el-radio>
+          <el-radio :label="'black'">显示红方攻击范围 | Show Pink attack range</el-radio>
+        </el-radio-group>
+      </div>
+      <div>
+        <el-radio-group v-model="chess.aiDepth">
+          <el-radio :label="0">PVP</el-radio>
+          <el-radio :label="1">AI: level1</el-radio>
+          <el-radio :label="2">AI: level2</el-radio>
+          <el-radio :label="3">AI: level3</el-radio>
+          <el-radio :label="4">AI: level4</el-radio>
+        </el-radio-group>
+      </div>
     </div>
     <el-dialog
       class="upgrade-dialog"
-      title="升变你的兵卒 | Upgrade Your Pawn"
-      :visible.sync="chess.showUpgrade"
+      title="兵卒升变配置 | Pawn Upgrade Config"
+      :visible.sync="showUpgrade"
       size="small"
       :show-close="false"
       :close-on-click-modal="false"
@@ -65,24 +77,28 @@
         class="upgrade-btn"
         size="small"
         type="warning"
+        :disabled="chess.promotionType === 'r'"
         @click="upgradeTo('r')"
       >城堡 | Rook</el-button>
       <el-button
         class="upgrade-btn"
         size="small"
         type="warning"
+        :disabled="chess.promotionType === 'n'"
         @click="upgradeTo('n')"
       >骑士 | Knight</el-button>
       <el-button
         class="upgrade-btn"
         size="small"
         type="warning"
+        :disabled="chess.promotionType === 'b'"
         @click="upgradeTo('b')"
       >主教 | Bishop</el-button>
       <el-button
         class="upgrade-btn"
         size="small"
         type="warning"
+        :disabled="chess.promotionType === 'q'"
         @click="upgradeTo('q')"
       >王后 | Queen</el-button>
     </el-dialog>
@@ -91,8 +107,8 @@
       :visible.sync="chess.gameEnd"
       size="tiny"
     >
-      <span>胜者: {{campMapCN[chess.winner]}}</span>
-      <span>Winner: {{campMap[chess.winner]}}</span>
+      <div>胜者: {{campMapCN[chess.winner]}}</div>
+      <div>Winner: {{campMap[chess.winner]}}</div>
     </el-dialog>
   </div>
 </template>
@@ -107,6 +123,7 @@ export default {
   data() {
     return {
       loading: true,
+      showUpgrade: false,
       edge: 80,
       width: 8,
       height: 8,
@@ -130,33 +147,41 @@ export default {
       const vm = this;
       vm.generate();
       vm.loading = false;
-      console.log('vm.chess', vm.chess);
+      // console.log('vm.chess', vm.chess);
+      // vm.gridClick(vm.chess.graph[15]);
+      // vm.gridClick(vm.chess.graph[23]);
     },
     generate() {
       this.chess = new Chess();
+      // this.chess.aiDepth = 1;
     },
     undo() {
-      if (!this.chess) return;
+      if (!this.chess || this.chess.aiMoving) return;
       this.chess.undo();
     },
     gridClick(data) {
+      if (this.chess.aiMoving) return;
       // console.log('gridClick', data);
-      this.chess.move(data);
+      this.chess.play(data);
     },
     showPath(data) {
       if (this.chess.selected.position) return;
       this.chess.showPiecePath(data);
     },
     clearPath() {
-      if (this.chess.selected.position) return;
+      if (this.chess.aiMoving || this.chess.selected.position) return;
       this.chess.removePiecePath();
     },
     getPieceClass(item) {
       if (!item || !item.piece) return 'none';
       return `piece-${item.piece.name.toLowerCase()}-${item.piece.camp}`;
     },
+    openPromotionConfig() {
+      this.showUpgrade = true;
+    },
     upgradeTo(alias) {
-      this.chess.upgradeTo(alias);
+      this.chess.promotionType = alias;
+      this.showUpgrade = false;
     },
   },
 };
@@ -165,6 +190,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/css/color.scss';
 .grid-box {
+  // visibility: hidden;
   .chess-board {
     margin: 40px auto;
   }
