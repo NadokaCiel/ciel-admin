@@ -73,11 +73,11 @@ export default {
     }],
   },
   imageMap: {
-    white: 'http://120.27.3.78:3000/public/uploads/1587540378538ospu.png',
-    yellow: 'http://120.27.3.78:3000/public/uploads/1587540378529ayru.png',
-    red: 'http://120.27.3.78:3000/public/uploads/15875403785405f6u.png',
-    orange: 'http://120.27.3.78:3000/public/uploads/1587540378531iv44.png',
-    pink: 'http://120.27.3.78:3000/public/uploads/1587540378527brim.png',
-    dark: 'http://120.27.3.78:3000/public/uploads/15875403785444s7a.png',
+    white: 'https://nadokaciel.cn/public/uploads/1587540378538ospu.png',
+    yellow: 'https://nadokaciel.cn/public/uploads/1587540378529ayru.png',
+    red: 'https://nadokaciel.cn/public/uploads/15875403785405f6u.png',
+    orange: 'https://nadokaciel.cn/public/uploads/1587540378531iv44.png',
+    pink: 'https://nadokaciel.cn/public/uploads/1587540378527brim.png',
+    dark: 'https://nadokaciel.cn/public/uploads/15875403785444s7a.png',
   },
 };
