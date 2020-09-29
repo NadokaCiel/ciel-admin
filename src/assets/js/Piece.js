@@ -35,7 +35,7 @@ export class Piece {
   }
 }
 
-export const getPiece = (alias) => {
+export const makePiece = (alias) => {
   const piece = pieceEnum[alias.toLowerCase()];
   return {
     name: piece.name,
@@ -75,7 +75,7 @@ export const setActiveState = (p_, round) => {
 
 export default {
   Piece,
-  getPiece,
+  makePiece,
   transform,
   eaten,
   setActiveState,

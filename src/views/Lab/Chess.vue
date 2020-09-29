@@ -39,7 +39,7 @@
         </div>
       </transition-group>
     </div>
-    <div class="box">
+    <div class="box" v-if="chess">
       <div>执子 : {{campMapCN[chess.currentMover]}}</div>
       <div v-if="chess.aiMoving">AI思考中...</div>
       <div v-if="chess.beCheckedCamp">{{campMapCN[chess.beCheckedCamp]}}正被将军</div>
@@ -69,9 +69,9 @@
       title="兵卒升变配置 | Pawn Upgrade Config"
       :visible.sync="showUpgrade"
       size="small"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      :show-close="true"
+      :close-on-click-modal="true"
+      :close-on-press-escape="true"
     >
       <el-button
         class="upgrade-btn"
@@ -153,11 +153,11 @@ export default {
     },
     generate() {
       this.chess = new Chess();
-      // this.chess.aiDepth = 4;
+      // this.chess.aiDepth = 0;
     },
     undo() {
       if (!this.chess || this.chess.aiMoving) return;
-      this.chess.undo();
+      this.chess.undoMove();
     },
     gridClick(data) {
       if (this.chess.aiMoving) return;
