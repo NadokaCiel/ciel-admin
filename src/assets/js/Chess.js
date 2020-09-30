@@ -25,6 +25,7 @@ export default class Chess {
     vm.history = [];
     vm.accessPath = [];
     vm.attackPath = [];
+    vm.aiPath = [];
     vm.event = '';
     vm.winner = '';
     vm.currentMover = 'white';
@@ -260,9 +261,13 @@ export default class Chess {
   undoMove() {
     const vm = this;
     vm.undo();
+    if (vm.isAiMove()) {
+      vm.undo();
+    }
     vm.afterMove();
     vm.cemetery.white = vm.cemetery.white.filter(piece => piece.deathRound > vm.history.length);
     vm.cemetery.black = vm.cemetery.black.filter(piece => piece.deathRound > vm.history.length);
+    vm.aiPath = [];
   }
 
   undo() {
@@ -568,6 +573,7 @@ export default class Chess {
     const [m1, m2] = move;
     vm.isLegalPath(vm.graph[m1].piece, vm.graph[m1], vm.graph[m2], true);
     vm.move(...move);
+    vm.aiPath = [m1, m2];
     vm.afterMove();
   }
 

@@ -18,7 +18,7 @@
           v-for="item in chess.graph"
           :key="item.id"
           class="grid-box"
-          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}, {'attack-white': checkRoute === 'white' && chess.whiteAttckMap[item.id] && item.piece}, {'attack-black': checkRoute === 'black' && chess.blackAttckMap[item.id] && item.piece}]"
+          :class="[{'selected':chess.selected.position === item.position}, {'access': chess.accessPath.indexOf(item.position) >= 0}, {'attack': chess.attackPath.indexOf(item.position) >= 0}, {'attack-white': checkRoute === 'white' && chess.whiteAttckMap[item.id] && item.piece}, {'attack-black': checkRoute === 'black' && chess.blackAttckMap[item.id] && item.piece}, {'ai-before': chess.aiPath.indexOf(item.id) === 0}, {'ai-after': chess.aiPath.indexOf(item.id) === 1}]"
           :style="{'width':(100 / width) + '%','padding-bottom':(100 / width) + '%','height':0}"
           @click="gridClick(item)"
           @mouseenter="showPath(item)"
@@ -286,6 +286,31 @@ export default {
         box-shadow: 0 0 10px 3px rgba(65,105,225, .4);
         background-color: rgba(65,105,225, .4);
         animation: blink 1.2s infinite;
+      }
+
+      &.ai-before:after {
+        content: ' ';
+        position: absolute;
+        top:-2px;
+        right:-2px;
+        bottom:-2px;
+        left:-2px;
+        box-shadow: 0 0 10px 3px rgba(219, 144, 25, .4);
+        background-color: rgba(219, 144, 25, .4);
+        animation: blink 2.4s infinite;
+      }
+
+      &.ai-after:after {
+        content: ' ';
+        position: absolute;
+        top:-2px;
+        right:-2px;
+        bottom:-2px;
+        left:-2px;
+        box-shadow: 0 0 10px 3px rgba(219, 144, 25, .4);
+        background-color: rgba(219, 144, 25, .4);
+        animation: blink 2.4s infinite;
+        animation-delay: 1.2s;
       }
 
       &:hover .grid-black {
