@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueCookie from 'vue-cookie';
+import VueKonva from 'vue-konva';
 
 import _ from "lodash";
 import ElementUI from 'element-ui';
@@ -31,6 +32,7 @@ Vue.use(VueCookie);
 Vue.use(ElementUI);
 
 Vue.use(Bus);
+Vue.use(VueKonva);
 
 Vue.prototype.$config = config;
 

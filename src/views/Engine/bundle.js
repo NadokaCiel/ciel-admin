@@ -53,4 +53,13 @@ export default {
       auth: ['admin'],
     },
   },
+  Vdomc: {
+    name: '画布',
+    icon: "fa-image",
+    path: '/engine/vdomc',
+    component: () => import(/* webpackChunkName: "engine" */ './Vdomc.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };
