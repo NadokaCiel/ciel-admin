@@ -22,19 +22,19 @@
           @dragmove="dragMove"
           ref="myshape"
           :config="{
-          sceneFunc: myShape,
-          fill: isDragging ? '#34D800' : '#00D2FF',
-          stroke: 'black',
-          strokeWidth: 1,
-          x: 220,
-          y: 220,
-          draggable: true,
-          dragBoundFunc: myShapeLimit,
-          offset: {
-            x: 40,
-            y: 40,
-          },
-        }" />
+            sceneFunc: myShape,
+            fill: isDragging ? '#34D800' : '#00D2FF',
+            stroke: 'black',
+            strokeWidth: 1,
+            x: 220,
+            y: 220,
+            draggable: true,
+            dragBoundFunc: myShapeLimit,
+            offset: {
+              x: 40,
+              y: 40,
+            },
+          }"/>
       </v-layer>
     </v-stage>
     <el-button

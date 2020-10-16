@@ -107,4 +107,13 @@ export default {
       auth: ['anonymous'],
     },
   },
+  Maze: {
+    name: '迷宫',
+    icon: "fa-route",
+    path: '/lab/maze',
+    component: () => import(/* webpackChunkName: "lab" */ './Maze.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
 };
