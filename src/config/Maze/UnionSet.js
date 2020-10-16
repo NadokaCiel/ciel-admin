@@ -1,6 +1,6 @@
 export default class UnionSet {
   constructor(size) {
-    this.set = new Array(size)
+    this.set = new Array(size);
     for (let i = this.set.length - 1; i >= 0; i -= 1) {
       this.set[i] = -1;
     }
@@ -20,6 +20,7 @@ export default class UnionSet {
 
   findRoot(x) {
     if (this.set[x] < 0) return x;
+    // eslint-disable-next-line
     return this.set[x] = this.findRoot(this.set[x]);
   }
 
