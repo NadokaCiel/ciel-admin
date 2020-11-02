@@ -163,9 +163,9 @@ export default {
         return;
       }
       console.log('undeal');
-      const card = player.pop();
+      const card = player.shift();
       card.show = false;
-      vm.mypoker.deck.unshift(card);
+      vm.mypoker.deck.push(card);
     },
     getPoints(player) {
       let anum = 0;
