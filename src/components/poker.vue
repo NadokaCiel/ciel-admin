@@ -50,7 +50,7 @@ export default {
   margin: 5px;
   width: 50px;
   height: 80px;
-  font-size: 16px;
+  font-size: 12px;
   perspective: 1000;
   text-align: left;
   transform-style: preserve-3d;

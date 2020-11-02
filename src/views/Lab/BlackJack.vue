@@ -323,7 +323,7 @@ export default {
   }
 
   .deck-fold {
-    margin-left: -10%;
+    margin-left: -25px;
   }
 
   .cell-move {
