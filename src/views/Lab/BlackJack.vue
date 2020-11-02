@@ -203,11 +203,6 @@ export default {
         vm.playerStop = true;
       }
 
-      if (vm.player1Points > 21) {
-        vm.$alert('Burst！', {
-          type: 'error',
-        });
-      }
       if (!vm.checkGame()) vm.aiMove();
     },
     aiMove() {
@@ -238,12 +233,6 @@ export default {
         vm.aiStop = true;
       }
 
-      if (vm.player2Points > 21) {
-        vm.$alert('AI Burst, You Win！', {
-          type: 'success',
-        });
-      }
-
       const result = vm.checkGame();
       if (!result && vm.playerStop) {
         vm.aiMove();
@@ -256,6 +245,21 @@ export default {
     },
     checkGame() {
       const vm = this;
+
+      if (vm.player1Points > 21) {
+        vm.$alert('Burst！', {
+          type: 'error',
+        });
+        return true;
+      }
+
+      if (vm.player2Points > 21) {
+        vm.$alert('AI Burst, You Win！', {
+          type: 'success',
+        });
+        return true;
+      }
+
       if (!vm.aiStop || !vm.playerStop) return false;
 
       if (vm.player1Points > vm.player2Points) {
