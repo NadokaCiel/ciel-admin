@@ -116,4 +116,13 @@ export default {
       auth: ['anonymous'],
     },
   },
+  BlackJack: {
+    name: '二十一点',
+    icon: "fa-layer-group",
+    path: '/lab/blackjack',
+    component: () => import(/* webpackChunkName: "lab" */ './BlackJack.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
 };
