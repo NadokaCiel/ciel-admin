@@ -130,6 +130,9 @@ export default {
       vm.deal(vm.player2);
       vm.player1Points = vm.getPoints(vm.player1);
       vm.player2Points = vm.getPoints(vm.player2);
+      vm.isPlayerMove = true;
+      vm.playerStop = false;
+      vm.aiStop = false;
       vm.checkGame();
     },
     shuffleDeck(count) {
@@ -241,11 +244,15 @@ export default {
         });
       }
 
-      vm.checkGame();
+      const result = vm.checkGame();
+      if (!result && vm.playerStop) {
+        vm.aiMove();
+      }
     },
     stand() {
       const vm = this;
       vm.playerStop = true;
+      vm.aiMove();
     },
     checkGame() {
       const vm = this;
