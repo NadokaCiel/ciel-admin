@@ -10,7 +10,7 @@ const optionMap = {
       width: "375px",
     },
     data: [{
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://nadokaciel.cn/public/uploads/15851273912515b72.png",
       link_type: "internal",
       link_value: "page/index/index",
       ext_foo: "bar",
@@ -33,7 +33,7 @@ const optionMap = {
     style: {
       height: "400px",
       width: "300px",
-      image: "https://static-cdn.verystar.net/some_text_view_image.png",
+      image: "https://nadokaciel.cn/public/uploads/1585127407841g9w0.png",
     },
     data: {
       title: "活动规则",
@@ -55,7 +55,7 @@ const optionMap = {
       width: "300px",
     },
     data: {
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://nadokaciel.cn/public/uploads/15851273912515b72.png",
       link_type: "internal",
       link_value: "page/index/index",
       ext_foo: "bar",
@@ -72,7 +72,7 @@ const optionMap = {
     data: [{
       title: "某主题1",
       title_color: "#555555",
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://nadokaciel.cn/public/uploads/15851273912515b72.png",
       link_type: "internal",
       link_value: "page/theme/theme?id=1",
     }, {
@@ -91,12 +91,12 @@ const optionMap = {
     style: {
       height: "50px",
       width: "100px",
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://nadokaciel.cn/public/uploads/15851273912515b72.png",
     },
     data: {
       title: "购买历史",
       title_color: "#555555",
-      image: "https://verystar.admin.verystar.net/img/logo.jpg",
+      image: "https://nadokaciel.cn/public/uploads/15851273912515b72.png",
       link_type: "internal",
       link_value: "page/theme/theme?id=2",
       ext_foo: "bar",
