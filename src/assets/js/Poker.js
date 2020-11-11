@@ -47,15 +47,26 @@ export class Poker {
 export default {
   Poker,
   valueMap,
+  rankMap,
   suits,
   types,
+  isHeteroColor,
 };
 
 const suits = ["heart", "spade", "diamond", "club"];
 
 const types = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
+// const types = ["J", "Q", "K"];
+
 // const types = ["A", "2", "3", "4", "5"];
+
+export const isHeteroColor = (suit1, suit2) => {
+  if (suit1 === 'heart' || suit1 === 'diamond') {
+    return suit2 === 'spade' || suit2 === 'club';
+  }
+  return suit2 === 'heart' || suit2 === 'diamond';
+};
 
 const valueMap = {
   A: 11,
@@ -71,4 +82,20 @@ const valueMap = {
   J: 10,
   Q: 10,
   K: 10,
+};
+
+export const rankMap = {
+  A: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10,
+  J: 11,
+  Q: 12,
+  K: 13,
 };

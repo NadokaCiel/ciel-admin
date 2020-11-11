@@ -53,6 +53,9 @@ export default {
   font-size: 12px;
   perspective: 1000;
   text-align: left;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid $co10;
   transform-style: preserve-3d;
 }
 
@@ -77,7 +80,6 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 15;
-  border: 1px solid $co10;
   background-color: $white;
   backface-visibility: hidden;
 }

@@ -1,5 +1,7 @@
 <template>
   <div class="black-jack">
+    <div class="page-title">二十一点</div>
+    <div class="page-subtitle">BlackJack</div>
     <div class="player-points">AI Points: {{ player2Points }}</div>
     <div class="player-panel clearfix">
       <transition-group

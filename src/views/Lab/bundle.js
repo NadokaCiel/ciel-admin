@@ -125,4 +125,13 @@ export default {
       auth: ['anonymous'],
     },
   },
+  Freecell: {
+    name: '空当接龙',
+    icon: "fa-clone",
+    path: '/lab/freecell',
+    component: () => import(/* webpackChunkName: "lab" */ './Freecell.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
 };
