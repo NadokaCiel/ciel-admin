@@ -62,4 +62,13 @@ export default {
       auth: ['admin'],
     },
   },
+  Drag: {
+    name: '拖拽',
+    icon: "fa-arrows-alt",
+    path: '/engine/drag',
+    component: () => import(/* webpackChunkName: "engine" */ './Drag.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };
