@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <el-card class="user-card">
+    <el-card class="user-card" v-loading="loading">
       <div
         slot="header"
         flex="main:justify cross:center"
       >
-        <div>您好，{{user.user_name}}!</div>
-        <div>当前身份：{{roleMap[user.role] || '未知'}}</div>
+        <div>您好，{{user.user_name || '游客'}}!</div>
+        <div>当前身份：{{roleMap[user.role] || '游客'}}</div>
       </div>
       <div class="memo">
         <div class="memo-title">统计数据</div>
@@ -16,7 +16,7 @@
             flex="main:center cross:center"
           >
             <div class="memo-line-title">ccoin：</div>
-            <div class="memo-line-content">{{user.ccoin || 0}}</div>
+            <div class="memo-line-content">{{user.ccoin || '-'}}</div>
           </div>
         </div>
         <div flex="main:center cross:center">
@@ -25,7 +25,7 @@
             flex="main:center cross:center"
             v-if="user.id"
           >
-            <el-button class="memo-line-title" @click="signin" size="mini" type="primary" v-if="!user.signed">签到</el-button>
+            <c-button class="memo-line-title" :clickFunc="[signin]" size="mini" type="primary" v-if="!user.signed">签到</c-button>
             <el-button class="memo-line-title" size="mini" disabled v-else>今日已签到</el-button>
           </div>
           <div
@@ -34,30 +34,30 @@
             v-if="user.serial !== 0"
           >
             <div class="memo-line-title">您已连续签到：</div>
-            <div class="memo-line-content">{{user.serial || 0}}天</div>
+            <div class="memo-line-content">{{user.serial || '-'}}天</div>
           </div>
         </div>
-        <div flex="main:center cross:center">
+        <div flex="main:center cross:center" v-loading="infoLoading">
           <div
             class="memo-line"
             flex="main:center cross:center"
           >
             <div class="memo-line-title">用户：</div>
-            <div class="memo-line-content">{{info.userCount || 0}}</div>
+            <div class="memo-line-content">{{info.userCount || '-'}}</div>
           </div>
           <div
             class="memo-line"
             flex="main:center cross:center"
           >
             <div class="memo-line-title">文章：</div>
-            <div class="memo-line-content">{{info.articleCount || 0}}</div>
+            <div class="memo-line-content">{{info.articleCount || '-'}}</div>
           </div>
           <div
             class="memo-line"
             flex="main:center cross:center"
           >
             <div class="memo-line-title">问卷：</div>
-            <div class="memo-line-content">{{info.quizCount || 0}}</div>
+            <div class="memo-line-content">{{info.quizCount || '-'}}</div>
           </div>
         </div>
       </div>
@@ -69,6 +69,8 @@ export default {
   name: "Home",
   data() {
     return {
+      loading: true,
+      infoLoading: true,
       user: {},
       info: {},
       roleMap: {
@@ -85,6 +87,8 @@ export default {
   methods: {
     getData() {
       const vm = this;
+      vm.loading = true;
+      vm.infoLoading = true;
       vm.$api.userInfo({
         restful: {
           id: 'self',
@@ -94,7 +98,9 @@ export default {
       }) => {
         vm.user = data.user;
         vm.user.serial = data.serial;
+        vm.loading = false;
       }).catch(err => {
+        vm.loading = false;
         vm.$alert(err, {
           type: 'error',
         });
@@ -104,15 +110,17 @@ export default {
         data,
       }) => {
         vm.info = data;
+        vm.infoLoading = false;
       }).catch(err => {
+        vm.infoLoading = false;
         vm.$alert(err, {
           type: 'error',
         });
       });
     },
-    signin() {
+    async signin() {
       const vm = this;
-      vm.$api.signin().then(({
+      await vm.$api.signin().then(({
         data,
       }) => {
         console.log(data);

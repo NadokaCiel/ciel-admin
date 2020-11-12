@@ -56,6 +56,7 @@ export default {
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid $co10;
+  background-color: $white;
   transform-style: preserve-3d;
 }
 

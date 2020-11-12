@@ -17,7 +17,7 @@
       <div class="show-panel">
         <poker
           class="as-one"
-          :class="{'highlight': showDeckActive && cardIdx === showDeck.length - 1}"
+          :class="{'highlight': showDeckActive && cardIdx === showDeck.length - 1, 'hint-start': hintStart.isShowDeck && cardIdx === showDeck.length - 1}"
           :style="{left: cardIdx * 35 + 'px', zIndex: cardIdx + 1}"
           :suit="card.suit"
           :type="card.type"
@@ -51,7 +51,7 @@
         > -->
         <poker
           class="as-one"
-          :class="{'highlight': nowDeckIdx === deckIdx && nowCardIdx <= cardIdx}"
+          :class="{'highlight': nowDeckIdx === deckIdx && nowCardIdx <= cardIdx, 'hint-start': !hintStart.isShowDeck && hintStart.cardIdx <= cardIdx && hintStart.listIdx === deckIdx, 'hint-end': hintEnd.cardIdx <= cardIdx && hintEnd.listIdx === deckIdx}"
           :style="{top: cardIdx * 40 + 'px'}"
           :suit="card.suit"
           :type="card.type"
@@ -73,6 +73,11 @@
         </el-radio-group>
       </div>
       <div class="game-tool">
+        <el-button
+          class="blackjack-btn"
+          type="primary"
+          @click="hint"
+        >提示 | Hint</el-button>
         <el-button
           class="blackjack-btn"
           type="primary"
@@ -113,6 +118,15 @@ export default {
       nowDeckIdx: null,
       nowCardIdx: null,
       showDeckActive: false,
+      hintStart: {
+        isShowDeck: false,
+        listIdx: undefined,
+        cardIdx: undefined,
+      },
+      hintEnd: {
+        listIdx: undefined,
+        cardIdx: undefined,
+      },
     };
   },
   methods: {
@@ -126,6 +140,7 @@ export default {
       vm.showDeckActive = false;
       vm.points = 0;
       vm.mypoker.shuffle();
+      vm.clearHint();
       for (let i = 0; i < 7; i += 1) {
         vm.ground[i] = [];
         for (let j = 0; j < i + 1; j += 1) {
@@ -142,6 +157,7 @@ export default {
     },
     deal() {
       const vm = this;
+      vm.clearHint();
       console.log('deal');
       vm.showDeckActive = false;
       const len = vm.showDeck.length;
@@ -165,6 +181,7 @@ export default {
     },
     groundClick(deckIdx) {
       const vm = this;
+      vm.clearHint();
       if (vm.ground[deckIdx].length > 0) return;
       if (!vm.showDeckActive && !vm.nowDeckIdx && vm.nowDeckIdx !== 0) return;
       if (vm.showDeckActive) {
@@ -197,6 +214,7 @@ export default {
     },
     cardClick(deckIdx, cardIdx) {
       const vm = this;
+      vm.clearHint();
       if (vm.nowDeckIdx || vm.nowDeckIdx === 0) {
         if (deckIdx === vm.nowDeckIdx) {
           vm.nowDeckIdx = null;
@@ -250,12 +268,14 @@ export default {
     },
     showClick() {
       const vm = this;
+      vm.clearHint();
       vm.nowDeckIdx = null;
       vm.nowCardIdx = null;
       vm.showDeckActive = !vm.showDeckActive;
     },
     foldClick(deckIdx) {
       const vm = this;
+      vm.clearHint();
       if (!vm.showDeckActive && (!vm.nowDeckIdx && vm.nowDeckIdx !== 0)) return;
       if (vm.showDeckActive) {
         const newCard = vm.showDeck[vm.showDeck.length - 1];
@@ -316,6 +336,88 @@ export default {
         });
       }
     },
+    hint() {
+      const vm = this;
+      const startMoves = [];
+      const endMoves = [];
+      let showCard = null;
+      const possibleMove = [];
+      /*
+        思考：分为两组：起始组，目标组
+        起始组包括：上方翻牌最后一张，下方所有已经翻出来的任意牌
+        目标组包括：下方所有牌堆最后一张
+      */
+      vm.ground.forEach((list, listIdx) => {
+        if (list.length > 0) {
+          list.forEach((card, cardIdx) => {
+            if (card.show) {
+              startMoves.push([card, listIdx, cardIdx]);
+            }
+            if (cardIdx === list.length - 1) {
+              endMoves.push([card, listIdx, cardIdx]);
+            }
+          });
+        }
+      });
+      if (vm.showDeck.length > 0) {
+        showCard = vm.showDeck[vm.showDeck.length - 1];
+      }
+      for (let j = 0; j < endMoves.length; j += 1) {
+        const [endCard, endListIdx] = endMoves[j];
+        if (showCard) {
+          if (rankMap[showCard.type] === rankMap[endCard.type] - 1 && isHeteroColor(showCard.suit, endCard.suit)) {
+            possibleMove.push([showCard, endMoves[j]]);
+          }
+        }
+        for (let i = 0; i < startMoves.length; i += 1) {
+          const [startCard, startListIdx] = startMoves[i];
+          if (startListIdx !== endListIdx) {
+            if (rankMap[startCard.type] === rankMap[endCard.type] - 1 && isHeteroColor(startCard.suit, endCard.suit)) {
+              possibleMove.push([startMoves[i], endMoves[j]]);
+            }
+          }
+        }
+      }
+      console.table(possibleMove);
+      if (possibleMove.length > 0) {
+        const [start, end] = possibleMove[Math.floor(Math.random() * possibleMove.length)];
+        if (start.type) {
+          vm.hintStart = {
+            isShowDeck: true,
+            listIdx: undefined,
+            cardIdx: undefined,
+          };
+        } else {
+          vm.hintStart = {
+            isShowDeck: false,
+            listIdx: start[1],
+            cardIdx: start[2],
+          };
+        }
+
+        vm.hintEnd = {
+          listIdx: end[1],
+          cardIdx: end[2],
+        };
+
+        console.table(vm.hintStart);
+        console.table(vm.hintEnd);
+      } else {
+        vm.clearHint();
+      }
+    },
+    clearHint() {
+      this.hintStart = {
+        isShowDeck: false,
+        listIdx: undefined,
+        cardIdx: undefined,
+      };
+
+      this.hintEnd = {
+        listIdx: undefined,
+        cardIdx: undefined,
+      };
+    },
   },
   computed: {},
   watch: {
@@ -331,12 +433,14 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/css/color.scss';
 .freecell {
+  min-width: 650px;
 
   .game-header {
-    padding: 40px 0;
+    padding: 40px;
   }
 
   .fold-box {
+    flex-shrink: 0;
     position: relative;
     margin-left: 40px;
     width: 50px;
@@ -346,6 +450,7 @@ export default {
   }
 
   .show-panel {
+    flex-shrink: 0;
     position: relative;
     margin: 0 20px;
     height: 80px;
@@ -393,6 +498,45 @@ export default {
 
   .game-info {
     font-size: 12px;
+  }
+}
+</style>
+<style lang="scss">
+@import '~@/assets/css/color.scss';
+.freecell {
+  .hint-start .card-front {
+    background-color: rgba($co18, 0.4);
+    animation: hintStart 2.4s infinite;
+  }
+
+  .hint-end .card-front {
+    background-color: rgba($co3, 0.4);
+    animation: hintEnd 2.4s infinite;
+    animation-delay: 2.4s;
+  }
+
+  @keyframes hintStart {
+    0% {
+      background-color: rgba($co18, 0.4);
+    }
+    50% {
+      background-color: #fff;
+    }
+    100% {
+      background-color: rgba($co18, 0.4);
+    }
+  }
+
+  @keyframes hintEnd {
+    0% {
+      background-color: rgba($co3, 0.4);
+    }
+    50% {
+      background-color: #fff;
+    }
+    100% {
+      background-color: rgba($co3, 0.4);
+    }
   }
 }
 </style>
