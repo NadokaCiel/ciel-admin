@@ -23,6 +23,14 @@ export default {
   created() {
     // const vm = this;
     // console.log(vm.$router);
+    const fontSize = `${document.body.clientWidth / 16}px`;
+    document.getElementsByTagName("html")[0].style.setProperty('font-size', fontSize);
+    document.body.style.setProperty('font-size', '.6rem');
+    window.onresize = () => {
+      const size = `${document.body.clientWidth / 16}px`;
+      document.getElementsByTagName("html")[0].style.setProperty('font-size', size);
+      document.body.style.setProperty('font-size', '.6rem');
+    };
   },
   methods: {
     onMenu(isFoled) {

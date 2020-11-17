@@ -71,4 +71,13 @@ export default {
       auth: ['admin'],
     },
   },
+  Effect: {
+    name: '特效',
+    icon: "fa-star",
+    path: '/engine/effect',
+    component: () => import(/* webpackChunkName: "engine" */ './Effect.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
 };
