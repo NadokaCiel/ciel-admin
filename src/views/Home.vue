@@ -101,7 +101,7 @@ export default {
         vm.loading = false;
       }).catch(err => {
         vm.loading = false;
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -113,7 +113,7 @@ export default {
         vm.infoLoading = false;
       }).catch(err => {
         vm.infoLoading = false;
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -129,7 +129,10 @@ export default {
         });
         vm.getData();
       }).catch(err => {
-        vm.$alert(err, {
+        if (err.retcode === 45000) {
+          vm.user.signed = true;
+        }
+        vm.$alert(err.msg || '签到失败', {
           type: 'error',
         });
       });

@@ -129,7 +129,7 @@ export default {
                 vm.$localStorage.remove('name');
                 vm.$router.push({ name: 'Login' });
               }).catch(err => {
-                vm.$alert(err, {
+                vm.$alert(err.msg, {
                   type: 'error',
                 });
                 vm.$localStorage.remove('token');

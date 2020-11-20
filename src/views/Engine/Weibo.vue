@@ -136,7 +136,7 @@ export default {
         vm.loading = false;
       }).catch(err => {
         vm.loading = false;
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });

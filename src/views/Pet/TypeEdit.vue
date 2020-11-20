@@ -208,7 +208,7 @@ export default {
       }).then(({ data }) => {
         vm.form = data;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -232,7 +232,7 @@ export default {
         }).then(() => {
           vm.toList();
         }).catch(err => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: 'error',
           });
         });
@@ -242,7 +242,7 @@ export default {
         }).then(() => {
           vm.toList();
         }).catch(err => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: 'error',
           });
         });

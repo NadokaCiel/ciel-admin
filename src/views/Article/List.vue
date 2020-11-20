@@ -132,7 +132,7 @@ export default {
         vm.loading = false;
       }).catch(err => {
         vm.loading = false;
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -154,7 +154,7 @@ export default {
               });
               vm.getList();
             }).catch(err => {
-              vm.$alert(err, {
+              vm.$alert(err.msg, {
                 type: 'error',
               });
             });
@@ -183,7 +183,7 @@ export default {
               });
               vm.getList();
             }).catch(err => {
-              vm.$alert(err, {
+              vm.$alert(err.msg, {
                 type: 'error',
               });
             });

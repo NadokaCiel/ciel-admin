@@ -128,7 +128,7 @@ export default {
           vm.$emit("item-saved", body);
         })
         .catch((err) => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: "error",
           });
         });

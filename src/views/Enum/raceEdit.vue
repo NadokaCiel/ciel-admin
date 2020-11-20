@@ -221,7 +221,7 @@ export default {
           vm.$emit("race-saved", body);
         })
         .catch((err) => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: "error",
           });
         });

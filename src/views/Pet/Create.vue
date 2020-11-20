@@ -150,7 +150,7 @@ export default {
         });
         vm.pets = data.list;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -165,7 +165,7 @@ export default {
       // }).then(() => {
       //   vm.toPetHome();
       // }).catch(err => {
-      //   vm.$alert(err, {
+      //   vm.$alert(err.msg, {
       //     type: 'error',
       //   });
       // });

@@ -45,7 +45,7 @@ export default {
       }).then(({ data }) => {
         vm.info = data;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });

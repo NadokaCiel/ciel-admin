@@ -94,7 +94,7 @@ export default {
         vm.toList();
       }).catch(err => {
         console.log(err);
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });

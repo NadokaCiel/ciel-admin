@@ -63,7 +63,7 @@ export default {
         vm.result = data;
         vm.sheet = data.sheet;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -76,7 +76,7 @@ export default {
         vm.quiz = data;
         vm.subjects = data.subjects;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });

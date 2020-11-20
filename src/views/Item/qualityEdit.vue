@@ -96,7 +96,7 @@ export default {
           vm.$emit("quality-saved", body);
         })
         .catch((err) => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: "error",
           });
         });

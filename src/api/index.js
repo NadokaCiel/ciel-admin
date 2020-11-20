@@ -55,7 +55,7 @@ const getApi = (version) => {
           });
           return;
         }
-        next(serverData.msg || 'unknown error', serverData.data);
+        next({ ...serverData }, serverData.data);
       } else {
         next(false, serverData.data);
       }

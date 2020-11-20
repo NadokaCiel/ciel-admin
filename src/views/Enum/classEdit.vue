@@ -222,7 +222,7 @@ export default {
           vm.$emit("class-saved", body);
         })
         .catch((err) => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: "error",
           });
         });

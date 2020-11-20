@@ -180,7 +180,7 @@ export default {
         });
         vm.idx = vm.subjects.length;
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -190,7 +190,7 @@ export default {
       vm.$api.subjectOption().then(({ data }) => {
         vm.options = data.subject || [];
       }).catch(err => {
-        vm.$alert(err, {
+        vm.$alert(err.msg, {
           type: 'error',
         });
       });
@@ -255,7 +255,7 @@ export default {
         }).then(() => {
           vm.toList();
         }).catch(err => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: 'error',
           });
         });
@@ -268,7 +268,7 @@ export default {
         }).then(() => {
           vm.toList();
         }).catch(err => {
-          vm.$alert(err, {
+          vm.$alert(err.msg, {
             type: 'error',
           });
         });
