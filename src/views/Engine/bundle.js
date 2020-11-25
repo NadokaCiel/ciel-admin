@@ -8,6 +8,15 @@ export default {
       auth: ['admin'],
     },
   },
+  Config: {
+    name: '小程序配置',
+    icon: "fa-cog",
+    path: '/engine/config',
+    component: () => import(/* webpackChunkName: "engine" */'./Config.vue'),
+    meta: {
+      auth: ['admin'],
+    },
+  },
   Weibo: {
     name: '微博',
     icon: "fa-info-circle",

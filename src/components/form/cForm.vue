@@ -59,7 +59,7 @@
 
     <el-form-item class="vs-form-button" v-if="showBtn">
       <c-button type="primary" :clickFunc="[checkForm]">保存</c-button>
-      <el-button @click="cancel">取消</el-button>
+      <el-button @click="cancel" v-if="cancel">取消</el-button>
     </el-form-item>
   </el-form>
 </template>

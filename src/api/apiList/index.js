@@ -11,6 +11,7 @@ import Class from './Class';
 import Race from './Race';
 import Quiz from './Quiz';
 import Subject from './Subject';
+import Config from './Config';
 
 const getApi = (version) => [
   ...Common(version),
@@ -26,6 +27,7 @@ const getApi = (version) => [
   ...Race(version),
   ...Quiz(version),
   ...Subject(version),
+  ...Config(version),
 ];
 
 export default getApi;
