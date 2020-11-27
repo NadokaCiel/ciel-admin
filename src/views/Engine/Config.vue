@@ -89,12 +89,22 @@ export default {
     return {
       idx: 0,
       drag: false,
-      form: {},
-      settings: {},
+      form: {
+        avatar: "",
+      },
+      settings: {
+        avatar: {
+          title: "托托的照片",
+          type: "string",
+          format: "file",
+          default: "",
+          required: false,
+        },
+      },
       layout: [
         {
           title: "AI话题推荐",
-          contains: [],
+          contains: ["avatar"],
         },
       ],
       aiOptions: [],

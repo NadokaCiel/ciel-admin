@@ -9,6 +9,9 @@ export default function(version = '') {
     params: {
       // post参数
       post: [{
+        param: 'avatar',
+        isNeed: 0,
+      }, {
         param: 'ai_option',
         isNeed: 1,
       }, {
