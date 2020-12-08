@@ -134,4 +134,13 @@ export default {
       auth: ['anonymous'],
     },
   },
+  Flight: {
+    name: '飞行棋',
+    icon: "fa-plane",
+    path: '/lab/flight',
+    component: () => import(/* webpackChunkName: "lab" */ './Flight.vue'),
+    meta: {
+      auth: ['anonymous'],
+    },
+  },
 };

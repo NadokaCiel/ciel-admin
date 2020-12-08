@@ -14,6 +14,7 @@
         v-for="item in graph"
         :key="item.id"
         class="grid-box"
+        :class="{'border-box': border}"
         :style="{'width':(100 / width) + '%','padding-bottom':(100 / width) + '%','height':0,}"
         @click="gridClick(item)"
       >
@@ -21,6 +22,7 @@
           <slot :name="'grid' + item.id"></slot>
         </div>
       </div>
+      <slot name="extra"></slot>
     </transition-group>
   </div>
 </template>
@@ -41,11 +43,17 @@ export default {
       type: Number,
       default: () => 40,
     },
+    border: {
+      type: Boolean,
+      default: () => true,
+    },
+    graph: {
+      type: Array,
+    },
   },
   data() {
     return {
       loading: true,
-      graph: [],
       dotMap: {},
     };
   },
@@ -55,7 +63,9 @@ export default {
   methods: {
     init() {
       const vm = this;
-      vm.generate();
+      if (!vm.graph || vm.graph.length === 0) {
+        vm.generate();
+      }
       vm.loading = false;
       // console.log('vm.graph', vm.graph);
       // console.log('vm.dotMap', vm.dotMap);
@@ -81,6 +91,7 @@ export default {
     },
     gridClick(data) {
       console.log('grid data:', data);
+      this.$emit('gridClick', data);
     },
   },
   beforeDestroy() {
@@ -100,6 +111,7 @@ export default {
   }
 
   .grid-board {
+    position: relative;
     margin: 0 auto;
     overflow: auto;
     // border: 1px solid $darker;
@@ -109,7 +121,9 @@ export default {
       position: relative;
       float: left;
       user-select: none;
+    }
 
+    .border-box {
       &::after {
         content: "";
         position: absolute;

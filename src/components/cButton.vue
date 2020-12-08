@@ -49,13 +49,14 @@ export default {
   methods: {
     async handleClick(evt) {
       const vm = this;
-      console.log(evt);
+      // console.log(evt);
       if (vm.clickFunc.length > 0) {
         vm.innerLoading = true;
         try {
           await vm.clickFunc[0](...vm.clickFunc.slice(1));
           vm.innerLoading = false;
         } catch (e) {
+          console.log(evt);
           console.error(e);
           vm.innerLoading = false;
         }
