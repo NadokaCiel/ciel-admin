@@ -51,11 +51,16 @@ export default class FlightChess {
     }
     // console.log('vm.pieces', vm.pieces);
     vm.nowCamp = camps[random(0, 3)];
+    // vm.nowCamp = 'green';
     vm.initCamp = vm.nowCamp;
     vm.selectedPlane = null;
     vm.canMoveTwice = false;
     vm.diceLoading = false;
-    // vm.pieces[0].list[0].geo = 70;
+    // vm.pieces[1].list[0].geo = 70;
+    // vm.pieces[1].list[1].geo = 22;
+    // vm.pieces[1].list[2].geo = 22;
+    // vm.pieces[2].list[0].geo = 22;
+    // vm.pieces[3].list[0].geo = 22;
     // vm.pieces[1].list[0].geo = 30;
     // vm.pieces[2].list[0].geo = 260;
     // vm.pieces[3].list[0].geo = 220;
@@ -82,7 +87,7 @@ export default class FlightChess {
       // vm.nowDice = random();
       list.push(new Promise(resolve => {
         setTimeout(() => {
-          // vm.nowDice = 5;
+          // vm.nowDice = 6;
           vm.nowDice = random();
           resolve();
         }, 50 * i);
@@ -129,11 +134,12 @@ export default class FlightChess {
   async takeOff() {
     const vm = this;
     if (vm.nowDice < 5) return;
-    const moveId = vm.selectedPlane.geo;
+    let moveId = vm.selectedPlane.geo;
     // console.log('beginPoint(vm.selectedPlane.camp)', beginPoint[vm.selectedPlane.camp]);
-    vm.move(vm.selectedPlane, moveId, beginPoint[vm.selectedPlane.camp]);
+    moveId = vm.move(vm.selectedPlane, moveId, beginPoint[vm.selectedPlane.camp]);
     const nowCamp = vm.pieces.find(p => p.camp === vm.nowCamp);
     nowCamp.flying += 1;
+    vm.checkCrush(moveId, vm.nowCamp);
     vm.skip();
   }
 
@@ -180,9 +186,10 @@ export default class FlightChess {
       await sleep(2000);
     }
 
-    // TODO 撞子判断 被撞的棋子全部返回原点
+    // 撞子判断 被撞的棋子全部返回原点
+    vm.checkCrush(moveId, camp);
 
-    // TODO 标记进入终点的棋子
+    // 标记进入终点的棋子
     if (inEndPoint(moveId, camp)) {
       vm.selectedPlane.ended = true;
       const nowCamp = vm.pieces.find(c => c.camp === camp);
@@ -196,6 +203,42 @@ export default class FlightChess {
     }
 
     vm.skip();
+  }
+
+  checkCrush(id, camp) {
+    const vm = this;
+    vm.pieces.forEach(d => {
+      const data = d;
+      if (data.camp !== camp) {
+        data.list.forEach(piece => {
+          const p = piece;
+          if (p.geo === id) {
+            data.flying -= 1;
+            p.geo = vm.getEmptyPort(data.camp);
+          }
+        });
+      }
+    });
+  }
+
+  getEmptyPort(camp) {
+    const vm = this;
+    const nowCamp = vm.pieces.find(c => c.camp === camp);
+    const bases = baseList.find(c => c.name === camp);
+    for (let i = 0; i < bases.list.length; i += 1) {
+      const id = bases.list[i];
+      let flag = false; // 停机坪是否被飞机占用
+      for (let j = 0; j < nowCamp.list.length; j += 1) {
+        const pid = nowCamp.list[j].geo;
+        if (pid === id) {
+          flag = true;
+        }
+      }
+      if (!flag) {
+        return id;
+      }
+    }
+    return null;
   }
 
   // 普通路径移动
