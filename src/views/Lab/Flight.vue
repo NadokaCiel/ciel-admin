@@ -1,14 +1,14 @@
 <template>
-  <div class="flight-chess">
+  <div class="flight-chess" :style="{ minWidth: game.edge * game.width + 80 + 'px'}" v-if="game">
     <!-- <div class="page-title">飞行棋</div>
     <div class="page-subtitle">Flight Chess</div> -->
-    <grid :edge="game.edge" :width="game.width" :height="game.height" :graph="game.graph" :border="false" @gridClick="gridClick" v-if="game">
+    <grid class="flight-grid" :style="{ minWidth: game.edge * game.width + 'px'}" :edge="game.edge" :width="game.width" :height="game.height" :graph="game.graph" :border="false" @gridClick="gridClick">
       <template v-for="grid in game.graph" v-slot:[getGrid(grid.id)]>
         <div class="grid-content" :class="'grid-' + grid.color" :key="grid.id">
-          <div>{{grid.color ? grid.id : ''}}</div>
-          <!-- <div
-            v-if="grid.piece"
-            :class="['fa fa-plane', 'piece-' + grid.piece.camp]"
+          <!-- <div>{{grid.color ? grid.id : ''}}</div>
+          <div
+            v-if="grid.id === 145"
+            class="grid-center"
           >
           </div> -->
         </div>
@@ -21,6 +21,8 @@
     </grid>
     <div class="page-infos" v-if="game">
       <div class="page-info" v-if="game.winner">游戏结束！赢家：<span :class="'piece-' + game.winner">{{campMap[game.winner]}}方</span></div>
+      <div class="page-info">玩家阵营：<span :class="'piece-' + game.initCamp">{{campMap[game.initCamp]}}方</span></div>
+      <div class="page-info">{{game.initCamp === game.nowCamp ? '请进行操作' : 'AI操作中...'}}</div>
       <div class="page-info">当前轮次： {{game.round}}</div>
       <div class="page-info">当前阵营：<span :class="'piece-' + game.nowCamp">{{campMap[game.nowCamp]}}方</span></div>
       <div class="page-info">当前点数： {{game.nowDice}}</div>
@@ -30,14 +32,16 @@
         <c-button
           class="page-btn"
           type="primary"
+          size="mini"
           :clickFunc="[roll]"
-          :disabled="game.nowDice > 0 || !!game.winner"
+          :disabled="game.nowDice > 0 || !!game.winner || game.initCamp !== game.nowCamp"
         >掷骰子 | Roll</c-button>
         <c-button
           class="page-btn"
           type="primary"
+          size="mini"
           :clickFunc="[move]"
-          :disabled="game.nowDice === 0 || !game.selectedPlane || game.diceLoading || !!game.winner"
+          :disabled="game.nowDice === 0 || !game.selectedPlane || game.diceLoading || !!game.winner  || game.initCamp !== game.nowCamp"
         >移动 | Move</c-button>
       </div>
     </div>
@@ -78,11 +82,15 @@ export default {
       const vm = this;
       if (!vm.game) return;
       await vm.game.gameMove();
+      await vm.game.aiMove();
     },
-    roll() {
+    async roll() {
       const vm = this;
       if (!vm.game) return;
-      vm.game.rollDice();
+      await vm.game.rollDice();
+      if (vm.game.initCamp !== vm.game.nowCamp) {
+        vm.game.aiMove();
+      }
     },
     getGrid(s) {
       return `grid${s}`;
@@ -97,7 +105,7 @@ export default {
       // console.log('x', x);
       // console.log('y', y);
       return {
-        transform: `rotate(${piece.ori}deg)`,
+        transform: `rotate(${piece.ori}deg) scale(${vm.game.edge / 40})`,
         top: `${y * vm.game.edge}px`,
         left: `${x * vm.game.edge}px`,
         width: `${vm.game.edge}px`,
@@ -111,7 +119,12 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/css/color.scss';
 .flight-chess {
-  padding: 40px 0;
+  padding: 40px;
+  width: auto;
+
+  // .flight-grid {
+  //   margin: 0 40px;
+  // }
 
   .config-bar {
     margin: 40px auto;
@@ -131,6 +144,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 1;
+    font-size: 12px;
 
     &::after {
       content: "";
@@ -204,6 +218,15 @@ export default {
       box-shadow: 0 0 8px 5px #ecd61d;
       animation: blink 1.2s infinite;
     }
+  }
+
+  .grid-center {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    // background-color: #000;
   }
 
   @keyframes blink {

@@ -303,15 +303,60 @@ export default class FlightChess {
     vm.selectedPlane = piece;
     return piece;
   }
+
+  // ai操作逻辑
+  async aiMove() {
+    const vm = this;
+    if (vm.initCamp === vm.nowCamp) return;
+
+    const { nowCamp } = vm;
+    await vm.rollDice();
+    if (nowCamp === vm.nowCamp) {
+      vm.selectRandomPiece();
+      await vm.gameMove();
+    }
+    vm.aiMove();
+  }
+
+  selectRandomPiece() {
+    const vm = this;
+    const nowCamp = vm.pieces.find(c => c.camp === vm.nowCamp);
+    const { list } = nowCamp;
+    let plane = null;
+    if (vm.nowDice > 4) {
+      list.forEach(p => {
+        if (inBasePoint(p.geo)) {
+          plane = p;
+        }
+      });
+    }
+
+    if (!plane) {
+      list.forEach(p => {
+        if (!inBasePoint(p.geo) && !inEndPoint(p.geo, vm.nowCamp)) {
+          plane = p;
+        }
+      });
+    }
+
+    if (vm.selectedPlane) {
+      vm.selectedPlane.selected = false;
+    }
+
+    if (plane) {
+      plane.selected = true;
+    }
+    vm.selectedPlane = plane;
+  }
 }
 
 const defaultConfig = {
   width: 17,
   height: 17,
-  edge: 40,
+  edge: 24,
 };
 
-const camps = ["green", "blue", "red", "yellow"];
+const camps = ["green", "blue", "yellow", "red"];
 
 const baseList = [{
   name: "green",
@@ -322,41 +367,41 @@ const baseList = [{
   ori: 180,
   list: [16, 17, 33, 34],
 }, {
-  name: "red",
-  ori: 0,
-  list: [256, 257, 273, 274],
-}, {
   name: "yellow",
   ori: 270,
   list: [271, 272, 288, 289],
+}, {
+  name: "red",
+  ori: 0,
+  list: [256, 257, 273, 274],
 }];
 
 const basePoint = [
   1, 2, 18, 19,
   16, 17, 33, 34,
-  256, 257, 273, 274,
   271, 272, 288, 289,
+  256, 257, 273, 274,
 ];
 
 const beginPoint = {
   green: 70,
   blue: 30,
-  red: 260,
   yellow: 220,
+  red: 260,
 };
 
 const flightPoint = {
   green: [82, 218],
   blue: [234, 226],
-  red: [56, 64],
   yellow: [208, 72],
+  red: [56, 64],
 };
 
 const endPoint = {
   green: 144,
   blue: 128,
-  red: 162,
   yellow: 146,
+  red: 162,
 };
 
 const movePath = [
@@ -373,8 +418,8 @@ const movePath = [
 const endPathMap = {
   green: [138, 139, 140, 141, 142, 143, 144],
   blue: [26, 43, 60, 77, 94, 111, 128],
-  red: [264, 247, 230, 213, 196, 179, 162],
   yellow: [152, 151, 150, 149, 148, 147, 146],
+  red: [264, 247, 230, 213, 196, 179, 162],
 };
 
 const g = 'green';
