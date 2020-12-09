@@ -1,12 +1,12 @@
 <template>
   <div class="flight-chess" :style="{ minWidth: game.edge * game.width + 80 + 'px'}" v-if="game">
-    <!-- <div class="page-title">飞行棋</div>
-    <div class="page-subtitle">Flight Chess</div> -->
+    <div class="page-title">飞行棋</div>
+    <div class="page-subtitle">Flight Chess</div>
     <grid class="flight-grid" :style="{ minWidth: game.edge * game.width + 'px'}" :edge="game.edge" :width="game.width" :height="game.height" :graph="game.graph" :border="false" @gridClick="gridClick">
       <template v-for="grid in game.graph" v-slot:[getGrid(grid.id)]>
         <div class="grid-content" :class="'grid-' + grid.color" :key="grid.id">
-          <!-- <div>{{grid.color ? grid.id : ''}}</div>
-          <div
+          <!-- <div>{{grid.color ? grid.id : ''}}</div> -->
+          <!-- <div
             v-if="grid.id === 145"
             class="grid-center"
           >
@@ -43,6 +43,13 @@
           :clickFunc="[move]"
           :disabled="game.nowDice === 0 || !game.selectedPlane || game.diceLoading || !!game.winner  || game.initCamp !== game.nowCamp"
         >移动 | Move</c-button>
+        <c-button
+          class="page-btn"
+          type="primary"
+          size="mini"
+          :clickFunc="[init]"
+          :disabled="game.diceLoading || game.initCamp !== game.nowCamp"
+        >重开 | Restart</c-button>
       </div>
     </div>
   </div>
@@ -145,7 +152,10 @@ export default {
     height: 100%;
     z-index: 1;
     font-size: 12px;
+  }
 
+  .grid-green, .grid-blue, .grid-red, .grid-yellow, .grid-white,
+  .grid-1, .grid-2, .grid-3, .grid-4 {
     &::after {
       content: "";
       position: absolute;
@@ -160,6 +170,54 @@ export default {
       border-radius: 50%;
       z-index: 5;
     }
+  }
+
+  .grid-1 {
+    border-radius: 50%;
+    background-color: rgba($green, 0.6);
+  }
+
+  .grid-2 {
+    border-radius: 50%;
+    background-color: rgba($blue, 0.6);
+  }
+
+  .grid-3 {
+    border-radius: 50%;
+    background-color: rgba($yellow, 0.6);
+  }
+
+  .grid-4 {
+    border-radius: 50%;
+    background-color: rgba($red, 0.6);
+  }
+
+  .grid-5 {
+    margin: 15% auto;
+    width: 2%;
+    height: 70%;
+    background-color: rgba($green, 0.6);
+  }
+
+  .grid-6 {
+    margin: 49% auto;
+    width: 70%;
+    height: 2%;
+    background-color: rgba($blue, 0.6);
+  }
+
+  .grid-7 {
+    margin: 15% auto;
+    width: 2%;
+    height: 70%;
+    background-color: rgba($yellow, 0.6);
+  }
+
+  .grid-8 {
+    margin: 49% auto;
+    width: 70%;
+    height: 2%;
+    background-color: rgba($red, 0.6);
   }
 
   .grid-green {

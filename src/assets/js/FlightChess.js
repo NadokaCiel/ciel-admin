@@ -136,7 +136,7 @@ export default class FlightChess {
     if (vm.nowDice < 5) return;
     let moveId = vm.selectedPlane.geo;
     // console.log('beginPoint(vm.selectedPlane.camp)', beginPoint[vm.selectedPlane.camp]);
-    moveId = vm.move(vm.selectedPlane, moveId, beginPoint[vm.selectedPlane.camp]);
+    moveId = vm.move(vm.selectedPlane, moveId, readyPoint[vm.selectedPlane.camp]);
     const nowCamp = vm.pieces.find(p => p.camp === vm.nowCamp);
     nowCamp.flying += 1;
     vm.checkCrush(moveId, vm.nowCamp);
@@ -244,6 +244,11 @@ export default class FlightChess {
   // 普通路径移动
   regularMove(nowId) {
     const vm = this;
+    if (inReadyPoint(nowId, vm.nowCamp)) {
+      const nextId = beginPoint[vm.nowCamp];
+      vm.move(vm.selectedPlane, nowId, nextId);
+      return nextId;
+    }
     let nextPathIndex = movePath.findIndex(n => n === nowId) + 1;
     if (nextPathIndex >= movePath.length) {
       nextPathIndex = 0;
@@ -426,6 +431,13 @@ const basePoint = [
   256, 257, 273, 274,
 ];
 
+const readyPoint = {
+  green: 53,
+  blue: 31,
+  yellow: 237,
+  red: 259,
+};
+
 const beginPoint = {
   green: 70,
   blue: 30,
@@ -475,21 +487,21 @@ const w = 'white';
 
 const colorMap = [
   g, g, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, b, b,
-  g, g, 0, 0, b, y, r, g, b, y, r, g, b, 0, 0, b, b,
+  g, g, 0, 0, b, y, r, g, b, y, r, g, b, 2, 0, b, b,
   0, 0, 0, 0, g, 0, 0, 0, b, 0, 0, 0, y, 0, 0, 0, 0,
-  0, 0, 0, 0, r, 0, 0, 0, b, 0, 0, 0, r, 0, 0, 0, 0,
+  0, 1, 0, 0, r, 8, 8, 8, b, 8, 8, 8, r, 0, 0, 0, 0,
   0, g, b, y, w, 0, 0, 0, b, 0, 0, 0, w, g, b, y, 0,
-  0, r, 0, 0, 0, 0, 0, 0, b, 0, 0, 0, 0, 0, 0, r, 0,
-  0, y, 0, 0, 0, 0, 0, 0, b, 0, 0, 0, 0, 0, 0, g, 0,
-  0, b, 0, 0, 0, 0, 0, 0, b, 0, 0, 0, 0, 0, 0, b, 0,
+  0, r, 0, 7, 0, 0, 0, 0, b, 0, 0, 0, 0, 5, 0, r, 0,
+  0, y, 0, 7, 0, 0, 0, 0, b, 0, 0, 0, 0, 5, 0, g, 0,
+  0, b, 0, 7, 0, 0, 0, 0, b, 0, 0, 0, 0, 5, 0, b, 0,
   0, g, g, g, g, g, g, g, 0, y, y, y, y, y, y, y, 0,
-  0, r, 0, 0, 0, 0, 0, 0, r, 0, 0, 0, 0, 0, 0, r, 0,
-  0, y, 0, 0, 0, 0, 0, 0, r, 0, 0, 0, 0, 0, 0, g, 0,
-  0, b, 0, 0, 0, 0, 0, 0, r, 0, 0, 0, 0, 0, 0, b, 0,
+  0, r, 0, 7, 0, 0, 0, 0, r, 0, 0, 0, 0, 5, 0, r, 0,
+  0, y, 0, 7, 0, 0, 0, 0, r, 0, 0, 0, 0, 5, 0, g, 0,
+  0, b, 0, 7, 0, 0, 0, 0, r, 0, 0, 0, 0, 5, 0, b, 0,
   0, g, r, y, w, 0, 0, 0, r, 0, 0, 0, w, g, r, y, 0,
-  0, 0, 0, 0, b, 0, 0, 0, r, 0, 0, 0, b, 0, 0, 0, 0,
+  0, 0, 0, 0, b, 6, 6, 6, r, 6, 6, 6, b, 0, 0, 3, 0,
   0, 0, 0, 0, g, 0, 0, 0, r, 0, 0, 0, y, 0, 0, 0, 0,
-  r, r, 0, 0, r, y, b, g, r, y, b, g, r, 0, 0, y, y,
+  r, r, 0, 4, r, y, b, g, r, y, b, g, r, 0, 0, y, y,
   r, r, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, y, y,
 ];
 
@@ -522,6 +534,10 @@ function getNextPoint(id) {
     nextCamp = colorMap[movePath[nextIndex] - 1];
   }
   return movePath[nextIndex];
+}
+
+function inReadyPoint(id, camp) {
+  return readyPoint[camp] === id;
 }
 
 function inEndPoint(id, camp) {
