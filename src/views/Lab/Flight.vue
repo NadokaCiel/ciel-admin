@@ -194,7 +194,7 @@ export default {
 
   .grid-5 {
     margin: 15% auto;
-    width: 2%;
+    width: 1px;
     height: 70%;
     background-color: rgba($green, 0.6);
   }
@@ -202,13 +202,13 @@ export default {
   .grid-6 {
     margin: 49% auto;
     width: 70%;
-    height: 2%;
+    height: 1px;
     background-color: rgba($blue, 0.6);
   }
 
   .grid-7 {
     margin: 15% auto;
-    width: 2%;
+    width: 1px;
     height: 70%;
     background-color: rgba($yellow, 0.6);
   }
@@ -216,7 +216,7 @@ export default {
   .grid-8 {
     margin: 49% auto;
     width: 70%;
-    height: 2%;
+    height: 1px;
     background-color: rgba($red, 0.6);
   }
 
