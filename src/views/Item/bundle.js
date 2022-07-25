@@ -12,7 +12,7 @@ export default {
     name: '品质列表',
     icon: "fa-shapes",
     path: '/item/quality/list',
-    component: () => import(/* webpackChunkName: "item" */ './QualityList.vue'),
+    component: () => import(/* webpackChunkName: "item" */ './QualityList'),
     meta: {
       auth: ['admin'],
     },
@@ -21,7 +21,7 @@ export default {
     name: '物品类型列表',
     icon: "fa-boxes",
     path: '/item/type/list',
-    component: () => import(/* webpackChunkName: "item" */ './TypeList.vue'),
+    component: () => import(/* webpackChunkName: "item" */ './TypeList'),
     meta: {
       auth: ['admin'],
     },
@@ -30,7 +30,7 @@ export default {
     name: '物品列表',
     icon: "fa-cubes",
     path: '/item/list',
-    component: () => import(/* webpackChunkName: "item" */ './List.vue'),
+    component: () => import(/* webpackChunkName: "item" */ './List'),
     meta: {
       auth: ['admin'],
     },

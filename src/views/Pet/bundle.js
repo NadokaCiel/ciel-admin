@@ -12,7 +12,7 @@ export default {
     name: '种类列表',
     icon: "fa-list",
     path: '/pet/type/list',
-    component: () => import(/* webpackChunkName: "pet" */ './TypeList.vue'),
+    component: () => import(/* webpackChunkName: "pet" */ './TypeList'),
     meta: {
       auth: ['user'],
     },
@@ -22,7 +22,7 @@ export default {
     name: '种类编辑',
     icon: "fa-edit",
     path: '/pet/type/edit/:id',
-    component: () => import(/* webpackChunkName: "pet" */ './TypeEdit.vue'),
+    component: () => import(/* webpackChunkName: "pet" */ './TypeEdit'),
     meta: {
       auth: ['admin'],
     },
@@ -31,7 +31,7 @@ export default {
     name: '宠物商店',
     icon: "fa-store",
     path: '/pet/create',
-    component: () => import(/* webpackChunkName: "pet" */ './Create.vue'),
+    component: () => import(/* webpackChunkName: "pet" */ './Create'),
     meta: {
       auth: ['user'],
     },
@@ -40,7 +40,7 @@ export default {
     name: '家',
     icon: "fa-igloo",
     path: '/pet/home',
-    component: () => import(/* webpackChunkName: "pet" */'./Home.vue'),
+    component: () => import(/* webpackChunkName: "pet" */'./Home'),
     meta: {
       auth: ['user'],
     },

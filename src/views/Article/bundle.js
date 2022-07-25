@@ -12,7 +12,7 @@ export default {
     name: '列表',
     icon: "fa-list",
     path: '/article/list',
-    component: () => import(/* webpackChunkName: "article" */ './List.vue'),
+    component: () => import(/* webpackChunkName: "article" */ './List'),
     meta: {
       auth: ['user'],
     },
@@ -22,7 +22,7 @@ export default {
     icon: "fa-edit",
     path: '/article/edit/:id',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "article" */ './Edit.vue'),
+    component: () => import(/* webpackChunkName: "article" */ './Edit'),
     meta: {
       auth: ['admin'],
     },
@@ -32,7 +32,7 @@ export default {
     icon: "fa-newspaper-o",
     path: '/article/view/:id',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "article" */'./View.vue'),
+    component: () => import(/* webpackChunkName: "article" */'./View'),
     meta: {
       auth: ['user'],
     },

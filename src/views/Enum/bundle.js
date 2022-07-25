@@ -12,7 +12,7 @@ export default {
     name: '职业列表',
     icon: "fa-user-cog",
     path: '/enum/class/list',
-    component: () => import(/* webpackChunkName: "enum" */ './ClassList.vue'),
+    component: () => import(/* webpackChunkName: "enum" */ './ClassList'),
     meta: {
       auth: ['admin'],
     },
@@ -21,7 +21,7 @@ export default {
     name: '种族列表',
     icon: "fa-user-edit",
     path: '/enum/race/list',
-    component: () => import(/* webpackChunkName: "enum" */ './RaceList.vue'),
+    component: () => import(/* webpackChunkName: "enum" */ './RaceList'),
     meta: {
       auth: ['admin'],
     },

@@ -12,7 +12,7 @@ export default {
     name: '列表',
     icon: "fa-list",
     path: '/user/list',
-    component: () => import(/* webpackChunkName: "user" */ './List.vue'),
+    component: () => import(/* webpackChunkName: "user" */ './List'),
     meta: {
       auth: ['admin'],
     },
@@ -22,7 +22,7 @@ export default {
     icon: "fa-edit",
     path: '/user/edit/:id',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "user" */ './Edit.vue'),
+    component: () => import(/* webpackChunkName: "user" */ './Edit'),
     meta: {
       auth: ['admin'],
     },
@@ -31,7 +31,7 @@ export default {
     name: '修改密码',
     icon: "fa-lock",
     path: '/user/reset',
-    component: () => import(/* webpackChunkName: "user" */ './Reset.vue'),
+    component: () => import(/* webpackChunkName: "user" */ './Reset'),
     meta: {
       auth: ['visitor'],
     },

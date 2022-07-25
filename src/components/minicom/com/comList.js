@@ -1,9 +1,9 @@
 const components = {
-  swiper: () => import(/* webpackChunkName: "minicom" */ './swiper.vue'),
-  textView: () => import(/* webpackChunkName: "minicom" */ './textView.vue'),
-  coverView: () => import(/* webpackChunkName: "minicom" */ './coverView.vue'),
-  imageView: () => import(/* webpackChunkName: "minicom" */ './imageView.vue'),
-  buttonView: () => import(/* webpackChunkName: "minicom" */ './buttonView.vue'),
+  swiper: () => import(/* webpackChunkName: "minicom" */ './swiper'),
+  textView: () => import(/* webpackChunkName: "minicom" */ './textView'),
+  coverView: () => import(/* webpackChunkName: "minicom" */ './coverView'),
+  imageView: () => import(/* webpackChunkName: "minicom" */ './imageView'),
+  buttonView: () => import(/* webpackChunkName: "minicom" */ './buttonView'),
 };
 
 export default components;

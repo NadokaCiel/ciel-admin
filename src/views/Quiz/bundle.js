@@ -12,7 +12,7 @@ export default {
     name: '问卷列表',
     icon: "fa-list",
     path: '/quiz/list',
-    component: () => import(/* webpackChunkName: "quiz" */ './List.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */ './List'),
     meta: {
       auth: ['user'],
     },
@@ -22,7 +22,7 @@ export default {
     icon: "fa-edit",
     path: '/quiz/edit/:id',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "quiz" */ './Edit.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */ './Edit'),
     meta: {
       auth: ['admin'],
     },
@@ -32,7 +32,7 @@ export default {
     icon: "fa-newspaper-o",
     path: '/quiz/:id/result',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "quiz" */ './ResultList.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */ './ResultList'),
     meta: {
       auth: ['admin'],
     },
@@ -42,7 +42,7 @@ export default {
     icon: "fa-newspaper-o",
     path: '/quiz/:id/result/:resultId',
     activeAs: 'List',
-    component: () => import(/* webpackChunkName: "quiz" */ './ResultView.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */ './ResultView'),
     meta: {
       auth: ['admin'],
     },
@@ -51,7 +51,7 @@ export default {
     name: '题目列表',
     icon: "fa-pencil-alt",
     path: '/quiz/subject/list',
-    component: () => import(/* webpackChunkName: "quiz" */'./SubjectList.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */'./SubjectList'),
     meta: {
       auth: ['user'],
     },
@@ -61,7 +61,7 @@ export default {
     icon: "fa-edit",
     path: '/quiz/subject/edit/:id',
     activeAs: 'SubjectList',
-    component: () => import(/* webpackChunkName: "quiz" */ './SubjectEdit.vue'),
+    component: () => import(/* webpackChunkName: "quiz" */ './SubjectEdit'),
     meta: {
       auth: ['admin'],
     },

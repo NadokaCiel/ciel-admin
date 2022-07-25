@@ -12,7 +12,7 @@ export default {
     name: '元胞自动机',
     icon: "fa-braille",
     path: '/lab/cellular',
-    component: () => import(/* webpackChunkName: "lab" */ './Cellular.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Cellular'),
     meta: {
       auth: ['anonymous'],
     },
@@ -21,7 +21,7 @@ export default {
     name: '生日问题',
     icon: "fa-birthday-cake",
     path: '/lab/brith',
-    component: () => import(/* webpackChunkName: "lab" */ './Birth.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Birth'),
     meta: {
       auth: ['anonymous'],
     },
@@ -30,7 +30,7 @@ export default {
     name: '骰子',
     icon: "fa-dice",
     path: '/lab/dice',
-    component: () => import(/* webpackChunkName: "lab" */ './Dice.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Dice'),
     meta: {
       auth: ['anonymous'],
     },
@@ -39,7 +39,7 @@ export default {
     name: '连连看',
     icon: "fa-link",
     path: '/lab/linkup',
-    component: () => import(/* webpackChunkName: "lab" */ './Linkup.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Linkup'),
     meta: {
       auth: ['anonymous'],
     },
@@ -48,7 +48,7 @@ export default {
     name: '2048',
     icon: "fa-sort-numeric-down",
     path: '/lab/slider',
-    component: () => import(/* webpackChunkName: "lab" */ './Slider.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Slider'),
     meta: {
       auth: ['anonymous'],
     },
@@ -57,7 +57,7 @@ export default {
     name: '区块链',
     icon: "fa-donate",
     path: '/lab/blockchain',
-    component: () => import(/* webpackChunkName: "lab" */ './Blockchain.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Blockchain'),
     meta: {
       auth: ['anonymous'],
     },
@@ -66,7 +66,7 @@ export default {
     name: '动森遗传研究',
     icon: "fa-seedling",
     path: '/lab/garden',
-    component: () => import(/* webpackChunkName: "lab" */ './Garden.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Garden'),
     meta: {
       auth: ['anonymous'],
     },
@@ -75,7 +75,7 @@ export default {
     name: '宝可梦属性',
     icon: "fa-dragon",
     path: '/lab/pokemon',
-    component: () => import(/* webpackChunkName: "lab" */ './Pokemon.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Pokemon'),
     meta: {
       auth: ['anonymous'],
     },
@@ -84,7 +84,7 @@ export default {
     name: '小程序配置',
     icon: "fa-mobile-alt",
     path: '/lab/miniapp',
-    component: () => import(/* webpackChunkName: "lab" */ './Miniapp.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Miniapp'),
     meta: {
       auth: ['admin'],
     },
@@ -93,7 +93,7 @@ export default {
     name: '国际象棋',
     icon: "fa-chess",
     path: '/lab/chess',
-    component: () => import(/* webpackChunkName: "lab" */ './Chess.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Chess'),
     meta: {
       auth: ['anonymous'],
     },
@@ -102,7 +102,7 @@ export default {
     name: '动画',
     icon: "fa-cog",
     path: '/lab/cartoon',
-    component: () => import(/* webpackChunkName: "lab" */ './Cartoon.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Cartoon'),
     meta: {
       auth: ['anonymous'],
     },
@@ -111,7 +111,7 @@ export default {
     name: '迷宫',
     icon: "fa-route",
     path: '/lab/maze',
-    component: () => import(/* webpackChunkName: "lab" */ './Maze.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Maze'),
     meta: {
       auth: ['anonymous'],
     },
@@ -120,7 +120,7 @@ export default {
     name: '二十一点',
     icon: "fa-layer-group",
     path: '/lab/blackjack',
-    component: () => import(/* webpackChunkName: "lab" */ './BlackJack.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './BlackJack'),
     meta: {
       auth: ['anonymous'],
     },
@@ -129,7 +129,7 @@ export default {
     name: '空当接龙',
     icon: "fa-clone",
     path: '/lab/freecell',
-    component: () => import(/* webpackChunkName: "lab" */ './Freecell.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Freecell'),
     meta: {
       auth: ['anonymous'],
     },
@@ -138,7 +138,7 @@ export default {
     name: '飞行棋',
     icon: "fa-plane",
     path: '/lab/flight',
-    component: () => import(/* webpackChunkName: "lab" */ './Flight.vue'),
+    component: () => import(/* webpackChunkName: "lab" */ './Flight'),
     meta: {
       auth: ['anonymous'],
     },
